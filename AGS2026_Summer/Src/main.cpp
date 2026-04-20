@@ -1,5 +1,7 @@
 #include<DxLib.h>
 #include <iostream>
+#include "Application.h"
+
 #ifdef _DEBUG
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
@@ -13,25 +15,23 @@ int WINAPI WinMain(
 	// メモリリーク検出
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
+	//インスタンスの生成
+	Application::CreateInstance();
 
-
-	//メインループ
-	while (ProcessMessage() == 0) {
-		//描画スクリーンの設定
-		SetDrawScreen(DX_SCREEN_BACK);
-
-		//画面を黒でクリアする
-		ClearDrawScreen();
-
-		//画面更新
-		ScreenFlip();
+	//インスタンスの取得
+	Application& instance = Application::GetInstance();
+	
+	if (instance.IsInitFail())
+	{
+		//初期化失敗
+		return -1;
 	}
 
-	//DXライブラリ終了処理
-	if (DxLib_End() == -1)
-	{
-		return -1;
-	};
+	//実行
+	instance.Run();
+
+	//解放
+	instance.Destroy();
 
 	return 0;
 }

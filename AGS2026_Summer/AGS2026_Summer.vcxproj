@@ -135,11 +135,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Manager\Resource.cpp" />
+    <ClCompile Include="Src\Scene\GameScene.cpp" />
+    <ClCompile Include="Src\Manager\SceneManager.cpp" />
+    <ClCompile Include="Src\Scene\SceneBase.cpp" />
     <ClCompile Include="Src\Application.cpp" />
     <ClCompile Include="Src\main.cpp" />
+    <ClCompile Include="Src\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Manager\Resource.h" />
+    <ClInclude Include="Src\Scene\GameScene.h" />
+    <ClInclude Include="Src\Manager\SceneManager.h" />
+    <ClInclude Include="Src\Scene\SceneBase.h" />
     <ClInclude Include="Src\Application.h" />
+    <ClInclude Include="Src\Scene\TitleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
