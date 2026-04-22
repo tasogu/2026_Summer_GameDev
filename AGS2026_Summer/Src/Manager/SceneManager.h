@@ -2,6 +2,7 @@
 #include <chrono>
 
 class SceneBase;
+class Fader;
 class Camera;
 
 class SceneManager
@@ -53,8 +54,14 @@ private:
 	//各種シーン
 	SceneBase* scene_;
 
+	//フェード
+	Fader* fader_;
+
 	//カメラ
 	Camera* camera_;
+
+	//シーン繊維中判定
+	bool isSceneChanging_;
 
 	// デルタタイム
 	std::chrono::system_clock::time_point preTime_;
@@ -76,5 +83,7 @@ private:
 	//シーン移行
 	void DoChangeScene(SCENE_ID sceneId);
 
+	//フェード
+	void Fade(void);
 };
 

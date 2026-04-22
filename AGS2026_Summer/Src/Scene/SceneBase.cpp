@@ -1,6 +1,7 @@
+#include "../Manager/ResourceManager.h"
 #include "SceneBase.h"
 
-SceneBase::SceneBase(void)
+SceneBase::SceneBase(void) : resMng_(ResourceManager::GetInstance())
 {
 }
 

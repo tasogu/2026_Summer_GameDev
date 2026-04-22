@@ -9,7 +9,7 @@ public:
 	enum class TYPE
 	{
 		NONE,
-		ING,
+		IMG,
 		IMGS,
 		MODEL,
 	};

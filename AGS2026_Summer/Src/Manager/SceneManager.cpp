@@ -1,4 +1,5 @@
 #include <DxLib.h>
+#include "../Common/Fader.h"
 #include "../Scene/SceneBase.h"
 #include "../Scene/TitleScene.h"
 #include "../Scene/GameScene.h"
@@ -162,6 +163,34 @@ void SceneManager::DoChangeScene(SCENE_ID sceneId)
 	scene_->Init();
 
 	waitSceneId_ = SCENE_ID::NONE;
+}
+
+void SceneManager::Fade(void)
+{
+	Fader::STATE fState = fader_->GetState();
+	switch (fState)
+	{
+	case Fader::STATE::FADE_IN:
+		// –¾“]’†
+		if (fader_->IsEnd())
+		{
+			// –¾“]‚ªI—¹‚µ‚½‚çAƒtƒF[ƒhˆ—I—¹
+			fader_->SetFade(Fader::STATE::NONE);
+			isSceneChanging_ = false;
+		}
+		break;
+	case Fader::STATE::FADE_OUT:
+		// ˆÃ“]’†
+		if (fader_->IsEnd())
+		{
+			// Š®‘S‚ÉˆÃ“]‚µ‚Ä‚©‚çƒV[ƒ“‘JˆÚ
+			DoChangeScene(waitSceneId_);
+			// ˆÃ“]‚©‚ç–¾“]‚Ö
+			fader_->SetFade(Fader::STATE::FADE_IN);
+		}
+		break;
+	}
+
 }
 
 void SceneManager::Destroy(void)

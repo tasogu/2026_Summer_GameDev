@@ -1,6 +1,8 @@
 #include <DxLib.h>
 #include<chrono>
 #include <thread>
+#include "Manager/InputManager.h"
+#include "Manager/ResourceManager.h"
 #include "Manager/SceneManager.h"
 #include "Application.h"
 
@@ -44,6 +46,9 @@ void Application::Init(void)
 	//キー制御初期化
 	SetUseDirectInputFlag(true);
 
+	//リソース管理初期化
+	ResourceManager::Createinstance();
+
 	//シーン管理初期化
 	SceneManager::CreateInstance();
 }
@@ -80,7 +85,10 @@ void Application::Run(void)
 
 void Application::Destroy(void)
 {
+	InputManager::GetInstance().Destroy();
+	ResourceManager::GetInstance().Destroy();
 	SceneManager::GetInstance().Destroy();
+
 	// DxLib終了
 	if (DxLib_End() == -1)
 	{
@@ -106,4 +114,7 @@ Application::Application(void)
 {
 	isInitFail_ = false;
 	isReleaseFail_ = false;
+
+	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+
 }

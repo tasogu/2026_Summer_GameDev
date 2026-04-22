@@ -1,5 +1,5 @@
 #pragma once
-class ResurceManager;
+class ResourceManager;
 
 class SceneBase
 {
@@ -22,6 +22,6 @@ public:
 protected:
 
 	//ƒŠƒ\[ƒXŠÇ—
-//	ResurceManager& resMng_;
+	ResourceManager& resMng_;
 };
 
