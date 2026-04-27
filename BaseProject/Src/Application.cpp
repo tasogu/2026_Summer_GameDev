@@ -3,6 +3,7 @@
 #include "Manager/InputManager.h"
 #include "Manager/ResourceManager.h"
 #include "Manager/SceneManager.h"
+#include "Common/FpsController.h"
 #include "Application.h"
 
 Application* Application::instance_ = nullptr;
@@ -34,6 +35,9 @@ void Application::Init(void)
 	// ウィンドウサイズ
 	SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 32);
 	ChangeWindowMode(true);
+
+	//FPS制御初期化
+	fpsController_ = new FpsController(FRAME_RATE);
 
 	// DxLibの初期化
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
@@ -84,7 +88,15 @@ void Application::Run(void)
 
 		sceneManager.Draw();
 
+#ifdef _DEBUG
+		// 平均FPS描画
+		fpsController_->Draw();
+#endif // _DEBUG
+
 		ScreenFlip();
+
+		// 理想FPS経過待ち
+		fpsController_->Wait();
 
 	}
 

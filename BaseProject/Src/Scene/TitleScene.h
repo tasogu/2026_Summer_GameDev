@@ -26,6 +26,7 @@ public:
 
 private:
 
-
+	//ƒ^ƒCƒgƒ‹‰æ‘œ
+	int imgTitle_;
 
 };

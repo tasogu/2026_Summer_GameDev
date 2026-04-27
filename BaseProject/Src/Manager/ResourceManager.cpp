@@ -31,6 +31,9 @@ void ResourceManager::Init(void)
 
 	Resource* res;
 
+	//ƒ^ƒCƒgƒ‹‰æ‘œ
+	res = new RES(RES_T::IMG, PATH_IMG + "Title.png"); 
+	resourcesMap_.emplace(SRC::TITLE, res);
 }
 
 void ResourceManager::Release(void)

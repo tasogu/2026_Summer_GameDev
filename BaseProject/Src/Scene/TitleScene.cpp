@@ -3,12 +3,14 @@
 #include "../Manager/InputManager.h"
 #include "../Manager/SceneManager.h"
 #include "../Manager/Camera.h"
+#include "../Manager/ResourceManager.h"
 #include "TitleScene.h"
 
 TitleScene::TitleScene(void)
 	:
 	SceneBase()
 {
+	imgTitle_ = -1;
 }
 
 TitleScene::~TitleScene(void)
@@ -17,6 +19,8 @@ TitleScene::~TitleScene(void)
 
 void TitleScene::Init(void)
 {
+	//‰æ‘œ“Ç‚Ýž‚Ý
+	imgTitle_ = resMng_.Load(ResourceManager::SRC::TITLE).handleId_;
 
 	// ’è“_ƒJƒƒ‰
 	sceMng_.GetCamera()->ChangeMode(Camera::MODE::FIXED_POINT);
@@ -37,8 +41,10 @@ void TitleScene::Update(void)
 
 void TitleScene::Draw(void)
 {
+	DrawExtendGraph(0, 0 , 1280, 720, imgTitle_, true);
 }
 
 void TitleScene::Release(void)
 {
+	
 }

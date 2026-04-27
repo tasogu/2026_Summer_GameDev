@@ -11,6 +11,8 @@ public:
 	// リソース名
 	enum class SRC
 	{
+		TITLE,
+
 	};
 
 	// 明示的にインステンスを生成する
