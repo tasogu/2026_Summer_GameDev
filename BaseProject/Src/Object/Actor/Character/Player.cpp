@@ -68,10 +68,12 @@ void Player::InitTransform(void)
 {
 
 	//プレイヤーの大きさ
-	MV1SetScale(imgPlayer_, SCALE_);
+	//MV1SetScale(imgPlayer_, SCALE_);
+	transform_.scl = SCALE_;
 
 	//プレイヤーの回転
-	MV1SetRotationXYZ(imgPlayer_, VGet(0.0f, ROT_Y, 0.0f));
+	//MV1SetRotationXYZ(imgPlayer_, VGet(0.0f, ROT_Y, 0.0f));
+	//transform_.quaRotLocal = VGet(0.0f, ROT_Y, 0.0f);
 
 	//プレイヤーの座標
 	MV1SetPosition(imgPlayer_, POS_);
