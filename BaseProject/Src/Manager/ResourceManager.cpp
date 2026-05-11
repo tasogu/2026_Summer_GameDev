@@ -34,6 +34,14 @@ void ResourceManager::Init(void)
 	//タイトル画像
 	res = new RES(RES_T::IMG, PATH_IMG + "Title.png"); 
 	resourcesMap_.emplace(SRC::TITLE, res);
+
+	//ステージモデル
+	res = new RES(RES_T::MODEL, PATH_MDL + "Stage/MainStage/MainStage.mv1");
+	resourcesMap_.emplace(SRC::STAGE, res);
+
+	//プレイヤーモデル
+	res = new RES(RES_T::MODEL, PATH_MDL + "Player/Player.mv1");
+	resourcesMap_.emplace(SRC::PLAYER, res);
 }
 
 void ResourceManager::Release(void)

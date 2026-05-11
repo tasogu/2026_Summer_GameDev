@@ -1,5 +1,7 @@
 #pragma once
 #include "SceneBase.h"
+class Stage;
+class Player;
 
 class GameScene : public SceneBase
 {
@@ -26,4 +28,9 @@ public:
 
 private:
 
+	//ステージ
+	Stage* stage_;
+
+	//プレイヤー
+	Player* player_;
 };

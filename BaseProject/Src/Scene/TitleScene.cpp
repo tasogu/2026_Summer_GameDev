@@ -8,9 +8,9 @@
 
 TitleScene::TitleScene(void)
 	:
-	SceneBase()
+	SceneBase(),
+	imgTitle_(-1)
 {
-	imgTitle_ = -1;
 }
 
 TitleScene::~TitleScene(void)

@@ -12,7 +12,8 @@ public:
 	enum class SRC
 	{
 		TITLE,
-
+		STAGE,
+		PLAYER,
 	};
 
 	// 明示的にインステンスを生成する
