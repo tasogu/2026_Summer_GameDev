@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "../../../Manager/ResourceManager.h"
+#include "../../Common/Transform.h"
 #include "Player.h"
 
 Player::Player(void)
@@ -58,11 +59,14 @@ void Player::Release(void)
 void Player::InitLoad(void)
 {
 	//プレイヤーモデルのロード
-	imgPlayer_ = resMng_.Load(ResourceManager::SRC::PLAYER).handleId_;
+//	imgPlayer_ = resMng_.Load(ResourceManager::SRC::PLAYER).handleId_;
+	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER).handleId_);
+
 }
 
 void Player::InitTransform(void)
 {
+
 	//プレイヤーの大きさ
 	MV1SetScale(imgPlayer_, SCALE_);
 
