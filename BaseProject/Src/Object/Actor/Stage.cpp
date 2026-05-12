@@ -39,28 +39,35 @@ void Stage::Update(void)
 
 void Stage::Draw(void)
 {
-	MV1DrawModel(imgStage_);
+	//MV1DrawModel(imgStage_);
+	MV1DrawModel(transform_.modelId);
 
 }
 
 void Stage::Release(void)
 {
-	MV1DeleteModel(imgStage_);
+//	MV1DeleteModel(imgStage_);
+	transform_.Release();
 }
 
 void Stage::InitLoad(void)
 {
-	imgStage_ = resMng_.Load(ResourceManager::SRC::STAGE).handleId_;
+	//imgStage_ = resMng_.Load(ResourceManager::SRC::STAGE).handleId_;
+	transform_.SetModel(resMng_.Load(ResourceManager::SRC::STAGE).handleId_);
 
 }
 
 void Stage::InitTransform(void)
 {
 	//ステージの大きさ、回転、座標の初期化
-	MV1SetScale(imgStage_, SCALE_);
-	MV1SetPosition(imgStage_, POS_);
+	//MV1SetScale(imgStage_, SCALE_);
+	//MV1SetPosition(imgStage_, POS_);
 	
+	//ステージの大きさ,座標の初期化
+	transform_.scl = SCALE_;
+	transform_.pos = POS_;
 
+	transform_.Update();
 }
 
 void Stage::InitCollider(void)

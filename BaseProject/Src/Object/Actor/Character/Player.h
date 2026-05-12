@@ -29,13 +29,15 @@ private:
 	static constexpr VECTOR SCALE_ = { 1.0f, 1.0f, 1.0f };
 
 	//回転
-	static constexpr float ROT_Y = 180.0f * DX_PI_F / 180.0f;
+	static constexpr float ROT_Y =180.0f;
 
 	//座標
 	static constexpr VECTOR POS_ = { 0.0f, 40.0f, 0.0f };
 
 	//モデル描画
 	int imgPlayer_;
+
+
 
 		// リソースロード
 	void InitLoad(void);
@@ -53,5 +55,5 @@ private:
 	void InitPost(void);
 
 	//プレイヤーの移動
-	void Move(void);
+	void ProcessMove(void);
 };

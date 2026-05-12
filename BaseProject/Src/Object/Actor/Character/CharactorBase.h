@@ -11,5 +11,8 @@ public:
 	//デストラクタ
 	virtual ~CharactorBase(void) override;
 
+
+	//移動量
+	VECTOR movePow_;
 };
 
