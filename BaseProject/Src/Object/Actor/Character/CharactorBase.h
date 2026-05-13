@@ -25,8 +25,6 @@ public:
 	//移動速度
 	float speed_;
 
-	//アニメーションコントローター
-	int animationController_;
 
 };
 

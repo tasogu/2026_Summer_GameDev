@@ -15,6 +15,8 @@ GameScene::GameScene(void)
 
 GameScene::~GameScene(void)
 {
+	delete stage_;
+	delete player_;
 }
 
 void GameScene::Init(void)

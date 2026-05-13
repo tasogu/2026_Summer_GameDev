@@ -1,5 +1,6 @@
 #pragma once
 #include "CharactorBase.h"
+class AnimationController;
 
 class Player : public CharactorBase
 {
@@ -10,6 +11,14 @@ public:
 	{
 		NONE,
 		PLAY,
+	};
+
+	//アニメーションタイプ
+	enum class ANIM_TYPE
+	{
+		IDLE,
+		WALK,
+		RUN,
 	};
 
 	//コンストラクタ
@@ -31,6 +40,8 @@ public:
 	void Release(void);
 
 private:
+	//アニメーションコントローラーの呼び出し
+	AnimationController* animationController_;
 
 	//スケール
 	static constexpr VECTOR SCALE = { 1.0f, 1.0f, 1.0f };

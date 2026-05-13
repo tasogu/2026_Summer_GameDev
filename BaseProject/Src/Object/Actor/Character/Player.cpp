@@ -6,6 +6,7 @@
 #include "../../../Utility/AsoUtility.h"
 #include "../../../Manager/SceneManager.h"
 #include "../../../Manager/Camera.h"
+#include "../../../Application.h"
 #include "../../Common/AnimationController.h"
 #include "Player.h"
 
@@ -15,11 +16,13 @@ Player::Player(void)
 	CharactorBase()
 {
 	state_ = STATE::NONE;
+	animationController_ = nullptr;
 
 }
 
 Player::~Player(void)
 {
+	delete animationController_;
 }
 
 void Player::Init(void)
@@ -55,9 +58,11 @@ void Player::Update(void)
 		break;
 	}
 
-
-	//プレイヤーの更新
+	//プレイヤ-の更新
 	transform_.Update();
+
+	//アニメーションの更新
+	animationController_->Update();
 }
 
 void Player::UpdateNone(void)
@@ -143,7 +148,14 @@ void Player::InitCollider(void)
 
 void Player::InitAnimation(void)
 {
-	
+	std::string path = Application::PATH_MODEL + "Player";
+	animationController_ = new AnimationController(transform_.modelId);
+	animationController_->Add((int)ANIM_TYPE::IDLE , 20.0f, path + "Idle.mv1");
+	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f, path + "Walk.mv1");
+	animationController_->Add((int)ANIM_TYPE::RUN, 20.0f, path + "Run.mv1");
+
+	animationController_->Play((int)ANIM_TYPE::IDLE);
+
 }
 
 void Player::InitPost(void)
