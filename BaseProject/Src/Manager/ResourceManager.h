@@ -14,6 +14,9 @@ public:
 		TITLE,
 		STAGE,
 		PLAYER,
+		IDLE,
+		WALK,
+		RUN,
 	};
 
 	// 明示的にインステンスを生成する

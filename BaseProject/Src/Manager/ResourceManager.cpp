@@ -42,6 +42,7 @@ void ResourceManager::Init(void)
 	//プレイヤーモデル
 	res = new RES(RES_T::MODEL, PATH_MDL + "Player/Player.mv1");
 	resourcesMap_.emplace(SRC::PLAYER, res);
+
 }
 
 void ResourceManager::Release(void)
