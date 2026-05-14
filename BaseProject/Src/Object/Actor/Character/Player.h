@@ -58,11 +58,23 @@ private:
 	//移動速度(走り)
 	static constexpr float SPEED_RUN = 6.0f;
 
+	//回転時間
+	static constexpr float TIME_ROT = 1.0f;
+
 	//モデル描画
 	int imgPlayer_;
 
 	//現在の状態を取得
 	STATE state_;
+
+	//回転する方向最初
+	Quaternion playerRotY_;
+
+	//回転する方向最後
+	Quaternion goalQuaRot_;
+
+	//回転時間
+	float stepRotTime_;
 
 	//更新ステップ(NONE)
 	void UpdateNone(void);
@@ -96,5 +108,11 @@ private:
 
 	//プレイヤーの移動
 	void ProcessMove(void);
+
+	//回転したい角度を設定
+	void SetGoalRotate(double rotRad);
+
+	//移動方向への回転
+	void Rotate(void);
 
 };

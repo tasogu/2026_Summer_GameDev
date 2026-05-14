@@ -15,6 +15,10 @@ Player::Player(void)
 	imgPlayer_(-1),
 	CharactorBase()
 {
+	playerRotY_ = Quaternion();
+	goalQuaRot_ = Quaternion();
+	stepRotTime_ = 0.0f;
+
 	state_ = STATE::NONE;
 	animationController_ = nullptr;
 
@@ -73,6 +77,13 @@ void Player::UpdatePlay(void)
 {
 	//移動
 	ProcessMove();
+
+	//移動方向に応じた回転
+	Rotate();
+
+
+	//プレイヤーの回転の更新
+	transform_.quaRot = playerRotY_;
 
 }
 
@@ -148,11 +159,11 @@ void Player::InitCollider(void)
 
 void Player::InitAnimation(void)
 {
-	std::string path = Application::PATH_MODEL + "Player";
+	std::string path = Application::PATH_MODEL + "Player/";
 	animationController_ = new AnimationController(transform_.modelId);
 	animationController_->Add((int)ANIM_TYPE::IDLE , 20.0f, path + "Idle.mv1");
 	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f, path + "Walk.mv1");
-	animationController_->Add((int)ANIM_TYPE::RUN, 20.0f, path + "Run.mv1");
+	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f, path + "Run.mv1");
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 
@@ -219,28 +230,76 @@ void Player::ProcessMove(void)
 		dir = cameraRot.GetLeft();
 	}
 
-	//移動角度がゼロより上
+	//移動角度がゼロ以外
 	if (!AsoUtility::EqualsVZero(dir))
 	{
-		//移動処理
+		//移動速度を歩きに設定
 		speed_ = SPEED_MOVE;
-		if (ins.IsNew(KEY_INPUT_RSHIFT))
+
+		//シフトキーを押されたら走る
+		if (ins.IsNew(KEY_INPUT_RSHIFT) || ins.IsNew(KEY_INPUT_LSHIFT))
 		{
 			speed_ = SPEED_RUN;
+
+			//アニメーションを走るに変更
+			animationController_->Play((int)ANIM_TYPE::RUN);
+
 		}
+		else {
+			//アニメーションを歩きに変更
+			animationController_->Play((int)ANIM_TYPE::WALK);
+		}
+
 		//移動させたい方向(ベクトル)に変換
 		moveDir_ = dir;
 
 		//移動させたい方向に移動量をかける(=移動量)
 		movePow_ = VScale(moveDir_, speed_);
 
+		//回転処理
+		SetGoalRotate(rotRad);
+
 		//プレイヤーの座標に移動量を加算
 		movePos_ = VAdd(transform_.pos, movePow_);
 
 		//プレイヤーに移動を適用
 		transform_.pos = movePos_;
+
+
+	}
+	else if(AsoUtility::EqualsVZero(dir))
+	{
+		//アニメーションを待機に変更
+		animationController_->Play((int)ANIM_TYPE::IDLE);
 	}
 
 
+}
+
+void Player::SetGoalRotate(double rotRad)
+{
+	VECTOR cameraRot = SceneManager::GetInstance().GetCamera()->GetAngles();
+	Quaternion axis = Quaternion::AngleAxis((double)cameraRot.y + rotRad, AsoUtility::AXIS_Y);
+
+	// 現在設定されている回転との角度差を取る
+	double angleDiff = Quaternion::Angle(axis, goalQuaRot_);
+
+	// しきい値
+	if (angleDiff > 0.1)
+	{
+		stepRotTime_ = TIME_ROT;
+	}
+
+	goalQuaRot_ = axis;
+
+}
+
+void Player::Rotate(void)
+{
+	stepRotTime_ -= scnMng_.GetDeltaTime();
+
+	//回転の球面補間
+	playerRotY_ = Quaternion::Slerp(
+		playerRotY_, goalQuaRot_, (TIME_ROT - stepRotTime_) / TIME_ROT);
 }
 
