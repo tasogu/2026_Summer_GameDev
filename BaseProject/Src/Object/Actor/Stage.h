@@ -4,7 +4,14 @@
 class Stage : public ActorBase
 {
 public:
+	// 衝突判定種別
+	enum class COLLIDER_TYPE
+	{
+		MODEL = 0,
+		MAX,
+	};
 
+	
 	//コンストラクタ
 	Stage(void);
 	//デストラクタ

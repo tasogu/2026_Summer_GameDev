@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Object\Actor\ColliderModel.cpp" />
+    <ClCompile Include="Src\Object\Actor\ColliderLine.cpp" />
+    <ClCompile Include="Src\Object\Actor\ColliderCapsule.cpp" />
+    <ClCompile Include="Src\Object\Actor\ColliderBase.cpp" />
     <ClCompile Include="Src\Object\Actor\Character\CharactorBase.cpp" />
     <ClCompile Include="Src\Object\Actor\Character\Player.cpp" />
     <ClCompile Include="Src\Common\FpsController.cpp" />
@@ -43,6 +47,10 @@
     <ClCompile Include="Src\Object\Actor\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Object\Actor\ColliderModel.h" />
+    <ClInclude Include="Src\Object\Actor\ColliderLine.h" />
+    <ClInclude Include="Src\Object\Actor\ColliderCapsule.h" />
+    <ClInclude Include="Src\Object\Actor\ColliderBase.h" />
     <ClInclude Include="Src\Object\Actor\Character\CharactorBase.h" />
     <ClInclude Include="Src\Object\Actor\Character\Player.h" />
     <ClInclude Include="Src\Common\FpsController.h" />

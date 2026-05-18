@@ -1,5 +1,6 @@
 #pragma once
 #include "../Common/Transform.h"
+#include "../Actor/ColliderBase.h"
 class ResourceManager;
 class SceneManager;
 
@@ -29,6 +30,17 @@ public:
 	// 大きさ、回転、座標等の取得
 	const Transform& GetTransform(void) const;
 
+	const std::map<int, ColliderBase*>& GetOwnColliders(void) const
+	{
+		return ownColliders_;
+	}
+
+	// 特定の自身の衝突情報取得
+	const ColliderBase* GetOwnCollider(int key) const;
+
+	// 衝突対象となるコライダを登録
+	void AddHitCollider(const ColliderBase* hitCollider);
+
 protected:
 
 	// シングルトン参照
@@ -37,6 +49,9 @@ protected:
 
 	// モデル制御の基本情報
 	Transform transform_;
+
+	// 自身の衝突情報
+	std::map<int, ColliderBase*> ownColliders_;
 
 	// リソースロード
 	virtual void InitLoad(void) = 0;
@@ -52,5 +67,8 @@ protected:
 
 	// 初期化後の個別処理
 	virtual void InitPost(void) = 0;
+
+	// 衝突相手の情報
+	std::vector<const ColliderBase*> hitColliders_;
 
 };

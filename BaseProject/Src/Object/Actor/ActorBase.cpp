@@ -51,3 +51,12 @@ const Transform& ActorBase::GetTransform(void) const
 {
 	return transform_;
 }
+
+const ColliderBase* ActorBase::GetOwnCollider(int key) const
+{
+	return nullptr;
+}
+
+void ActorBase::AddHitCollider(const ColliderBase* hitCollider)
+{
+}

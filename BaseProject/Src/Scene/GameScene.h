@@ -33,4 +33,5 @@ private:
 
 	//ƒvƒŒƒCƒ„[
 	Player* player_;
+
 };

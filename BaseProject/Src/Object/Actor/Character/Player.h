@@ -56,10 +56,25 @@ private:
 	static constexpr float SPEED_MOVE = 3.0f;
 
 	//移動速度(走り)
-	static constexpr float SPEED_RUN = 6.0f;
+	static constexpr float SPEED_RUN = 60.0f;
 
 	//回転時間
 	static constexpr float TIME_ROT = 1.0f;
+
+	// 衝突判定用線分開始
+	static constexpr VECTOR COL_LINE_START_LOCAL_POS = { 0.0f, 80.0f, 0.0f };
+
+	// 衝突判定用線分終了
+	static constexpr VECTOR COL_LINE_END_LOCAL_POS = { 0.0f, -10.0f, 0.0f };
+
+	// 衝突判定用カプセル上部球体
+	static constexpr VECTOR COL_CAPSULE_TOP_LOCAL_POS = { 0.0f, 110.0f, 0.0f };
+
+	// 衝突判定用カプセル下部球体
+	static constexpr VECTOR COL_CAPSULE_DOWN_LOCAL_POS = { 0.0f, 30.0f, 0.0f };
+
+	// 衝突判定用カプセル球体半径
+	static constexpr float COL_CAPSULE_RADIUS = 20.0f;
 
 	//モデル描画
 	int imgPlayer_;

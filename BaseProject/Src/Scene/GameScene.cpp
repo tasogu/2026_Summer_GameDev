@@ -4,10 +4,13 @@
 #include "../Object/Actor/ActorBase.h"
 #include "../Object/Actor/Stage.h"
 #include "../Object/Actor/Character/Player.h"
+#include "../Manager/Camera.h"
 #include "GameScene.h"
 
 GameScene::GameScene(void)
 	:
+	stage_(nullptr),
+	player_(nullptr),
 	SceneBase()
 
 {
@@ -28,6 +31,21 @@ void GameScene::Init(void)
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Init();
+
+	// ステージのコライダを取得
+	const ColliderBase* stageCollider =
+		stage_->GetOwnCollider(static_cast<int>(Stage::COLLIDER_TYPE::MODEL));
+
+	//プレイヤーに登録
+	player_->AddHitCollider(stageCollider);
+
+	//カメラにも登録
+	Camera* camera = sceMng_.GetCamera();
+	
+
+	//カメラ追従設定
+	camera->SetFollow(&player_->GetTransform());
+	camera->ChangeMode(Camera::MODE::FOLLOW);
 }
 
 void GameScene::Update(void)
