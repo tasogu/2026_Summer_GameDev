@@ -18,11 +18,26 @@ CharactorBase::~CharactorBase(void)
 
 void CharactorBase::Update(void)
 {
+	//移動前座標を保存
+	prevPos_ = transform_.pos;
+
+	//各キャラクターごとの更新処理
+	UpdateProcess();
+
+	//キャラクターの移動
+	transform_.pos = VAdd(prevPos_ ,movePow_);
+
 	//重力による移動量
 	CalcGravityPow();
 
 	//衝突判定
 	Collision();
+
+	//画面に反映
+	transform_.Update();
+
+	//各キャラクターごとの更新の処理
+	UpdateProcessPost();
 }
 
 void CharactorBase::CalcGravityPow(void)
@@ -40,6 +55,8 @@ void CharactorBase::CalcGravityPow(void)
 	jumpPow_ = VAdd(jumpPow_, gravity);
 
 	transform_.pos = VAdd(transform_.pos, jumpPow_);
+
+	jumpPow_ = VGet(0, 0, 0);
 }
 
 void CharactorBase::Collision(void)
@@ -121,7 +138,7 @@ void CharactorBase::CollisionGravity(void)
 			{
 				transform_.pos = VAdd(bestHitPos, VScale(AsoUtility::DIR_U, 2.0f));
 			}
-
+			
 		}
 
 		// 検出した地面ポリゴン情報の後始末

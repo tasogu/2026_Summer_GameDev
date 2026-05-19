@@ -23,6 +23,9 @@ public:
 	//更新
 	virtual void Update(void) override;
 
+	//移動前座標を保存する
+	VECTOR prevPos_;
+
 	//移動量
 	VECTOR movePow_;
 
@@ -47,6 +50,10 @@ protected:
 
 	//衝突時の牡鹿絵師量
 	static constexpr float COLLISION_BACK_DIS = 1.0f;
+
+	//更新系(純粋仮想関数)
+	virtual void UpdateProcess(void) = 0;
+	virtual void UpdateProcessPost(void) = 0;
 
 	//重力計算
 	void CalcGravityPow(void);

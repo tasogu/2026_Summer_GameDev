@@ -30,8 +30,8 @@ public:
 	//初期化
 	void Init(void);
 
-	//更新
-	void Update(void);
+	////更新
+	//void Update(void);
 
 	//描画
 	void Draw(void);
@@ -50,7 +50,7 @@ private:
 	static constexpr float ROT_Y =180.0f;
 
 	//座標
-	static constexpr VECTOR POS = { 0.0f, 40.0f, 0.0f };
+	static constexpr VECTOR POS = { 0.0f, 1000.0f, 0.0f };
 
 	//移動速度(歩き)
 	static constexpr float SPEED_MOVE = 3.0f;
@@ -90,6 +90,10 @@ private:
 
 	//回転時間
 	float stepRotTime_;
+
+	//更新系(純粋仮想関数継承)
+	virtual void UpdateProcess(void) override;
+	virtual void UpdateProcessPost(void) override;
 
 	//更新ステップ(NONE)
 	void UpdateNone(void);

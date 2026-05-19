@@ -51,7 +51,8 @@ void Player::Init(void)
 
 }
 
-void Player::Update(void)
+
+void Player::UpdateProcess(void)
 {
 	//更新ステップ
 	switch (state_)
@@ -69,6 +70,11 @@ void Player::Update(void)
 
 	//アニメーションの更新
 	animationController_->Update();
+
+}
+
+void Player::UpdateProcessPost(void)
+{
 }
 
 void Player::UpdateNone(void)
@@ -82,7 +88,6 @@ void Player::UpdatePlay(void)
 
 	//移動方向に応じた回転
 	Rotate();
-
 
 	//プレイヤーの回転の更新
 	transform_.quaRot = playerRotY_;
@@ -272,12 +277,6 @@ void Player::ProcessMove(void)
 
 		//回転処理
 		SetGoalRotate(rotRad);
-
-		//プレイヤーの座標に移動量を加算
-		movePos_ = VAdd(transform_.pos, movePow_);
-
-		//プレイヤーに移動を適用
-		transform_.pos = movePos_;
 
 
 	}
