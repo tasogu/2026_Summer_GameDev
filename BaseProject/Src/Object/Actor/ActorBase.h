@@ -41,6 +41,9 @@ public:
 	// 衝突対象となるコライダを登録
 	void AddHitCollider(const ColliderBase* hitCollider);
 
+	// 衝突対象となるコライダをクリア
+	void ClearHitCollider(void);
+
 protected:
 
 	// シングルトン参照

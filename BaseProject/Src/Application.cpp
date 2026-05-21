@@ -138,7 +138,8 @@ bool Application::IsReleaseFail(void) const
 Application::Application(void)
 	:
 	isInitFail_(false),
-	isReleaseFail_(false)
+	isReleaseFail_(false),
+	fpsController_(nullptr)
 {
 }
 

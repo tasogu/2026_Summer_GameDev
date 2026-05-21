@@ -42,7 +42,6 @@ void GameScene::Init(void)
 	//ƒJƒƒ‰‚É‚à“o˜^
 	Camera* camera = sceMng_.GetCamera();
 	
-
 	//ƒJƒƒ‰’Ç]Ý’è
 	camera->SetFollow(&player_->GetTransform());
 	camera->ChangeMode(Camera::MODE::FOLLOW);

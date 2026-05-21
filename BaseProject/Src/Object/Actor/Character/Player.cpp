@@ -65,17 +65,13 @@ void Player::UpdateProcess(void)
 		break;
 	}
 
-	//プレイヤ-の更新
-	transform_.Update();
-
-	//アニメーションの更新
-	animationController_->Update();
-
 }
 
 void Player::UpdateProcessPost(void)
 {
 }
+
+
 
 void Player::UpdateNone(void)
 {
@@ -121,8 +117,11 @@ void Player::ChangeStatePlay(void)
 
 void Player::Draw(void)
 {
-	//プレイヤーの描画
-	MV1DrawModel(transform_.modelId);
+	//基底クラスの描画処理
+	ActorBase::Draw();
+
+	////プレイヤーの描画
+	//MV1DrawModel(transform_.modelId);
 	
 
 }
@@ -166,6 +165,7 @@ void Player::InitCollider(void)
 	ColliderLine* coiLine = new ColliderLine(
 		ColliderBase::TAG::PLAYER, &transform_,
 		COL_LINE_START_LOCAL_POS, COL_LINE_END_LOCAL_POS);
+	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::LINE), coiLine);
 	
 	// 主に壁や木などの衝突で仕様するカプセルコライダ
 	ColliderCapsule* colCapsule = new ColliderCapsule(

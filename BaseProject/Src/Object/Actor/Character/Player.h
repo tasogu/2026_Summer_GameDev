@@ -1,6 +1,6 @@
 #pragma once
 #include "CharactorBase.h"
-class AnimationController;
+//class AnimationController;
 
 class Player : public CharactorBase
 {
@@ -40,8 +40,8 @@ public:
 	void Release(void);
 
 private:
-	//アニメーションコントローラーの呼び出し
-	AnimationController* animationController_;
+	////アニメーションコントローラーの呼び出し
+	//AnimationController* animationController_;
 
 	//スケール
 	static constexpr VECTOR SCALE = { 1.0f, 1.0f, 1.0f };
@@ -111,19 +111,19 @@ private:
 	void ChangeStatePlay(void);
 
 	// リソースロード
-	void InitLoad(void);
+	void InitLoad(void) override;
 
 	// 大きさ、回転、座標の初期化
-	void InitTransform(void);
+	void InitTransform(void) override;
 
 	// 衝突判定の初期化
-	void InitCollider(void);
+	void InitCollider(void) override;
 
 	// アニメーションの初期化
-	void InitAnimation(void);
+	void InitAnimation(void) override;
 
 	// 初期化後の個別処理
-	void InitPost(void);
+	void InitPost(void) override;
 
 	//プレイヤーの移動
 	void ProcessMove(void);

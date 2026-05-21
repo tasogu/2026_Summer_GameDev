@@ -1,6 +1,7 @@
 #include "../../Actor/ColliderCapsule.h"
 #include "../../Actor/ColliderLine.h"
 #include "../../Actor/ColliderModel.h"
+#include "../../Common/AnimationController.h"
 #include "../../../Utility/AsoUtility.h"
 #include "../../../../Src/Application.h"
 #include "../../../Manager/SceneManager.h"
@@ -8,7 +9,16 @@
 
 CharactorBase::CharactorBase(void)
 	:
-	ActorBase()
+	ActorBase(),
+	isGround_(false),
+	prevPos_(),
+	movePow_(),
+	moveDir_(),
+	movePos_(),
+	jumpPow_(),
+	speed_()
+
+
 {
 }
 
@@ -18,14 +28,16 @@ CharactorBase::~CharactorBase(void)
 
 void CharactorBase::Update(void)
 {
+	OutputDebugString("DEBUG: CharactorBase::Update() is running!\n");
+
 	//移動前座標を保存
 	prevPos_ = transform_.pos;
 
 	//各キャラクターごとの更新処理
 	UpdateProcess();
 
-	//キャラクターの移動
-	transform_.pos = VAdd(prevPos_ ,movePow_);
+	//移動方向に応じた遅延回転
+	DelayRotate();
 
 	//重力による移動量
 	CalcGravityPow();
@@ -36,8 +48,28 @@ void CharactorBase::Update(void)
 	//画面に反映
 	transform_.Update();
 
+	//アニメーションの更新
+	animationController_->Update();
+
 	//各キャラクターごとの更新の処理
 	UpdateProcessPost();
+
+
+}
+
+void CharactorBase::Draw(void)
+{
+	ActorBase::Draw();
+}
+
+void CharactorBase::DelayRotate(void)
+{
+	// 移動方向から回転に変換する
+	Quaternion goalRot = Quaternion::LookRotation(moveDir_);
+
+	// 回転の補間
+	transform_.quaRot =
+		Quaternion::Slerp(transform_.quaRot, goalRot, 0.2f);
 }
 
 void CharactorBase::CalcGravityPow(void)
@@ -54,15 +86,26 @@ void CharactorBase::CalcGravityPow(void)
 	VECTOR gravity = VScale(dirGravity, gravityPow);
 	jumpPow_ = VAdd(jumpPow_, gravity);
 
-	transform_.pos = VAdd(transform_.pos, jumpPow_);
-
-	jumpPow_ = VGet(0, 0, 0);
+	// 落下速度の上限を設定
+	if (jumpPow_.y < MAX_GALL_SPEED)
+	{
+		jumpPow_.y = MAX_GALL_SPEED;
+	}
 }
 
 void CharactorBase::Collision(void)
 {
+	//移動処理
+	transform_.pos = VAdd(transform_.pos, movePow_);
 
+	//衝突(カプセル)
 	CollisionCapsule();
+
+	//重力移動量を足す
+	transform_.pos = VAdd(transform_.pos, jumpPow_);
+
+	//衝突判定のリセット
+	isGround_ = false;
 
 	// 衝突(重力)
 	CollisionGravity();
@@ -86,8 +129,6 @@ void CharactorBase::CollisionGravity(void)
 	// 線分の始点と終点を取得
 	VECTOR s = colliderLine_->GetPosStart();
 	VECTOR e = colliderLine_->GetPosEnd();
-	//VECTOR s = VAdd(transform_.pos, VGet(0, 0, 0));
-	//VECTOR e = VAdd(transform_.pos, VGet(0, -50.0f, 0));
 
 	// 登録されている衝突物を全てチェック
 	for (const auto& hitCol : hitColliders_)
@@ -101,6 +142,15 @@ void CharactorBase::CollisionGravity(void)
 
 		if (colliderModel == nullptr) continue;
 		const float descendThreshold = 0.9f;
+		bool isDescending = (VDot(AsoUtility::DIR_D, jumpPow_) > descendThreshold);
+
+		// もし「常に判定したい」なら isDescending=true にするか、閾値を下げてください。
+		if (!isDescending)
+		{
+			// 上昇中はこのステージモデルに対する判定を飛ばす
+			// （必要に応じてコメントアウトして常に判定する）
+			continue;
+		}
 
 		// ステージモデル(地面)との衝突（全ポリゴンを取得）
 		auto hits = MV1CollCheck_LineDim(
@@ -138,14 +188,18 @@ void CharactorBase::CollisionGravity(void)
 			{
 				transform_.pos = VAdd(bestHitPos, VScale(AsoUtility::DIR_U, 2.0f));
 			}
-			
+			//客地扱いにする
+			isGround_ = true;
 		}
 
 		// 検出した地面ポリゴン情報の後始末
 		MV1CollResultPolyDimTerminate(hits);
 	}
-
-
+	//客氏していればジャンプリセット
+	if (isGround_)
+	{
+		jumpPow_ = AsoUtility::VECTOR_ZERO;
+	}
 }
 
 void CharactorBase::CollisionCapsule(void)

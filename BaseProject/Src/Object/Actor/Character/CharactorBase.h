@@ -2,6 +2,7 @@
 #include <map>
 #include <Dxlib.h>
 #include "../../Actor/ActorBase.h"
+class AnimationController;
 
 class CharactorBase : public ActorBase
 {
@@ -23,6 +24,9 @@ public:
 	//更新
 	virtual void Update(void) override;
 
+	//描画
+	virtual void Draw(void) override;
+
 	//移動前座標を保存する
 	VECTOR prevPos_;
 
@@ -42,6 +46,9 @@ public:
 	float speed_;
 
 protected:
+	//アニメーションコントローラーの呼び出し
+	AnimationController* animationController_;
+
 	//最大落下速度
 	static constexpr float MAX_GALL_SPEED = -30.0f;
 
@@ -51,9 +58,15 @@ protected:
 	//衝突時の牡鹿絵師量
 	static constexpr float COLLISION_BACK_DIS = 1.0f;
 
+	//地面と接しているかどうか
+	bool isGround_;
+
 	//更新系(純粋仮想関数)
 	virtual void UpdateProcess(void) = 0;
 	virtual void UpdateProcessPost(void) = 0;
+
+	//移動方向に応じた遅延回転
+	void DelayRotate(void);
 
 	//重力計算
 	void CalcGravityPow(void);
