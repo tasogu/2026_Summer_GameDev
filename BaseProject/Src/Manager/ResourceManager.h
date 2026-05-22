@@ -14,6 +14,7 @@ public:
 		TITLE,
 		STAGE,
 		PLAYER,
+		NOMAL_ENEMY,
 		IDLE,
 		WALK,
 		RUN,

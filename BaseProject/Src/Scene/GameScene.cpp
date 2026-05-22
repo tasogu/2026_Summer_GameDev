@@ -5,12 +5,14 @@
 #include "../Object/Actor/Stage.h"
 #include "../Object/Actor/Character/Player.h"
 #include "../Manager/Camera.h"
+#include "../Manager/EnemyManager.h"
 #include "GameScene.h"
 
 GameScene::GameScene(void)
 	:
 	stage_(nullptr),
 	player_(nullptr),
+	enemy_(nullptr),
 	SceneBase()
 
 {
@@ -20,6 +22,7 @@ GameScene::~GameScene(void)
 {
 	delete stage_;
 	delete player_;
+	delete enemy_;
 }
 
 void GameScene::Init(void)
@@ -31,6 +34,10 @@ void GameScene::Init(void)
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Init();
+
+	//エネミーの生成
+	enemy_ = new EnemyManager();
+	enemy_->Init();;
 
 	// ステージのコライダを取得
 	const ColliderBase* stageCollider =

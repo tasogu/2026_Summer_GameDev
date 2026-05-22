@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 class Stage;
 class Player;
+class EnemyManager;
 
 class GameScene : public SceneBase
 {
@@ -34,4 +35,6 @@ private:
 	//プレイヤー
 	Player* player_;
 
+	//エネミー
+	EnemyManager* enemy_;
 };

@@ -34,10 +34,10 @@ public:
 	//void Update(void);
 
 	//描画
-	void Draw(void);
+	virtual void Draw(void) override;
 
 	//解放
-	void Release(void);
+	virtual void Release(void) override;
 
 private:
 	////アニメーションコントローラーの呼び出し
