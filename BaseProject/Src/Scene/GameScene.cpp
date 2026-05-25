@@ -46,6 +46,9 @@ void GameScene::Init(void)
 	//プレイヤーに登録
 	player_->AddHitCollider(stageCollider);
 
+	//エネミーに追加
+	enemy_->AddHitCollider(stageCollider);
+
 	//カメラにも登録
 	Camera* camera = sceMng_.GetCamera();
 	
@@ -62,6 +65,9 @@ void GameScene::Update(void)
 
 	//プレイヤーの更新
 	player_->Update();
+
+	//エネミーの更新
+	enemy_->Update();
 
 	// シーン遷移
 	auto const& ins = InputManager::GetInstance();
@@ -80,6 +86,8 @@ void GameScene::Draw(void)
 	//プレイヤーの描画
 	player_->Draw();
 
+	//エネミーの描画
+	enemy_->Draw();
 }
 
 void GameScene::Release(void)
@@ -92,4 +100,7 @@ void GameScene::Release(void)
 	player_->Release();
 	delete player_;
 
+	//エネミーの開放
+	enemy_->Release();
+	delete enemy_;
 }

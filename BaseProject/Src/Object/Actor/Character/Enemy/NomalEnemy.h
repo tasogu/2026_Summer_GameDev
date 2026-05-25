@@ -5,7 +5,7 @@ class NomalEnemy : public EnemyBase
 {
 public:
 	//コンストラクタ
-	NomalEnemy(void);;
+	NomalEnemy(const EnemyBase::EnemyData& data);
 
 	//デストラクタ
 	virtual ~NomalEnemy(void) override;
@@ -68,6 +68,7 @@ private:
 	virtual void UpdateProcess(void) override;
 	virtual void UpdateProcessPost(void) override;
 
+	virtual void CollisionReserve(void) {};
 
 };
 

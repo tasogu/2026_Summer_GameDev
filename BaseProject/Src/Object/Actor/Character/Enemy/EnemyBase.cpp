@@ -1,6 +1,9 @@
 #include "EnemyBase.h"
 
-EnemyBase::EnemyBase(void)
+EnemyBase::EnemyBase(const EnemyBase::EnemyData& data)
+	:
+	CharactorBase()
+
 {
 }
 

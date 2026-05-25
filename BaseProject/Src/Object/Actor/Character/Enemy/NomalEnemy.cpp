@@ -5,7 +5,9 @@
 #include "../../ColliderLine.h"
 #include "NomalEnemy.h"
 
-NomalEnemy::NomalEnemy(void)
+NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
+	:
+	EnemyBase(data)
 {
 }
 
@@ -43,9 +45,6 @@ void NomalEnemy::InitTransform(void)
 
 	//プレイヤーの回転
 	transform_.quaRotLocal = Quaternion::Euler({ 0.0f, AsoUtility::Deg2RadF(ROT_Y),0.0f });
-
-	//移動位置を初期化
-	movePos_ = POS;
 
 	//プレイヤーの座標
 	transform_.pos = movePos_;
