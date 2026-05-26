@@ -137,6 +137,14 @@ void Player::InitLoad(void)
 //	imgPlayer_ = resMng_.Load(ResourceManager::SRC::PLAYER).handleId_;
 	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER).handleId_);
 
+	//剣のモデルのロード
+	transform_.SetModel(resMng_.Load(ResourceManager::SRC::SWORD).handleId_);
+
+	//モデルの手のボーンを取得
+	handBoneid_ = MV1SearchFrame(transform_.modelId, "mixamorig:RightHandMiddle1");
+
+	//剣のモデルを手のボーンに装着
+	MV1AttachAnim(transform_.modelId, handBoneid_, 1);
 }
 
 void Player::InitTransform(void)

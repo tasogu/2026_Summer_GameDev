@@ -43,6 +43,10 @@ void ResourceManager::Init(void)
 	res = new RES(RES_T::MODEL, PATH_MDL + "Player/Player.mv1");
 	resourcesMap_.emplace(SRC::PLAYER, res);
 
+	//剣のモデル
+	res = new RES(RES_T::MODEL, PATH_MDL + "Player/Sword.mv1");
+	resourcesMap_.emplace(SRC::SWORD, res);
+
 	//ノーマルエネミーモデル
 	res = new RES(RES_T::MODEL, PATH_MDL + "Enemy/Player.mv1");
 	resourcesMap_.emplace(SRC::NOMAL_ENEMY, res);

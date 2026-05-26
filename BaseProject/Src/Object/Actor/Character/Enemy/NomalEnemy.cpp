@@ -21,6 +21,8 @@ void NomalEnemy::InitLoad(void)
 {
 
 	transform_.SetModel(resMng_.Load(ResourceManager::SRC::NOMAL_ENEMY).handleId_);
+
+	
 }
 
 void NomalEnemy::InitTransform(void)

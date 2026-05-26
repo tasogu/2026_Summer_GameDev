@@ -61,6 +61,9 @@ protected:
 	//地面と接しているかどうか
 	bool isGround_;
 
+	//手のボーンを取得する
+	int handBoneid_;
+
 	//更新系(純粋仮想関数)
 	virtual void UpdateProcess(void) = 0;
 	virtual void UpdateProcessPost(void) = 0;
