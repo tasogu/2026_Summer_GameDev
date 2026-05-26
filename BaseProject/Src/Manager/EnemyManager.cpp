@@ -66,7 +66,7 @@ void EnemyManager::LoadData(void)
 	data.hp = 10;
 
 	//初期座標
-	data.defaultPos = { 20.0f, 20.0f, 20.0f };
+	data.defaultPos = { 200.0f, 200.0f, 200.0f };
 
 	//エネミー生成
 	Create(data);

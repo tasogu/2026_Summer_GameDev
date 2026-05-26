@@ -1,4 +1,6 @@
 #include "../../../../Manager/ResourceManager.h"
+#include "../../../../Application.h"
+#include "../../../Common/AnimationController.h"
 #include "../../../Common/Transform.h"
 #include "../../../../Utility/AsoUtility.h"
 #include "../../ColliderCapsule.h"
@@ -15,27 +17,10 @@ NomalEnemy::~NomalEnemy(void)
 {
 }
 
-void NomalEnemy::Init(void)
-{
-	//リソースロード
-	InitLoad();
-
-	//	// 大きさ、回転、座標の初期化
-	InitTransform();
-
-	// 衝突判定の初期化
-	InitCollider();
-
-	// アニメーションの初期化
-	InitAnimation();
-
-	// 初期化後の個別処理
-	InitPost();
-}
-
 void NomalEnemy::InitLoad(void)
 {
-	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER).handleId_);
+
+	transform_.SetModel(resMng_.Load(ResourceManager::SRC::NOMAL_ENEMY).handleId_);
 }
 
 void NomalEnemy::InitTransform(void)
@@ -47,7 +32,7 @@ void NomalEnemy::InitTransform(void)
 	transform_.quaRotLocal = Quaternion::Euler({ 0.0f, AsoUtility::Deg2RadF(ROT_Y),0.0f });
 
 	//プレイヤーの座標
-	transform_.pos = movePos_;
+	transform_.Update();
 
 }
 
@@ -70,21 +55,12 @@ void NomalEnemy::InitCollider(void)
 
 void NomalEnemy::InitAnimation(void)
 {
+	std::string path = Application::PATH_MODEL + "Player/";
+	animationController_ = new AnimationController(transform_.modelId);
+
 }
 
 void NomalEnemy::InitPost(void)
-{
-}
-
-void NomalEnemy::Update(void)
-{
-}
-
-void NomalEnemy::Draw(void)
-{
-}
-
-void NomalEnemy::Release(void)
 {
 }
 

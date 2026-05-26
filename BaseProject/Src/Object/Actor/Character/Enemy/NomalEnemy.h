@@ -10,17 +10,13 @@ public:
 	//デストラクタ
 	virtual ~NomalEnemy(void) override;
 
-	//初期化
-	void Init(void);
-
-	//更新
-	virtual void Update(void) override;
-
-	//描画
-	virtual void Draw(void) override;
-
-	//解放
-	virtual void Release(void) override;
+	//アニメーションタイプ
+	enum class ANIM_TYPE
+	{
+		IDLE,
+		WALK,
+		RUN,
+	};
 
 
 private:
@@ -57,7 +53,7 @@ private:
 	// 衝突判定の初期化
 	void InitCollider(void) override;
 
-	// アニメーションの初期化
+	//// アニメーションの初期化
 	void InitAnimation(void) override;
 
 	// 初期化後の個別処理

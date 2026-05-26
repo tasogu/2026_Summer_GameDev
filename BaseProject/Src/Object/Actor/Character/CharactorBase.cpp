@@ -16,7 +16,8 @@ CharactorBase::CharactorBase(void)
 	moveDir_(),
 	movePos_(),
 	jumpPow_(),
-	speed_()
+	speed_(),
+	animationController_(nullptr)
 
 
 {
