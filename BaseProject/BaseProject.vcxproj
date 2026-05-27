@@ -48,6 +48,7 @@
     <ClCompile Include="Src\Utility\AsoUtility.cpp" />
     <ClCompile Include="Src\Utility\MatrixUtility.cpp" />
     <ClCompile Include="Src\Object\Actor\Stage.cpp" />
+    <ClCompile Include="Src\Object\Actor\Character\Sword.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Object\Actor\Character\Enemy\EnemyBase.h" />
@@ -79,6 +80,7 @@
     <ClInclude Include="Src\Utility\AsoUtility.h" />
     <ClInclude Include="Src\Utility\MatrixUtility.h" />
     <ClInclude Include="Src\Object\Actor\Stage.h" />
+    <ClInclude Include="Src\Object\Actor\Character\Sword.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

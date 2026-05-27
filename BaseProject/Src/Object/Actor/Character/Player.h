@@ -1,6 +1,7 @@
 #pragma once
 #include "CharactorBase.h"
 //class AnimationController;
+class Sword;
 
 class Player : public CharactorBase
 {
@@ -75,6 +76,12 @@ private:
 
 	// 衝突判定用カプセル球体半径
 	static constexpr float COL_CAPSULE_RADIUS = 20.0f;
+
+	//ソードのポインタ
+	Sword* sword_;
+
+	//剣のモデルID
+	int imgSword_;
 
 	//モデル描画
 	int imgPlayer_;

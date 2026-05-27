@@ -10,10 +10,12 @@
 #include "../../Common/AnimationController.h"
 #include "..//ColliderCapsule.h"
 #include "..//ColliderLine.h"
+#include "Sword.h"
 #include "Player.h"
 
 Player::Player(void)
 	:
+	sword_(nullptr),
 	imgPlayer_(-1),
 	CharactorBase()
 {
@@ -88,6 +90,19 @@ void Player::UpdatePlay(void)
 	//プレイヤーの回転の更新
 	transform_.quaRot = playerRotY_;
 
+	////手のローカル行列を取得
+	//MATRIX handLocalMat = MV1GetFrameLocalMatrix(transform_.modelId, handBoneid_);
+
+	////プレイヤーのワールド行列を取得
+	//MATRIX playerWorldMat = transform_.GetWorldMatrix();
+
+	//位置を取得
+	VECTOR handPos = MV1GetFramePosition(transform_.modelId, handBoneid_);
+
+	//剣の位置を手の位置に更新
+	sword_->UpdatePose(handPos);
+
+	MV1GetFrameLocalMatrix(transform_.modelId, handBoneid_);
 }
 
 void Player::ChangeState(STATE state)
@@ -123,6 +138,8 @@ void Player::Draw(void)
 	////プレイヤーの描画
 	//MV1DrawModel(transform_.modelId);
 	
+	//剣の描画
+	sword_->Draw();
 
 }
 
@@ -138,13 +155,14 @@ void Player::InitLoad(void)
 	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER).handleId_);
 
 	//剣のモデルのロード
-	transform_.SetModel(resMng_.Load(ResourceManager::SRC::SWORD).handleId_);
+	sword_ = new Sword();
+	sword_->Init();
 
 	//モデルの手のボーンを取得
 	handBoneid_ = MV1SearchFrame(transform_.modelId, "mixamorig:RightHandMiddle1");
-
+	
 	//剣のモデルを手のボーンに装着
-	MV1AttachAnim(transform_.modelId, handBoneid_, 1);
+	(imgSword_, handBoneid_, 1);
 }
 
 void Player::InitTransform(void)
