@@ -42,13 +42,13 @@ void NomalEnemy::InitCollider(void)
 {
 	//主に地面との衝突で使用する線分コライダー	
 	ColliderLine* coiLine = new ColliderLine(
-		ColliderBase::TAG::PLAYER, &transform_,
+		ColliderBase::TAG::ENEMY, &transform_,
 		COL_LINE_START_LOCAL_POS, COL_LINE_END_LOCAL_POS);
 	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::LINE), coiLine);
 
 	// 主に壁や木などの衝突で仕様するカプセルコライダ
 	ColliderCapsule* colCapsule = new ColliderCapsule(
-		ColliderBase::TAG::PLAYER, &transform_,
+		ColliderBase::TAG::ENEMY, &transform_,
 		COL_CAPSULE_TOP_LOCAL_POS, COL_CAPSULE_DOWN_LOCAL_POS,
 		COL_CAPSULE_RADIUS);
 	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::CAPSULE), colCapsule);

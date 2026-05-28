@@ -23,6 +23,8 @@ public:
 		STAGE,
 		PLAYER,
 		CAMERA,
+		ENEMY,
+		SWORD
 	};
 
 	// コンストラクタ

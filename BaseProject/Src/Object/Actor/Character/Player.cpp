@@ -17,8 +17,9 @@ Player::Player(void)
 	:
 	sword_(nullptr),
 	imgPlayer_(-1),
-	CharactorBase()
-{
+	CharactorBase(),
+	imgSword_(-1)
+{	
 	playerRotY_ = Quaternion();
 	goalQuaRot_ = Quaternion();
 	stepRotTime_ = 0.0f;
@@ -92,7 +93,7 @@ void Player::UpdatePlay(void)
 
 	////手のローカル行列を取得
 	//MATRIX handLocalMat = MV1GetFrameLocalMatrix(transform_.modelId, handBoneid_);
-
+	
 	////プレイヤーのワールド行列を取得
 	//MATRIX playerWorldMat = transform_.GetWorldMatrix();
 
@@ -100,7 +101,7 @@ void Player::UpdatePlay(void)
 	VECTOR handPos = MV1GetFramePosition(transform_.modelId, handBoneid_);
 
 	//剣の位置を手の位置に更新
-	sword_->UpdatePose(handPos);
+	sword_->UpdatePose(handPos, transform_.quaRot);
 
 	MV1GetFrameLocalMatrix(transform_.modelId, handBoneid_);
 }

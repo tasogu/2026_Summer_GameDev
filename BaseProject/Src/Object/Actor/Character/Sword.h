@@ -11,11 +11,21 @@ public:
 	void Draw(void);
 
 	//プレイヤーから行列を受け取って糸を反映するメソッド
-	void UpdatePose(VECTOR pos);
+	void UpdatePose(VECTOR pos, Quaternion playerRot);
 
 private:
 	//スケール
-	static constexpr VECTOR SCALE = { 0.1f, 0.1f, 0.1f };
+	static constexpr VECTOR SCALE = { 0.05f, 0.05f, 0.05f };
+
+	//	// 衝突判定用カプセル上部球体
+	static constexpr VECTOR COL_CAPSULE_TOP_LOCAL_POS = { 0.0f, 50.0f, 0.0f };
+
+	// 衝突判定用カプセル下部球体
+	static constexpr VECTOR COL_CAPSULE_DOWN_LOCAL_POS = { 0.0f, 20.0f, 0.0f };
+
+	// 衝突判定用カプセル球体半径
+	static constexpr float COL_CAPSULE_RADIUS = 20.0f;
+
 
 	//剣のモデルID
 	int imgSword_;
@@ -34,6 +44,8 @@ private:
 
 	// 初期化後の個別処理
 	void InitPost(void) override;
+
+
 
 };
 
