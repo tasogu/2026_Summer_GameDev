@@ -3,6 +3,7 @@
 #include "../../../Manager/ResourceManager.h"
 #include "../ColliderBase.h"
 #include "../ColliderCapsule.h"
+#include "CharactorBase.h"
 #include "Sword.h"
 
 Sword::Sword(void)
@@ -68,7 +69,7 @@ void Sword::InitCollider(void)
 		ColliderBase::TAG::SWORD,
 		&transform_, COL_CAPSULE_TOP_LOCAL_POS, COL_CAPSULE_DOWN_LOCAL_POS,
 		COL_CAPSULE_RADIUS);
-
+	ownColliders_.emplace(static_cast<int>(CharactorBase::COLLIDER_TYPE::CAPSULE), col);
 }
 
 void Sword::InitAnimation(void)

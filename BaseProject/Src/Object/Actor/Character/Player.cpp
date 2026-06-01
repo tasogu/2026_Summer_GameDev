@@ -91,12 +91,6 @@ void Player::UpdatePlay(void)
 	//プレイヤーの回転の更新
 	transform_.quaRot = playerRotY_;
 
-	////手のローカル行列を取得
-	//MATRIX handLocalMat = MV1GetFrameLocalMatrix(transform_.modelId, handBoneid_);
-	
-	////プレイヤーのワールド行列を取得
-	//MATRIX playerWorldMat = transform_.GetWorldMatrix();
-
 	//位置を取得
 	VECTOR handPos = MV1GetFramePosition(transform_.modelId, handBoneid_);
 
@@ -135,9 +129,6 @@ void Player::Draw(void)
 {
 	//基底クラスの描画処理
 	ActorBase::Draw();
-
-	////プレイヤーの描画
-	//MV1DrawModel(transform_.modelId);
 	
 	//剣の描画
 	sword_->Draw();
@@ -152,7 +143,6 @@ void Player::Release(void)
 void Player::InitLoad(void)
 {
 	//プレイヤーモデルのロード
-//	imgPlayer_ = resMng_.Load(ResourceManager::SRC::PLAYER).handleId_;
 	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER).handleId_);
 
 	//剣のモデルのロード
@@ -170,11 +160,9 @@ void Player::InitTransform(void)
 {
 
 	//プレイヤーの大きさ
-	//MV1SetScale(imgPlayer_, SCALE_);
 	transform_.scl = SCALE;
 
 	//プレイヤーの回転
-	//MV1SetRotationXYZ(imgPlayer_, VGet(0.0f, ROT_Y, 0.0f));
 	transform_.quaRotLocal = Quaternion::Euler({ 0.0f, AsoUtility::Deg2RadF(ROT_Y),0.0f });
 
 	//移動位置を初期化
@@ -182,7 +170,6 @@ void Player::InitTransform(void)
 
 	//プレイヤーの座標
 	transform_.pos = movePos_;
-//	MV1SetPosition(imgPlayer_, POS_);
 
 }
 

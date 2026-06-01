@@ -145,11 +145,10 @@ void CharactorBase::CollisionGravity(void)
 		const float descendThreshold = 0.9f;
 		bool isDescending = (VDot(AsoUtility::DIR_D, jumpPow_) > descendThreshold);
 
-		// もし「常に判定したい」なら isDescending=true にするか、閾値を下げてください。
+		// もし「常に判定したい」なら
 		if (!isDescending)
 		{
 			// 上昇中はこのステージモデルに対する判定を飛ばす
-			// （必要に応じてコメントアウトして常に判定する）
 			continue;
 		}
 
