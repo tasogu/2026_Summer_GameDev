@@ -39,6 +39,7 @@ void Sword::Update(void)
 {
 	//モデルの情報をTransformに反映させる
 	transform_.pos = MV1GetPosition(transform_.modelId);
+
 }
 
 void Sword::Draw(void)
@@ -92,14 +93,19 @@ void Sword::UpdatePose(VECTOR pos, Quaternion playerRot)
 	VECTOR finalPos = VAdd(pos, worldOffset);
 
 	//剣の構え用の回転行れる
-	MATRIX stanceMat = MGetRotX(AsoUtility::Deg2RadF(135.0f));
+	MATRIX stanceMat = MGetRotX(AsoUtility::Deg2RadF(ROT));
 
 	//最終的な回転行列(剣の構え×プレイヤーの向き)
 	MATRIX finalMat = MMult(stanceMat, rotMat);
 
 	//適用
-	MV1SetPosition(transform_.modelId, finalPos);
-	MV1SetRotationMatrix(transform_.modelId, finalMat);
-	MV1SetScale(transform_.modelId, SCALE);
+	//MV1SetPosition(transform_.modelId, finalPos);
+	//MV1SetRotationMatrix(transform_.modelId, finalMat);
+	//MV1SetScale(transform_.modelId, SCALE);
 
+	transform_.pos = finalPos;
+
+	transform_.quaRot = Quaternion::GetRotation(finalMat);
+
+	transform_.Update();
 }

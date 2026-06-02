@@ -18,14 +18,16 @@ private:
 	static constexpr VECTOR SCALE = { 0.05f, 0.05f, 0.05f };
 
 	//	// 衝突判定用カプセル上部球体
-	static constexpr VECTOR COL_CAPSULE_TOP_LOCAL_POS = { 0.0f, 100.0f, 0.0f };
+	static constexpr VECTOR COL_CAPSULE_TOP_LOCAL_POS = { 0.0f, 20.0f, -45.0f };
 
 	// 衝突判定用カプセル下部球体
-	static constexpr VECTOR COL_CAPSULE_DOWN_LOCAL_POS = { 0.0f, 20.0f, 0.0f };
+	static constexpr VECTOR COL_CAPSULE_DOWN_LOCAL_POS = { 0.0f, 20.0f, 10.0f };
 
 	// 衝突判定用カプセル球体半径
-	static constexpr float COL_CAPSULE_RADIUS = 20.0f;
+	static constexpr float COL_CAPSULE_RADIUS = 5.0f;
 
+	//剣に加える回転の角度
+	static constexpr float ROT = 135.0f;
 
 	//剣のモデルID
 	int imgSword_;

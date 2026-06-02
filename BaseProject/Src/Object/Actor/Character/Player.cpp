@@ -18,7 +18,8 @@ Player::Player(void)
 	sword_(nullptr),
 	imgPlayer_(-1),
 	CharactorBase(),
-	imgSword_(-1)
+	imgSword_(-1),
+	isAttack_(false)
 {	
 	playerRotY_ = Quaternion();
 	goalQuaRot_ = Quaternion();
@@ -82,8 +83,18 @@ void Player::UpdateNone(void)
 
 void Player::UpdatePlay(void)
 {
-	//移動
-	ProcessMove();
+	//アニメーションの更新
+	animationController_->Update();
+
+	//攻撃
+	ProcessAttack();
+	
+	//攻撃中ではないなら移動
+	if (isAttack_ == false) {
+		//移動
+		ProcessMove();
+
+	}
 
 	//移動方向に応じた回転
 	Rotate();
@@ -197,6 +208,7 @@ void Player::InitAnimation(void)
 	animationController_->Add((int)ANIM_TYPE::IDLE , 20.0f, path + "Idle.mv1");
 	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f, path + "Walk.mv1");
 	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f, path + "Run.mv1");
+	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f, path + "Attack.mv1");
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 
@@ -300,6 +312,35 @@ void Player::ProcessMove(void)
 		animationController_->Play((int)ANIM_TYPE::IDLE);
 	}
 
+
+}
+
+void Player::ProcessAttack(void)
+{
+	auto& ins = InputManager::GetInstance();
+	
+	//攻撃ボタンが押されたら
+	if (ins.IsNew(KEY_INPUT_K) && isAttack_ == false) {
+		//攻撃中フラグを立てる
+		isAttack_ = true;
+
+		//移動量をリセット
+		movePow_ = AsoUtility::VECTOR_ZERO;
+
+		//アニメーションを攻撃に変更
+		animationController_->Play((int)ANIM_TYPE::ATTACK, false);
+
+
+	}
+	//攻撃アニメーションが終了したら
+	else if (animationController_->IsEnd())
+	{
+		//攻撃中フラグをリセット
+		isAttack_ = false;
+
+		//アニメーションを待機に変更
+		animationController_->Play((int)ANIM_TYPE::IDLE);
+	}
 
 }
 

@@ -20,6 +20,7 @@ public:
 		IDLE,
 		WALK,
 		RUN,
+		ATTACK
 	};
 
 	//コンストラクタ
@@ -98,6 +99,9 @@ private:
 	//回転時間
 	float stepRotTime_;
 
+	//攻撃中かの判定
+	bool isAttack_;
+
 	//更新系(純粋仮想関数継承)
 	virtual void UpdateProcess(void) override;
 	virtual void UpdateProcessPost(void) override;
@@ -134,6 +138,9 @@ private:
 
 	//プレイヤーの移動
 	void ProcessMove(void);
+
+	//プレイヤーの攻撃
+	void ProcessAttack(void);
 
 	//回転したい角度を設定
 	void SetGoalRotate(double rotRad);
