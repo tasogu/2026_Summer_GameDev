@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneBase.h"
+#include "../Manager/ColliderManager.h"
 class Stage;
 class Player;
 class EnemyManager;
@@ -37,4 +38,7 @@ private:
 
 	//エネミー
 	EnemyManager* enemy_;
+
+	//コライダー
+	ColliderManager* collder_;
 };

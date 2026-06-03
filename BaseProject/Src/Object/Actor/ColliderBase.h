@@ -48,6 +48,9 @@ public:
 	// 衝突種別
 	TAG GetTag(void) const { return tag_; }
 
+	// 衝突判定
+	virtual bool CheckCollision(ColliderBase* other) = 0;
+
 protected:
 	// デバッグ表示の色
 	static constexpr int COLOR_VALID = 0xff0000;
@@ -70,5 +73,6 @@ protected:
 
 	// デバッグ用描画
 	virtual void DrawDebug(int color) = 0;
+
 };
 

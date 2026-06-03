@@ -73,6 +73,11 @@ bool ColliderModel::IsExcludeFrame(int frameIdx) const
 		frameIdx) != excludeFrameIds_.end();
 }
 
+bool ColliderModel::CheckCollision(ColliderBase* other)
+{
+	return false;
+}
+
 void ColliderModel::AddTargetFrameIds(const std::string& name)
 {
 	int num = MV1GetFrameNum(follow_->modelId);

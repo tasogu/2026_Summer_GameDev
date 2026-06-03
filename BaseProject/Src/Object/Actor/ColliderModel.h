@@ -27,6 +27,10 @@ public:
 
 	bool IsExcludeFrame(int frameIdx) const;
 	//bool IsTargetFrameNo(int frameIdx) const;
+
+		// 衝突判定
+	bool CheckCollision(ColliderBase* other) override;
+
 protected:
 	// 衝突判定から除外するフレーム番号
 	std::vector<int> excludeFrameIds_;
@@ -35,4 +39,6 @@ protected:
 
 	// デバッグ用描画
 	void DrawDebug(int color) override {};
+
+
 };

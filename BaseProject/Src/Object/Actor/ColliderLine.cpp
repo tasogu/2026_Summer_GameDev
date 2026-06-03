@@ -57,3 +57,8 @@ void ColliderLine::DrawDebug(int color)
 	DrawSphere3D(e, RADIUS, DIV_NUM, color, color, true);
 
 }
+
+bool ColliderLine::CheckCollision(ColliderBase* other)
+{
+	return false;
+}

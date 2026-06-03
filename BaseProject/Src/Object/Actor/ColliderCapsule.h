@@ -42,10 +42,16 @@ public:
 		int maxTryCnt,
 		float pushDistance) const;
 
+	// 衝突判定
+	bool CheckCollision(ColliderBase* other) override;
+
 protected:
 	// デバッグ用描画
 	void DrawDebug(int color) override;
 
+
+	//カプセル同士の衝突判定
+	bool CheckCollisionCapusle(const ColliderCapsule& a, const ColliderCapsule& b) const;
 private:
 	// 親Transformからの相対位置(上側)
 	VECTOR localPosTop_;
@@ -55,5 +61,7 @@ private:
 
 	// 半径
 	float radius_;
+
+
 };
 

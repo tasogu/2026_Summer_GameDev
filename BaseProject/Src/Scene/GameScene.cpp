@@ -14,7 +14,6 @@ GameScene::GameScene(void)
 	player_(nullptr),
 	enemy_(nullptr),
 	SceneBase()
-
 {
 }
 
@@ -23,6 +22,7 @@ GameScene::~GameScene(void)
 	delete stage_;
 	delete player_;
 	delete enemy_;
+	delete collder_;
 }
 
 void GameScene::Init(void)
@@ -39,9 +39,17 @@ void GameScene::Init(void)
 	enemy_ = new EnemyManager();
 	enemy_->Init();;
 
+	//コライダーの生成
+	collder_ = new ColliderManager();
+	
+	//プレイヤーのコライダーを登録
+	collder_->Register(player_->GetOwnCollider(0));
+
 	// ステージのコライダを取得
 	const ColliderBase* stageCollider =
 		stage_->GetOwnCollider(static_cast<int>(Stage::COLLIDER_TYPE::MODEL));
+
+	collder_->Register(stage_->GetOwnCollider(static_cast<int>(Stage::COLLIDER_TYPE::MODEL)));
 
 	//プレイヤーに登録
 	player_->AddHitCollider(stageCollider);
@@ -68,6 +76,9 @@ void GameScene::Update(void)
 
 	//エネミーの更新
 	enemy_->Update();
+
+	//コライダーの更新
+	collder_->Update();
 
 	// シーン遷移
 	auto const& ins = InputManager::GetInstance();

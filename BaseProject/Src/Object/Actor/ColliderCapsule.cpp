@@ -142,3 +142,43 @@ void ColliderCapsule::DrawDebug(int color)
 	DrawSphere3D(GetCenter(), 5.0f, 10, color, color, true);
 
 }
+
+bool ColliderCapsule::CheckCollision(ColliderBase* other)
+{
+	switch (other->GetShape()) {
+	case SHAPE::LINE:
+		//カプセルとラインの当たり判定
+		break;
+	case SHAPE::CAPSULE:
+		//カプセルとカプセルの当たり判定
+		const ColliderCapsule* otherCap = static_cast<const ColliderCapsule*> (other);
+
+		//自分と相手を渡して判定を実行
+		return CheckCollisionCapusle(*this, *otherCap);
+	}
+	return false;
+}
+
+bool ColliderCapsule::CheckCollisionCapusle(const ColliderCapsule& a, const ColliderCapsule& b) const
+{
+	//カプセルa,bの上と下の取得,半径の取得
+	VECTOR aTop = a.GetPosTop();
+	VECTOR aDown = a.GetPosDown();
+	float aRadius = a.GetRadius();
+	VECTOR bTop = b.GetPosTop();
+	VECTOR bDown = b.GetPosDown();
+	float bRadius = b.GetRadius();
+
+	//a,bの中心線を求める
+	VECTOR aCenter = VScale(VAdd(aTop, aDown), 0.5f);
+	VECTOR bCanter = VScale(VAdd(bTop, bDown), 0.5f);
+
+	//半径の合計を計算
+	float radiusSum = aRadius + bRadius;
+
+	//距離を求める
+	float dist = VSize(VSub(aCenter, bCanter));
+
+	//距離が半径の合計より小さいなら衝突している
+	return (dist < radiusSum);
+}

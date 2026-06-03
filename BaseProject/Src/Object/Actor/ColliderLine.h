@@ -29,6 +29,9 @@ public:
 
 	VECTOR GetPosEnd(void) const;
 
+	// 衝突判定
+	bool CheckCollision(ColliderBase* other) override;
+
 protected:
 	// デバッグ用描画
 	void DrawDebug(int color) override;
