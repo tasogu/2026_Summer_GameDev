@@ -10,7 +10,7 @@ void ColliderManager::Register(const ColliderBase* col)
 	collders_.push_back(col);
 }
 
-void ColliderManager::Unregister(ColliderBase* col)
+void ColliderManager::Unregister(const ColliderBase* col)
 {
 	//リストから順番に消していく
 	for (size_t i = 0; i < collders_.size(); ++i) {
@@ -31,6 +31,8 @@ void ColliderManager::Update()
 
 			//i番目とj番目のコライダーに
 			if (collders_[i]->CheckCollision(collders_[j])) {
+				collders_[i]->OnCollision(collders_[j]);
+				collders_[j]->OnCollision(collders_[i]);
 			}
 		}
 	}

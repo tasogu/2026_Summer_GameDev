@@ -73,8 +73,32 @@ bool ColliderModel::IsExcludeFrame(int frameIdx) const
 		frameIdx) != excludeFrameIds_.end();
 }
 
-bool ColliderModel::CheckCollision(ColliderBase* other)
+bool ColliderModel::CheckCollision(const ColliderBase* other)const
 {
+	switch (other->GetShape()) {
+	case SHAPE::LINE:
+		//カプセルとラインの当たり判定
+		const ColliderLine* colliderLine = dynamic_cast<const ColliderLine*>(other);
+		CheckLineCollision(*this, *colliderLine);
+		break;
+	}
+	return false;
+
+}
+
+void ColliderModel::OnCollision(const ColliderBase* hit)const
+{
+}
+
+bool ColliderModel::CheckLineCollision(const ColliderModel a, const ColliderLine b)const
+{
+	//モデルのハンドルID
+	int Mv1Id = follow_->modelId;
+
+	//線分の視点と終点を取得
+	VECTOR LineStart = b.GetPosStart();
+	VECTOR LineEnd = b.GetPosStart();
+
 	return false;
 }
 

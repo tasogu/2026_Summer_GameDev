@@ -9,7 +9,7 @@ public:
 	void Register(const ColliderBase* col);
 
 	// íœ‚·‚é‚Æ‚«‚É“o˜^‚ğŠO‚·
-	void Unregister(ColliderBase* col); 
+	void Unregister(const ColliderBase* col); 
 
 	// XV
 	void Update();

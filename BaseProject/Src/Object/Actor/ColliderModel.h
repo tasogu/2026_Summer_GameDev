@@ -1,6 +1,7 @@
 #pragma once
 #include<string>
 #include "ColliderBase.h"
+#include "ColliderLine.h"
 
 class ColliderModel : public ColliderBase
 {
@@ -29,7 +30,10 @@ public:
 	//bool IsTargetFrameNo(int frameIdx) const;
 
 		// 衝突判定
-	bool CheckCollision(ColliderBase* other) override;
+	bool CheckCollision(const ColliderBase* other)const override;
+
+	// 衝突時の処理
+	void OnCollision(const ColliderBase* hit)const override;
 
 protected:
 	// 衝突判定から除外するフレーム番号
@@ -37,8 +41,12 @@ protected:
 
 	std::vector<int> targetFrameIds_;   // 衝突対象
 
+	//ラインとの当たり判定
+	bool CheckLineCollision(const ColliderModel a, const ColliderLine b)const;
+
 	// デバッグ用描画
 	void DrawDebug(int color) override {};
 
+	
 
 };

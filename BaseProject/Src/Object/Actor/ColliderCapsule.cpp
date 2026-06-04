@@ -143,7 +143,7 @@ void ColliderCapsule::DrawDebug(int color)
 
 }
 
-bool ColliderCapsule::CheckCollision(ColliderBase* other)
+bool ColliderCapsule::CheckCollision(const ColliderBase* other)const
 {
 	switch (other->GetShape()) {
 	case SHAPE::LINE:
@@ -157,6 +157,10 @@ bool ColliderCapsule::CheckCollision(ColliderBase* other)
 		return CheckCollisionCapusle(*this, *otherCap);
 	}
 	return false;
+}
+
+void ColliderCapsule::OnCollision(const ColliderBase* hit)const
+{
 }
 
 bool ColliderCapsule::CheckCollisionCapusle(const ColliderCapsule& a, const ColliderCapsule& b) const

@@ -58,7 +58,11 @@ void ColliderLine::DrawDebug(int color)
 
 }
 
-bool ColliderLine::CheckCollision(ColliderBase* other)
+bool ColliderLine::CheckCollision(const ColliderBase* other)const
 {
 	return false;
+}
+
+void ColliderLine::OnCollision(const ColliderBase* hit)const
+{
 }

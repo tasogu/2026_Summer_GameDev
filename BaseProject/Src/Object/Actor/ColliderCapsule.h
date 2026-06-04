@@ -43,7 +43,10 @@ public:
 		float pushDistance) const;
 
 	// 衝突判定
-	bool CheckCollision(ColliderBase* other) override;
+	bool CheckCollision(const ColliderBase* other)const override;
+
+	// 衝突時の処理
+	void OnCollision(const ColliderBase* hit)const override;
 
 protected:
 	// デバッグ用描画
