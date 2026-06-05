@@ -79,7 +79,11 @@ bool ColliderModel::CheckCollision(const ColliderBase* other)const
 	case SHAPE::LINE:
 		//カプセルとラインの当たり判定
 		const ColliderLine* colliderLine = dynamic_cast<const ColliderLine*>(other);
-		CheckLineCollision(*this, *colliderLine);
+
+		//当たり判定の実装
+		if (colliderLine) {
+			return CheckLineCollision(*this, *colliderLine);
+		}
 		break;
 	}
 	return false;
@@ -90,14 +94,23 @@ void ColliderModel::OnCollision(const ColliderBase* hit)const
 {
 }
 
-bool ColliderModel::CheckLineCollision(const ColliderModel a, const ColliderLine b)const
+bool ColliderModel::CheckLineCollision(const ColliderModel& a, const ColliderLine& b)const
 {
 	//モデルのハンドルID
-	int Mv1Id = follow_->modelId;
+	int Mv1Id = a.follow_->modelId;
 
 	//線分の視点と終点を取得
 	VECTOR LineStart = b.GetPosStart();
-	VECTOR LineEnd = b.GetPosStart();
+	VECTOR LineEnd = b.GetPosEnd();
+
+	//衝突判定を実行
+	MV1_COLL_RESULT_POLY_DIM hitRes = MV1CollCheck_LineDim(Mv1Id, -1, LineStart, LineEnd);
+
+	// HitNum が 0 より大きければ衝突している
+	if (hitRes.HitNum > 0)
+	{
+		return true;
+	}
 
 	return false;
 }

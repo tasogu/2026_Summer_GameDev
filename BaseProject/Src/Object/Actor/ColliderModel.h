@@ -42,7 +42,7 @@ protected:
 	std::vector<int> targetFrameIds_;   // 衝突対象
 
 	//ラインとの当たり判定
-	bool CheckLineCollision(const ColliderModel a, const ColliderLine b)const;
+	bool CheckLineCollision(const ColliderModel& a, const ColliderLine& b)const;
 
 	// デバッグ用描画
 	void DrawDebug(int color) override {};
