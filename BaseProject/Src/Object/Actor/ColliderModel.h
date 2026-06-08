@@ -3,9 +3,11 @@
 #include "ColliderBase.h"
 #include "ColliderLine.h"
 
+
 class ColliderModel : public ColliderBase
 {
 public:
+
 	// コンストラクタ
 	ColliderModel(TAG tag, const Transform* follow);
 
@@ -29,11 +31,11 @@ public:
 	bool IsExcludeFrame(int frameIdx) const;
 	//bool IsTargetFrameNo(int frameIdx) const;
 
-		// 衝突判定
-	bool CheckCollision(const ColliderBase* other)const override;
+	// 衝突判定
+	CollisionResult CheckCollision(const ColliderBase* other)const override;
 
 	// 衝突時の処理
-	void OnCollision(const ColliderBase* hit)const override;
+	void OnCollision(const ColliderBase* hit, const CollisionResult& res)const override;
 
 protected:
 	// 衝突判定から除外するフレーム番号
@@ -42,7 +44,7 @@ protected:
 	std::vector<int> targetFrameIds_;   // 衝突対象
 
 	//ラインとの当たり判定
-	bool CheckLineCollision(const ColliderModel& a, const ColliderLine& b)const;
+	CollisionResult CheckLineCollision(const ColliderLine& b)const;
 
 	// デバッグ用描画
 	void DrawDebug(int color) override {};

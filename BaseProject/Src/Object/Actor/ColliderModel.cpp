@@ -73,8 +73,12 @@ bool ColliderModel::IsExcludeFrame(int frameIdx) const
 		frameIdx) != excludeFrameIds_.end();
 }
 
-bool ColliderModel::CheckCollision(const ColliderBase* other)const
+CollisionResult ColliderModel::CheckCollision(const ColliderBase* other)const
 {
+	//当たっていない状態の構造体を作っておく
+	CollisionResult result;
+	result.isHit = false;
+
 	switch (other->GetShape()) {
 	case SHAPE::LINE:
 		//カプセルとラインの当たり判定
@@ -82,37 +86,47 @@ bool ColliderModel::CheckCollision(const ColliderBase* other)const
 
 		//当たり判定の実装
 		if (colliderLine) {
-			return CheckLineCollision(*this, *colliderLine);
+			return CheckLineCollision(*colliderLine);
 		}
 		break;
 	}
-	return false;
+	return result;
 
 }
 
-void ColliderModel::OnCollision(const ColliderBase* hit)const
+void ColliderModel::OnCollision(const ColliderBase* hit, const CollisionResult& res)const
 {
 }
 
-bool ColliderModel::CheckLineCollision(const ColliderModel& a, const ColliderLine& b)const
+CollisionResult ColliderModel::CheckLineCollision( const ColliderLine& b)const
 {
-	//モデルのハンドルID
-	int Mv1Id = a.follow_->modelId;
+	CollisionResult res;
+	res.isHit = false;
 
-	//線分の視点と終点を取得
-	VECTOR LineStart = b.GetPosStart();
-	VECTOR LineEnd = b.GetPosEnd();
+	MV1_COLL_RESULT_POLY_DIM hits = MV1CollCheck_LineDim(follow_->modelId, -1, b.GetPosStart(), b.GetPosEnd());
 
-	//衝突判定を実行
-	MV1_COLL_RESULT_POLY_DIM hitRes = MV1CollCheck_LineDim(Mv1Id, -1, LineStart, LineEnd);
-
-	// HitNum が 0 より大きければ衝突している
-	if (hitRes.HitNum > 0)
+	//最も高いYを持つヒット点を探す
+	double bestHitY = -DBL_MAX;
+	for (int i = 0; i < hits.HitNum; i++)
 	{
-		return true;
+		//除外フレーム
+		if (!IsTargetFrame(hits.Dim[i].FrameIndex)) continue;
+
+		//ヒット点のYがこれまでの最高値より高いなら、結果を更新
+		if (hits.Dim[i].HitPosition.y > bestHitY)
+		{
+			bestHitY = hits.Dim[i].HitPosition.y;
+			res.hitPos = hits.Dim[i].HitPosition;
+			res.normal = hits.Dim[i].Normal; 
+			res.isHit = true;
+		}
 	}
 
-	return false;
+	// 結果構造体を返す前に、ヒット点の配列の後始末をする
+	MV1CollResultPolyDimTerminate(hits);
+
+	// 結果を返す
+	return res;
 }
 
 void ColliderModel::AddTargetFrameIds(const std::string& name)

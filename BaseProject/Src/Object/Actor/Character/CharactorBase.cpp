@@ -137,65 +137,17 @@ void CharactorBase::CollisionGravity(void)
 		// ステージ以外は処理を飛ばす
 		if (hitCol->GetTag() != ColliderBase::TAG::STAGE) continue;
 
-		// 派生クラスへキャスト
-		const ColliderModel* colliderModel =
-			dynamic_cast<const ColliderModel*>(hitCol);
+		//メソッドで判定結果を受け取る
+		CollisionResult res = hitCol->CheckCollision(colliderLine_);
 
-		if (colliderModel == nullptr) continue;
-		const float descendThreshold = 0.9f;
-		bool isDescending = (VDot(AsoUtility::DIR_D, jumpPow_) > descendThreshold);
-
-		// もし「常に判定したい」なら
-		if (!isDescending)
+		//判定結果を使って位置修正
+		if (res.isHit)
 		{
-			// 上昇中はこのステージモデルに対する判定を飛ばす
-			continue;
-		}
-
-		// ステージモデル(地面)との衝突（全ポリゴンを取得）
-		auto hits = MV1CollCheck_LineDim(
-			colliderModel->GetFollow()->modelId, -1, s, e);
-
-		bool found = false;
-		VECTOR bestHitPos = AsoUtility::VECTOR_ZERO;
-		double bestHitY = -DBL_MAX;
-
-		// 全ヒットから「除外フレームを無視」しつつ最も Y が大きいものを選ぶ
-		for (int i = 0; i < hits.HitNum; i++)
-		{
-			auto hit = hits.Dim[i];
-
-			// 除外フレームは無視する（IsTargetFrame が除外リストを示す実装になっている前提）
-			if (!colliderModel->IsTargetFrame(hit.FrameIndex))
-			{
-				continue;
-			}
-
-			// Y がより大きい（上にある）ヒットを採用
-			if (hit.HitPosition.y > bestHitY)
-			{
-				bestHitY = hit.HitPosition.y;
-				bestHitPos = hit.HitPosition;
-				found = true;
-			}
-		}
-
-		// 最適なヒットが見つかったら一度だけ位置補正を行う
-		if (found)
-		{
-			// 衝突地点より少し上に移動（押し出す）
-			if (transform_.pos.y < bestHitPos.y)
-			{
-				transform_.pos = VAdd(bestHitPos, VScale(AsoUtility::DIR_U, 2.0f));
-			}
-			//客地扱いにする
+			transform_.pos = res.hitPos;
 			isGround_ = true;
 		}
-
-		// 検出した地面ポリゴン情報の後始末
-		MV1CollResultPolyDimTerminate(hits);
 	}
-	//客氏していればジャンプリセット
+
 	if (isGround_)
 	{
 		jumpPow_ = AsoUtility::VECTOR_ZERO;

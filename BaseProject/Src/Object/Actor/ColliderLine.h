@@ -30,10 +30,10 @@ public:
 	VECTOR GetPosEnd(void) const;
 
 	// 衝突判定
-	bool CheckCollision(const ColliderBase* other)const override;
+	CollisionResult CheckCollision(const ColliderBase* other)const override;
 
 	// 衝突時の処理
-	void OnCollision(const ColliderBase* hit)const override;
+	void OnCollision(const ColliderBase* hit, const CollisionResult& res)const override;
 
 protected:
 	// デバッグ用描画

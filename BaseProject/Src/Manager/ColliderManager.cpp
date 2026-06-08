@@ -29,10 +29,14 @@ void ColliderManager::Update()
 		//自分より後ろの人だけとチェックする
 		for (size_t j = i + 1; j < collders_.size(); ++j) {
 
+			CollisionResult res = collders_[i]->CheckCollision(collders_[j]);
+
 			//i番目とj番目のコライダーに
-			if (collders_[i]->CheckCollision(collders_[j])) {
-				collders_[i]->OnCollision(collders_[j]);
-				collders_[j]->OnCollision(collders_[i]);
+			if (res.isHit) {
+				collders_[i]->OnCollision(collders_[j], res);
+
+				res.normal = VScale(res.normal, -1.0f);
+				collders_[j]->OnCollision(collders_[i], res);
 			}
 		}
 	}

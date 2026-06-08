@@ -143,8 +143,11 @@ void ColliderCapsule::DrawDebug(int color)
 
 }
 
-bool ColliderCapsule::CheckCollision(const ColliderBase* other)const
+CollisionResult ColliderCapsule::CheckCollision(const ColliderBase* other)const
 {
+	CollisionResult result;
+	result.isHit = false;
+
 	switch (other->GetShape()) {
 	case SHAPE::LINE:
 		//カプセルとラインの当たり判定
@@ -156,15 +159,18 @@ bool ColliderCapsule::CheckCollision(const ColliderBase* other)const
 		//自分と相手を渡して判定を実行
 		return CheckCollisionCapusle(*this, *otherCap);
 	}
-	return false;
+	return result;
 }
 
-void ColliderCapsule::OnCollision(const ColliderBase* hit)const
+void ColliderCapsule::OnCollision(const ColliderBase* hit, const CollisionResult& res)const
 {
 }
 
-bool ColliderCapsule::CheckCollisionCapusle(const ColliderCapsule& a, const ColliderCapsule& b) const
+CollisionResult ColliderCapsule::CheckCollisionCapusle(const ColliderCapsule& a, const ColliderCapsule& b) const
 {
+	CollisionResult result;
+	result.isHit = false;
+
 	//カプセルa,bの上と下の取得,半径の取得
 	VECTOR aTop = a.GetPosTop();
 	VECTOR aDown = a.GetPosDown();
@@ -184,5 +190,9 @@ bool ColliderCapsule::CheckCollisionCapusle(const ColliderCapsule& a, const Coll
 	float dist = VSize(VSub(aCenter, bCanter));
 
 	//距離が半径の合計より小さいなら衝突している
-	return (dist < radiusSum);
+	if (dist < radiusSum) {
+		result.isHit = true;
+	}
+
+	return result;
 }

@@ -51,11 +51,11 @@ void GameScene::Init(void)
 
 	//collder_->Register(stage_->GetOwnCollider(static_cast<int>(Stage::COLLIDER_TYPE::MODEL)));
 
-	////プレイヤーに登録
-	//player_->AddHitCollider(stageCollider);
+	//プレイヤーに登録
+	player_->AddHitCollider(stageCollider);
 
-	////エネミーに追加
-	//enemy_->AddHitCollider(stageCollider);
+	//エネミーに追加
+	enemy_->AddHitCollider(stageCollider);
 
 	//カメラにも登録
 	Camera* camera = sceMng_.GetCamera();

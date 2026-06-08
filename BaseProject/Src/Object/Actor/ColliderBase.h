@@ -4,6 +4,14 @@
 #include <memory> 
 class Transform;
 
+// 衝突結果
+struct CollisionResult {
+	bool isHit;			//当たったか
+	VECTOR hitPos;		//どこに当たったか
+	VECTOR normal;		//どの向きか
+	int frameIndex;		//どのパーツか
+};
+
 class ColliderBase
 {
 public:
@@ -49,10 +57,10 @@ public:
 	TAG GetTag(void) const { return tag_; }
 
 	// 衝突判定
-	virtual bool CheckCollision(const ColliderBase* other)const = 0;
+	virtual CollisionResult CheckCollision(const ColliderBase* other)const = 0;
 
 	// 衝突時の処理
-	virtual void OnCollision(const ColliderBase* hit)const = 0;
+	virtual void OnCollision(const ColliderBase* hit, const CollisionResult& res)const = 0;
 
 protected:
 	// デバッグ表示の色

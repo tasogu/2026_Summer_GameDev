@@ -58,11 +58,15 @@ void ColliderLine::DrawDebug(int color)
 
 }
 
-bool ColliderLine::CheckCollision(const ColliderBase* other)const
+CollisionResult ColliderLine::CheckCollision(const ColliderBase* other)const
 {
-	return false;
+	//“–‚½‚Á‚Ä‚¢‚È‚¢ó‘Ô‚Ì\‘¢‘Ì‚ğì‚Á‚Ä‚¨‚­
+	CollisionResult result;
+	result.isHit = false;
+
+	return result;
 }
 
-void ColliderLine::OnCollision(const ColliderBase* hit)const
+void ColliderLine::OnCollision(const ColliderBase* hit, const CollisionResult& res)const
 {
 }
