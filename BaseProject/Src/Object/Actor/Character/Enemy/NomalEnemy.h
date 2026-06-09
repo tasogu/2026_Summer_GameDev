@@ -18,7 +18,6 @@ public:
 		RUN,
 	};
 
-
 private:
 	//スケール
 	static constexpr VECTOR SCALE = { 1.0f, 1.0f, 1.0f };
@@ -43,6 +42,9 @@ private:
 
 	// 衝突判定用カプセル球体半径
 	static constexpr float COL_CAPSULE_RADIUS = 20.0f;
+	
+	//ノーマルエネミーの体力
+	static constexpr int NOMAL_HP = 10.0f;
 
 	// リソースロード
 	void InitLoad(void) override;

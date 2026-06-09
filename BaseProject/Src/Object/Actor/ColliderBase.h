@@ -3,6 +3,7 @@
 #include <vector> 
 #include <memory> 
 class Transform;
+class ColliderBase;
 
 // 衝突結果
 struct CollisionResult {
@@ -10,6 +11,7 @@ struct CollisionResult {
 	VECTOR hitPos;		//どこに当たったか
 	VECTOR normal;		//どの向きか
 	int frameIndex;		//どのパーツか
+	const ColliderBase* hitCollider;	//誰と当たったか
 };
 
 class ColliderBase
@@ -34,6 +36,8 @@ public:
 		ENEMY,
 		SWORD
 	};
+
+
 
 	// コンストラクタ
 	ColliderBase(SHAPE shape, TAG tag, const Transform* follow);
@@ -84,6 +88,7 @@ protected:
 
 	// デバッグ用描画
 	virtual void DrawDebug(int color) = 0;
+
 
 };
 

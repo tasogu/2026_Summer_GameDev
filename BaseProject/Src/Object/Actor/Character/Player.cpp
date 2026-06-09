@@ -332,14 +332,19 @@ void Player::ProcessAttack(void)
 
 
 	}
-	//攻撃アニメーションが終了したら
-	else if (animationController_->IsEnd())
+	else if (isAttack_ == true)
 	{
+
+
+		//攻撃アニメーションが終了したら
+		 if (animationController_->IsEnd()){
 		//攻撃中フラグをリセット
 		isAttack_ = false;
 
 		//アニメーションを待機に変更
 		animationController_->Play((int)ANIM_TYPE::IDLE);
+	}
+
 	}
 
 }

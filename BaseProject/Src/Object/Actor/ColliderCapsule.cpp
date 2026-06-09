@@ -179,19 +179,31 @@ CollisionResult ColliderCapsule::CheckCollisionCapusle(const ColliderCapsule& a,
 	VECTOR bDown = b.GetPosDown();
 	float bRadius = b.GetRadius();
 
-	//a,bの中心線を求める
-	VECTOR aCenter = VScale(VAdd(aTop, aDown), 0.5f);
-	VECTOR bCanter = VScale(VAdd(bTop, bDown), 0.5f);
+	int Flag = HitCheck_Capsule_Capsule(aTop, aDown, aRadius,
+			bTop, bDown, bRadius);
 
-	//半径の合計を計算
-	float radiusSum = aRadius + bRadius;
 
-	//距離を求める
-	float dist = VSize(VSub(aCenter, bCanter));
 
-	//距離が半径の合計より小さいなら衝突している
-	if (dist < radiusSum) {
+	////カプセルの長さを求める
+	//aTop = VSub(aTop, aDown);
+	//bTop = VSub(bTop, bDown);
+
+	////a,bの中心線を求める
+	//VECTOR aCenter = VScale(VAdd(aTop, aDown), 0.5f);
+	//VECTOR bCanter = VScale(VAdd(bTop, bDown), 0.5f);
+
+	////半径の合計を計算
+	//float radiusSum = aRadius + bRadius;
+
+	////距離を求める
+	//float dist = VSize(VSub(aCenter, bCanter));
+
+	//カプセル同士が当たっているか
+	if (Flag == true) {
 		result.isHit = true;
+
+		//当たった相手を入れる
+		result.hitCollider = &b;
 	}
 
 	return result;
