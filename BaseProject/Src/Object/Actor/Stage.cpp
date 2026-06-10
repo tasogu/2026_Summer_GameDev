@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "../../Manager/ResourceManager.h"
+#include "../../Manager/ColliderManager.h"
 #include "../Actor/ColliderModel.h"
 #include "Stage.h"
 
@@ -82,6 +83,9 @@ void Stage::InitCollider(void)
 
 	//モデルのコライダーを登録
 	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::MODEL), colModel);
+
+	//ステージを当たり判定に登録
+	ColliderManager::GetInstance().Register(colModel);
 
 }
 

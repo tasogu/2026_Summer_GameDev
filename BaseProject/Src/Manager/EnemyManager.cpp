@@ -22,6 +22,21 @@ void EnemyManager::Update(void)
 	{
 		enemy->Update();
 	}
+
+	//Ž€‚ñ‚¾“G‚¾‚¯‚ðÁ‚·
+	for (auto it = enemies_.begin(); it != enemies_.end(); )
+	{
+		if ((*it)->IsDead())
+		{
+			(*it)->Release();
+			delete (*it);
+			it = enemies_.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
 }
 
 void EnemyManager::Draw(void)
@@ -41,15 +56,6 @@ void EnemyManager::Release(void)
 		delete enemy;
 	}
 	enemies_.clear();
-}
-
-void EnemyManager::AddHitCollider( const ColliderBase* AddHitCollider)
-{
-	for (auto& enemy : enemies_)
-	{
-		enemy->AddHitCollider(AddHitCollider);
-	}
-
 }
 
 void EnemyManager::LoadData(void)

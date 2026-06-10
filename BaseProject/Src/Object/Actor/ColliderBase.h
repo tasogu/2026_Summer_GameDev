@@ -4,6 +4,7 @@
 #include <memory> 
 class Transform;
 class ColliderBase;
+class ActorBase;
 
 // 衝突結果
 struct CollisionResult {
@@ -66,6 +67,11 @@ public:
 	// 衝突時の処理
 	virtual void OnCollision(const ColliderBase* hit, const CollisionResult& res)const = 0;
 
+	//持ち主を返す
+	ActorBase* GetOwner(void) const { return owner_; }
+
+	void SetOwner(ActorBase* owner) { owner_ = owner; }
+
 protected:
 	// デバッグ表示の色
 	static constexpr int COLOR_VALID = 0xff0000;
@@ -79,6 +85,8 @@ protected:
 
 	// 追従先
 	const Transform* follow_;
+
+	ActorBase* owner_ = nullptr;
 
 	// 有効フラグ
 	bool isValid_;

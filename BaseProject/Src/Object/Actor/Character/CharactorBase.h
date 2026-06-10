@@ -45,6 +45,12 @@ public:
 	//移動速度
 	float speed_;
 
+	//死亡判定を受け取る
+	bool IsDead(void) const { return isDead_; }
+
+	//死亡させる
+	void Destroy(void) { isDead_ = true; }
+
 protected:
 	//アニメーションコントローラーの呼び出し
 	AnimationController* animationController_;
@@ -66,6 +72,8 @@ protected:
 
 	//HP
 	int hp_;
+
+	bool isDead_;
 
 	//更新系(純粋仮想関数)
 	virtual void UpdateProcess(void) = 0;

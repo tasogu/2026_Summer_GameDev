@@ -5,6 +5,7 @@
 #include "../../../Utility/AsoUtility.h"
 #include "../../../../Src/Application.h"
 #include "../../../Manager/SceneManager.h"
+#include "../../../Manager/ColliderManager.h"
 #include "CharactorBase.h"
 
 CharactorBase::CharactorBase(void)
@@ -132,7 +133,7 @@ void CharactorBase::CollisionGravity(void)
 	VECTOR e = colliderLine_->GetPosEnd();
 
 	// 登録されている衝突物を全てチェック
-	for (const auto& hitCol : hitColliders_)
+	for (const auto& hitCol : ColliderManager::GetInstance().GetColliders())
 	{
 		// ステージ以外は処理を飛ばす
 		if (hitCol->GetTag() != ColliderBase::TAG::STAGE) continue;
@@ -168,7 +169,7 @@ void CharactorBase::CollisionCapsule(void)
 	if (colliderCapsule == nullptr) return;
 
 	// 登録されている衝突物を全てチェック
-	for (const auto& hitCol : hitColliders_)
+	for (const auto& hitCol : ColliderManager::GetInstance().GetColliders())
 	{
 		// モデル以外は処理を飛ばす
 		if (hitCol->GetShape() != ColliderBase::SHAPE::MODEL) continue;

@@ -1,3 +1,6 @@
+#include "../../../../Manager/ColliderManager.h"
+#include "../../ColliderCapsule.h"
+#include "../../ColliderLine.h"
 #include "EnemyBase.h"
 
 EnemyBase::EnemyBase(const EnemyBase::EnemyData& data)
@@ -18,3 +21,9 @@ void EnemyBase::Draw(void)
 {
 	CharactorBase::Draw();
 }
+
+void EnemyBase::InitCollider(void)
+{
+
+}
+

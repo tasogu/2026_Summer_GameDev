@@ -8,8 +8,10 @@
 #include "../../../Manager/Camera.h"
 #include "../../../Application.h"
 #include "../../Common/AnimationController.h"
+#include "../../../Manager/ColliderManager.h"
 #include "..//ColliderCapsule.h"
 #include "..//ColliderLine.h"
+#include "Enemy/EnemyBase.h"
 #include "Sword.h"
 #include "Player.h"
 
@@ -33,6 +35,8 @@ Player::Player(void)
 Player::~Player(void)
 {
 	delete animationController_;
+
+	delete sword_;
 }
 
 void Player::Init(void)
@@ -143,12 +147,13 @@ void Player::Draw(void)
 	
 	//剣の描画
 	sword_->Draw();
-
 }
 
 void Player::Release(void)
 {
 	transform_.Release();
+	
+	ActorBase::Release();
 }
 
 void Player::InitLoad(void)
@@ -192,6 +197,9 @@ void Player::InitCollider(void)
 		COL_LINE_START_LOCAL_POS, COL_LINE_END_LOCAL_POS);
 	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::LINE), coiLine);
 	
+	//線分コライダーを当たり判定リストに登録
+	ColliderManager::GetInstance().Register(coiLine);
+
 	// 主に壁や木などの衝突で仕様するカプセルコライダ
 	ColliderCapsule* colCapsule = new ColliderCapsule(
 		ColliderBase::TAG::PLAYER, &transform_,
@@ -199,6 +207,10 @@ void Player::InitCollider(void)
 		COL_CAPSULE_RADIUS);
 	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::CAPSULE), colCapsule);
 
+	//カプセルコライダーを当たり判定リストに登録
+	ColliderManager::GetInstance().Register(colCapsule);
+
+	colCapsule->SetOwner(this);
 }
 
 void Player::InitAnimation(void)
@@ -334,12 +346,36 @@ void Player::ProcessAttack(void)
 	}
 	else if (isAttack_ == true)
 	{
+		//カプセルコライダー
+		int CapsuleType = static_cast<int>(COLLIDER_TYPE::CAPSULE);
+		const ColliderBase* swordColliderBase = sword_->GetOwnCollider(CapsuleType);
+
+		// カプセルコライダ情報
+		const ColliderCapsule* swordCapsule =
+			dynamic_cast<const ColliderCapsule*>(swordColliderBase);
+
+		// 登録されている衝突物を全てチェック
+		for (const auto& hitCol : ColliderManager::GetInstance().GetColliders()) {
+
+			//エネミー以外以外はすべて飛ばす
+			if (hitCol->GetTag() != ColliderBase::TAG::ENEMY) continue;
+
+			//攻撃判定
+			CollisionResult res = hitCol->CheckCollision(swordCapsule);
+
+			//攻撃が当たった
+			if (res.isHit) {
+				sword_->ExecuteStrike();
+				Destroy();
+			}
+		}		
 
 
 		//攻撃アニメーションが終了したら
 		 if (animationController_->IsEnd()){
 		//攻撃中フラグをリセット
 		isAttack_ = false;
+		sword_->ResetStrike();
 
 		//アニメーションを待機に変更
 		animationController_->Play((int)ANIM_TYPE::IDLE);

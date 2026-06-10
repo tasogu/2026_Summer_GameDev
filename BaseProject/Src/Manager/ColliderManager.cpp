@@ -41,3 +41,8 @@ void ColliderManager::Update()
 		}
 	}
 }
+
+const std::vector<const ColliderBase*>& ColliderManager::GetColliders(void)
+{
+	return collders_;
+}

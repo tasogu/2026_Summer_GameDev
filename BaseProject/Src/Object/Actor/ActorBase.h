@@ -38,12 +38,6 @@ public:
 	// 特定の自身の衝突情報取得
 	const ColliderBase* GetOwnCollider(int key) const;
 
-	// 衝突対象となるコライダを登録
-	void AddHitCollider(const ColliderBase* hitCollider);
-
-	// 衝突対象となるコライダをクリア
-	void ClearHitCollider(void);
-
 protected:
 
 	// シングルトン参照
@@ -70,8 +64,4 @@ protected:
 
 	// 初期化後の個別処理
 	virtual void InitPost(void) = 0;
-
-	// 衝突相手の情報
-	std::vector<const ColliderBase*> hitColliders_;
-
 };

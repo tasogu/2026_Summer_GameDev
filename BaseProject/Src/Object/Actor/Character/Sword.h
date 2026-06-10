@@ -13,6 +13,14 @@ public:
 	//プレイヤーから行列を受け取って糸を反映するメソッド
 	void UpdatePose(VECTOR pos, Quaternion playerRot);
 
+	// 多段ヒット（チェーンソー化）を防ぐためのメモ帳
+	std::vector<ActorBase*> hitActors_;
+
+	// プレイヤーが一言で呼び出すための窓口
+	void ExecuteStrike(void);
+
+	// 攻撃が終わった時にメモ帳を白紙に戻す窓口
+	void ResetStrike(void);
 private:
 	//スケール
 	static constexpr VECTOR SCALE = { 0.05f, 0.05f, 0.05f };

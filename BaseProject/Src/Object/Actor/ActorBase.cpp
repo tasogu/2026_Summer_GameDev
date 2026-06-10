@@ -1,3 +1,4 @@
+#include "../../Manager/ColliderManager.h"
 #include "../../Manager/ResourceManager.h"
 #include "../../Manager/SceneManager.h"
 #include "ActorBase.h"
@@ -58,6 +59,8 @@ void ActorBase::Release(void)
 	// 自身のコライダ解放
 	for (auto& own : ownColliders_)
 	{
+		ColliderManager::GetInstance().Unregister(own.second);
+
 		delete own.second;
 	}
 }
@@ -74,24 +77,4 @@ const ColliderBase* ActorBase::GetOwnCollider(int key) const
 		return nullptr;
 	}
 	return ownColliders_.at(key);
-}
-
-void ActorBase::AddHitCollider(const ColliderBase* hitCollider)
-{
-	for (const auto& c : hitColliders_)
-	{
-		if (c == hitCollider)
-		{
-			return;
-		}
-	}
-	hitColliders_.emplace_back(hitCollider);
-
-
-}
-
-void ActorBase::ClearHitCollider(void)
-{
-	hitColliders_.clear();
-
 }

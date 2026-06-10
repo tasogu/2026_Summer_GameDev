@@ -1,6 +1,7 @@
 #include ",,/../../../../Utility/AsoUtility.h"
 #include "../../Common/Transform.h"
 #include "../../../Manager/ResourceManager.h"
+#include "../../../Manager/ColliderManager.h"
 #include "../ColliderBase.h"
 #include "../ColliderCapsule.h"
 #include "CharactorBase.h"
@@ -71,6 +72,11 @@ void Sword::InitCollider(void)
 		&transform_, COL_CAPSULE_TOP_LOCAL_POS, COL_CAPSULE_DOWN_LOCAL_POS,
 		COL_CAPSULE_RADIUS);
 	ownColliders_.emplace(static_cast<int>(CharactorBase::COLLIDER_TYPE::CAPSULE), col);
+
+	//“–‚½‚è”»’èƒŠƒXƒg‚É“o˜^
+	ColliderManager::GetInstance().Register(col);
+
+	col->SetOwner(this);
 }
 
 void Sword::InitAnimation(void)
@@ -108,4 +114,12 @@ void Sword::UpdatePose(VECTOR pos, Quaternion playerRot)
 	transform_.quaRot = Quaternion::GetRotation(finalMat);
 
 	transform_.Update();
+}
+
+void Sword::ExecuteStrike(void)
+{
+}
+
+void Sword::ResetStrike(void)
+{
 }

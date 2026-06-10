@@ -22,7 +22,6 @@ GameScene::~GameScene(void)
 	delete stage_;
 	delete player_;
 	delete enemy_;
-	delete collder_;
 }
 
 void GameScene::Init(void)
@@ -37,26 +36,9 @@ void GameScene::Init(void)
 
 	//エネミーの生成
 	enemy_ = new EnemyManager();
-	enemy_->Init();;
-
-	//コライダーの生成
-	collder_ = new ColliderManager();
-	
-	//プレイヤーのコライダーを登録
-	collder_->Register(player_->GetOwnCollider(0));
-
-	// ステージのコライダを取得
-	const ColliderBase* stageCollider =
-		stage_->GetOwnCollider(static_cast<int>(Stage::COLLIDER_TYPE::MODEL));
+	enemy_->Init();
 
 	//collder_->Register(stage_->GetOwnCollider(static_cast<int>(Stage::COLLIDER_TYPE::MODEL)));
-
-	//プレイヤーに登録
-	player_->AddHitCollider(stageCollider);
-
-	//エネミーに追加
-	enemy_->AddHitCollider(stageCollider);
-
 	//カメラにも登録
 	Camera* camera = sceMng_.GetCamera();
 	
@@ -76,9 +58,6 @@ void GameScene::Update(void)
 
 	//エネミーの更新
 	enemy_->Update();
-
-	//コライダーの更新
-	collder_->Update();
 
 	// シーン遷移
 	auto const& ins = InputManager::GetInstance();

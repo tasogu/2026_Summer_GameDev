@@ -27,9 +27,6 @@ public:
 	//ƒGƒlƒ~[
 	const std::vector<EnemyBase*>& GetEemies(void) const { return enemies_; }
 
-	//Õ“Ë‘ÎÛ‚Æ‚È‚éŒÃ—ˆ‚¾‚ğ“o˜^
-	void AddHitCollider(const ColliderBase* AddHitCollider);
-
 	//CSV`“G‚Ìî•ñ
 	void LoadData(void);
 
