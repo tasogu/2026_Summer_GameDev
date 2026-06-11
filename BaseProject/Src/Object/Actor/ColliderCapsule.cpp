@@ -183,21 +183,6 @@ CollisionResult ColliderCapsule::CheckCollisionCapusle(const ColliderCapsule& a,
 			bTop, bDown, bRadius);
 
 
-
-	////カプセルの長さを求める
-	//aTop = VSub(aTop, aDown);
-	//bTop = VSub(bTop, bDown);
-
-	////a,bの中心線を求める
-	//VECTOR aCenter = VScale(VAdd(aTop, aDown), 0.5f);
-	//VECTOR bCanter = VScale(VAdd(bTop, bDown), 0.5f);
-
-	////半径の合計を計算
-	//float radiusSum = aRadius + bRadius;
-
-	////距離を求める
-	//float dist = VSize(VSub(aCenter, bCanter));
-
 	//カプセル同士が当たっているか
 	if (Flag == true) {
 		result.isHit = true;

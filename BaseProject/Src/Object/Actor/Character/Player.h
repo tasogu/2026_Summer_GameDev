@@ -148,4 +148,5 @@ private:
 	//ˆÚ“®•ûŒü‚Ö‚Ì‰ñ“]
 	void Rotate(void);
 
+
 };

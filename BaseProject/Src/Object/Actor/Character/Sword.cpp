@@ -2,6 +2,8 @@
 #include "../../Common/Transform.h"
 #include "../../../Manager/ResourceManager.h"
 #include "../../../Manager/ColliderManager.h"
+#include "../../../Manager/SceneManager.h"
+#include "Enemy/NomalEnemy.h"
 #include "../ColliderBase.h"
 #include "../ColliderCapsule.h"
 #include "CharactorBase.h"
@@ -118,8 +120,52 @@ void Sword::UpdatePose(VECTOR pos, Quaternion playerRot)
 
 void Sword::ExecuteStrike(void)
 {
+	//カプセルコライダー
+	int CapsuleType = static_cast<int>(CharactorBase::COLLIDER_TYPE::CAPSULE);
+	const ColliderBase* swordColliderBase = GetOwnCollider(CapsuleType);
+
+	// カプセルコライダ情報
+	const ColliderCapsule* swordCapsule =
+		dynamic_cast<const ColliderCapsule*>(swordColliderBase);
+
+
+	// 登録されている衝突物を全てチェック
+	for (const auto& hitCol : ColliderManager::GetInstance().GetColliders()) {
+
+		//エネミー以外以外はすべて飛ばす
+		if (hitCol->GetTag() != ColliderBase::TAG::ENEMY) continue;
+
+		//攻撃判定
+		CollisionResult res = hitCol->CheckCollision(swordCapsule);
+
+		//攻撃が当たった
+		if (res.isHit) {
+			ActorBase* owner = hitCol->GetOwner();
+
+			if (owner != nullptr) {
+
+				auto it = std::find(hitActors_.begin(), hitActors_.end(), owner);
+
+				if (it == hitActors_.end()) {
+					NomalEnemy* enemy = dynamic_cast<NomalEnemy*>(owner);
+
+					if (enemy != nullptr) {
+						//敵の死亡判定
+						enemy->OnDamage(10);
+
+						printfDx("敵を倒した！\n");
+
+						hitActors_.push_back(owner);
+					}
+				}
+			}
+		}
+	}
 }
 
 void Sword::ResetStrike(void)
 {
+	hitActors_.clear();
 }
+
+

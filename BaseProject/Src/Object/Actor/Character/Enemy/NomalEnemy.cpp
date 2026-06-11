@@ -12,6 +12,7 @@ NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
 	:
 	EnemyBase(data)
 {
+	hp_ = NOMAL_HP;
 }
 
 NomalEnemy::~NomalEnemy(void)
@@ -81,11 +82,4 @@ void NomalEnemy::UpdateProcess(void)
 
 void NomalEnemy::UpdateProcessPost(void)
 {
-	if (hp_ == 0) {
-	}
-}
-
-void NomalEnemy::OnDamege(int damege)
-{
-	Destroy();
 }

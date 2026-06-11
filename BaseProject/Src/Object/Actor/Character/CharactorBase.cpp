@@ -227,3 +227,12 @@ void CharactorBase::CollisionCapsule(void)
 		MV1CollResultPolyDimTerminate(hits);
 	}
 }
+
+void CharactorBase::OnDamage(int damage)
+{
+	hp_ -= damage;
+		if (hp_ <= 0) {
+			Destroy();
+		}
+}
+

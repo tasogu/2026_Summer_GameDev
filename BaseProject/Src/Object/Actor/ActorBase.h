@@ -64,4 +64,5 @@ protected:
 
 	// ‰Šú‰»Œã‚ÌŒÂ•Êˆ—
 	virtual void InitPost(void) = 0;
+
 };

@@ -16,10 +16,10 @@ public:
 	// 多段ヒット（チェーンソー化）を防ぐためのメモ帳
 	std::vector<ActorBase*> hitActors_;
 
-	// プレイヤーが一言で呼び出すための窓口
+	//攻撃の当たり判定とダメージ処理
 	void ExecuteStrike(void);
 
-	// 攻撃が終わった時にメモ帳を白紙に戻す窓口
+	//攻撃の当たり判定とダメージ処理
 	void ResetStrike(void);
 private:
 	//スケール
@@ -54,7 +54,6 @@ private:
 
 	// 初期化後の個別処理
 	void InitPost(void) override;
-
 
 
 };

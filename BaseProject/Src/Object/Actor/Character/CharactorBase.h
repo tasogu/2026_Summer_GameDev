@@ -51,6 +51,9 @@ public:
 	//死亡させる
 	void Destroy(void) { isDead_ = true; }
 
+	//ダメージ処理
+	void OnDamage(int damage);
+
 protected:
 	//アニメーションコントローラーの呼び出し
 	AnimationController* animationController_;

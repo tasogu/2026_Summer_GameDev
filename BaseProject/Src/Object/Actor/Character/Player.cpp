@@ -346,40 +346,18 @@ void Player::ProcessAttack(void)
 	}
 	else if (isAttack_ == true)
 	{
-		//カプセルコライダー
-		int CapsuleType = static_cast<int>(COLLIDER_TYPE::CAPSULE);
-		const ColliderBase* swordColliderBase = sword_->GetOwnCollider(CapsuleType);
-
-		// カプセルコライダ情報
-		const ColliderCapsule* swordCapsule =
-			dynamic_cast<const ColliderCapsule*>(swordColliderBase);
-
-		// 登録されている衝突物を全てチェック
-		for (const auto& hitCol : ColliderManager::GetInstance().GetColliders()) {
-
-			//エネミー以外以外はすべて飛ばす
-			if (hitCol->GetTag() != ColliderBase::TAG::ENEMY) continue;
-
-			//攻撃判定
-			CollisionResult res = hitCol->CheckCollision(swordCapsule);
-
-			//攻撃が当たった
-			if (res.isHit) {
-				sword_->ExecuteStrike();
-				Destroy();
-			}
-		}		
-
+		sword_->ExecuteStrike();
 
 		//攻撃アニメーションが終了したら
-		 if (animationController_->IsEnd()){
-		//攻撃中フラグをリセット
-		isAttack_ = false;
-		sword_->ResetStrike();
+		if (animationController_->IsEnd()) {
+			//攻撃中フラグをリセット
+			isAttack_ = false;
+			sword_->ResetStrike();
 
-		//アニメーションを待機に変更
-		animationController_->Play((int)ANIM_TYPE::IDLE);
-	}
+			//アニメーションを待機に変更
+			animationController_->Play((int)ANIM_TYPE::IDLE);
+
+		}
 
 	}
 

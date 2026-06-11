@@ -44,7 +44,7 @@ private:
 	static constexpr float COL_CAPSULE_RADIUS = 100.0f;
 	
 	//ノーマルエネミーの体力
-	static constexpr int NOMAL_HP = 10.0f;
+	static constexpr int NOMAL_HP = 60.0f;
 
 	// リソースロード
 	void InitLoad(void) override;
@@ -67,9 +67,6 @@ private:
 	virtual void UpdateProcessPost(void) override;
 
 	virtual void CollisionReserve(void) {};
-
-	//ダメージを受ける
-	virtual void OnDamege(int damege);
 
 };
 
