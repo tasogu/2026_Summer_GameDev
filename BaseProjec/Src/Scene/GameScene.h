@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "SceneBase.h"
 #include "../Manager/ColliderManager.h"
 class Stage;
@@ -31,14 +32,17 @@ public:
 private:
 
 	//ステージ
-	Stage* stage_;
+	//Stage* stage_;
+	std::unique_ptr<Stage> stage_;
 
 	//プレイヤー
-	Player* player_;
+	//Player* player_;
+	std::unique_ptr<Player> player_;
 
 	//エネミー
-	EnemyManager* enemy_;
+	//EnemyManager* enemy_;
+	std::unique_ptr<EnemyManager> enemy_;
 
-	//コライダー
-	ColliderManager* collder_;
+	////コライダー
+	//ColliderManager* collder_;
 };

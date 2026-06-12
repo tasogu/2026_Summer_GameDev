@@ -65,13 +65,13 @@ void ResourceManager::Release(void)
 void ResourceManager::Destroy(void)
 {
 	Release();
-	for (auto& res : resourcesMap_)
-	{
-		res.second->Release();
-		delete res.second;
-	}
-	resourcesMap_.clear();
-	delete instance_;
+	//for (auto& res : resourcesMap_)
+	//{
+	//	res.second->Release();
+	//	delete res.second;
+	//}
+	//resourcesMap_.clear();
+	//delete instance_;
 }
 
 const Resource& ResourceManager::Load(SRC src)

@@ -13,34 +13,35 @@ GameScene::GameScene(void)
 	stage_(nullptr),
 	player_(nullptr),
 	enemy_(nullptr),
+	//collder_(nullptr),
 	SceneBase()
 {
 }
 
 GameScene::~GameScene(void)
 {
-	delete stage_;
-	delete player_;
-	delete enemy_;
 }
 
 void GameScene::Init(void)
 {
 	//ステージの生成
-	stage_  = new Stage();
+	//stage_  = new Stage();
+	stage_ = std::make_unique<Stage>();
 	stage_->Init();
 
 	//プレイヤーの生成
-	player_ = new Player();
+	//player_ = new Player();
+	player_ = std::make_unique<Player>();
 	player_->Init();
 
 	//エネミーの生成
-	enemy_ = new EnemyManager();
+	//enemy_ = new EnemyManager();
+	enemy_ = std::make_unique<EnemyManager>();
 	enemy_->Init();
 
 	//collder_->Register(stage_->GetOwnCollider(static_cast<int>(Stage::COLLIDER_TYPE::MODEL)));
 	//カメラにも登録
-	Camera* camera = sceMng_.GetCamera();
+	std::shared_ptr<Camera> camera = sceMng_.GetCamera();
 	
 	//カメラ追従設定
 	camera->SetFollow(&player_->GetTransform());
@@ -84,13 +85,10 @@ void GameScene::Release(void)
 {
 	//ステージの開放
 	stage_->Release();
-	delete stage_;
 
 	//プレイヤーの開放
 	player_->Release();
-	delete player_;
 
 	//エネミーの開放
 	enemy_->Release();
-	delete enemy_;
 }

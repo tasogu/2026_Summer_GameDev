@@ -139,27 +139,26 @@ void Sword::ExecuteStrike(void)
 		CollisionResult res = hitCol->CheckCollision(swordCapsule);
 
 		//çUåÇÇ™ìñÇΩÇ¡ÇΩ
-		if (res.isHit) {
-			ActorBase* owner = hitCol->GetOwner();
+		if (!res.isHit) continue;
+		ActorBase* owner = hitCol->GetOwner();
 
-			if (owner != nullptr) {
+		if (owner == nullptr) continue;
 
-				auto it = std::find(hitActors_.begin(), hitActors_.end(), owner);
+		auto it = std::find(hitActors_.begin(), hitActors_.end(), owner);
 
-				if (it == hitActors_.end()) {
-					NomalEnemy* enemy = dynamic_cast<NomalEnemy*>(owner);
+		if (it != hitActors_.end()) continue;
 
-					if (enemy != nullptr) {
-						//ìGÇÃéÄñSîªíË
-						enemy->OnDamage(10);
+		NomalEnemy* enemy = dynamic_cast<NomalEnemy*>(owner);
 
-						printfDx("ìGÇì|ÇµÇΩÅI\n");
+		if (enemy == nullptr) continue;
 
-						hitActors_.push_back(owner);
-					}
-				}
-			}
-		}
+		//ìGÇÃéÄñSîªíË
+		enemy->OnDamage(10);
+
+		printfDx("ìGÇì|ÇµÇΩÅI\n");
+
+		hitActors_.push_back(owner);
+
 	}
 }
 

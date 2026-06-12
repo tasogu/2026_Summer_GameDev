@@ -24,6 +24,7 @@ void Application::CreateInstance(void)
 Application& Application::GetInstance(void)
 {
 	return *instance_;
+	delete instance_;
 }
 
 void Application::Init(void)
@@ -37,7 +38,8 @@ void Application::Init(void)
 	ChangeWindowMode(true);
 
 	//FPSêßå‰èâä˙âª
-	fpsController_ = new FpsController(FRAME_RATE);
+	//fpsController_ = new FpsController(FRAME_RATE);
+	fpsController_ = std::make_unique<FpsController>(FRAME_RATE);
 
 	// DxLibÇÃèâä˙âª
 	SetUseDirect3DVersion(DX_DIRECT3D_11);

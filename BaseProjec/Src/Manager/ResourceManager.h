@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <memory>
 #include <string>
 #include "Resource.h"
 
@@ -48,7 +49,7 @@ private:
 	static ResourceManager* instance_;
 
 	// リソース管理の対象
-	std::map<SRC, Resource*> resourcesMap_;
+	std::map<SRC, std::unique_ptr<Resource>> resourcesMap_;
 
 	// 読み込み済みリソース
 	std::map<SRC, Resource&> loadedMap_;

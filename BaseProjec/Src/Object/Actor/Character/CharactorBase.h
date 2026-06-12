@@ -56,7 +56,8 @@ public:
 
 protected:
 	//アニメーションコントローラーの呼び出し
-	AnimationController* animationController_;
+	//AnimationController* animationController_;
+	std::unique_ptr<AnimationController> animationController_;
 
 	//最大落下速度
 	static constexpr float MAX_GALL_SPEED = -30.0f;

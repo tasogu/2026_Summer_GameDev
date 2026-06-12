@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <memory>
 class FpsController;
 
 class Application
@@ -60,7 +61,8 @@ private:
 	static Application* instance_;
 
 	//FPSêßå‰
-	FpsController* fpsController_;
+	//FpsController* fpsController_;
+	std::unique_ptr<FpsController> fpsController_;
 
 	// èâä˙âªé∏îs
 	bool isInitFail_;

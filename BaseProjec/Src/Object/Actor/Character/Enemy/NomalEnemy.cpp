@@ -67,7 +67,8 @@ void NomalEnemy::InitCollider(void)
 void NomalEnemy::InitAnimation(void)
 {
 	std::string path = Application::PATH_MODEL + "Player/";
-	animationController_ = new AnimationController(transform_.modelId);
+	//animationController_ = new AnimationController(transform_.modelId);
+	animationController_ = std::make_unique<AnimationController>(transform_.modelId);
 
 }
 
@@ -82,4 +83,9 @@ void NomalEnemy::UpdateProcess(void)
 
 void NomalEnemy::UpdateProcessPost(void)
 {
+}
+
+void NomalEnemy::ProcessAttack(void) 
+{
+
 }

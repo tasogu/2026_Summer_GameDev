@@ -14,6 +14,8 @@ int WINAPI WinMain(
 	_In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 
+	_CrtSetBreakAlloc(17405);
+
 	//ƒƒ‚ƒŠƒŠ[ƒNŒŸo
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 

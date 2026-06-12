@@ -68,5 +68,8 @@ private:
 
 	virtual void CollisionReserve(void) {};
 
+	//エネミーの攻撃
+	void ProcessAttack(void);
+
 };
 

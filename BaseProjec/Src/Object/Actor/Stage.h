@@ -37,8 +37,6 @@ private:
 	//ステージの座標
 	static constexpr VECTOR POS_ = { 0.0f, 0.0f, 0.0f };
 
-
-
 	//ステージのモデル
 	int imgStage_;
 
