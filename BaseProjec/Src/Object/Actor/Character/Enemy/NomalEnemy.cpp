@@ -43,13 +43,13 @@ void NomalEnemy::InitTransform(void)
 void NomalEnemy::InitCollider(void)
 {
 	//主に地面との衝突で使用する線分コライダー	
-	ColliderLine* coiLine = new ColliderLine(
+	auto coiLine = std::make_unique< ColliderLine>(
 		ColliderBase::TAG::ENEMY, &transform_,
 		COL_LINE_START_LOCAL_POS, COL_LINE_END_LOCAL_POS);
-	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::LINE), coiLine);
+	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::LINE), std::move(coiLine));
 
 	//線分コライダーを当たり判定リストに登録
-	ColliderManager::GetInstance().Register(coiLine);
+	ColliderManager::GetInstance().Register(coiLine.get());
 
 	// 主に壁や木などの衝突で仕様するカプセルコライダ
 	ColliderCapsule* colCapsule = new ColliderCapsule(

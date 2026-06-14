@@ -30,13 +30,13 @@ public:
 	// 大きさ、回転、座標等の取得
 	const Transform& GetTransform(void) const;
 
-	const std::map<int, ColliderBase*>& GetOwnColliders(void) const
+	const std::map<int, std::unique_ptr<ColliderBase>>& GetOwnColliders(void) const
 	{
 		return ownColliders_;
 	}
 
 	// 特定の自身の衝突情報取得
-	const ColliderBase* GetOwnCollider(int key) const;
+	ColliderBase* GetOwnCollider(int key) const;
 
 protected:
 
@@ -48,8 +48,8 @@ protected:
 	Transform transform_;
 
 	// 自身の衝突情報
-	std::map<int, ColliderBase*> ownColliders_;
-
+	//std::map<int, ColliderBase*> ownColliders_;
+	std::map <int, std::unique_ptr<ColliderBase>> ownColliders_;
 	// リソースロード
 	virtual void InitLoad(void) = 0;
 

@@ -122,7 +122,7 @@ void Sword::ExecuteStrike(void)
 {
 	//カプセルコライダー
 	int CapsuleType = static_cast<int>(CharactorBase::COLLIDER_TYPE::CAPSULE);
-	const ColliderBase* swordColliderBase = GetOwnCollider(CapsuleType);
+	ColliderBase* swordColliderBase = GetOwnCollider(CapsuleType);
 
 	// カプセルコライダ情報
 	const ColliderCapsule* swordCapsule =

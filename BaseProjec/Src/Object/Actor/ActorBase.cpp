@@ -59,9 +59,8 @@ void ActorBase::Release(void)
 	// 自身のコライダ解放
 	for (auto& own : ownColliders_)
 	{
-		ColliderManager::GetInstance().Unregister(own.second);
+		ColliderManager::GetInstance().Unregister(own.second.get());
 
-		delete own.second;
 	}
 }
 
@@ -70,11 +69,12 @@ const Transform& ActorBase::GetTransform(void) const
 	return transform_;
 }
 
-const ColliderBase* ActorBase::GetOwnCollider(int key) const
+ColliderBase* ActorBase::GetOwnCollider(int key) const
 {
-	if (ownColliders_.count(key) == 0)
+	auto it = ownColliders_.find(key);
+	if (it != ownColliders_.end())
 	{
-		return nullptr;
+		return it->second.get();
 	}
-	return ownColliders_.at(key);
+	return nullptr;
 }
