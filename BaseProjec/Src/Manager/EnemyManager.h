@@ -25,16 +25,16 @@ public:
 	void Release(void);
 
 	//エネミー
-	const std::vector<EnemyBase*>& GetEemies(void) const { return enemies_; }
+	const std::vector<std::shared_ptr<EnemyBase>>& GetEemies(void) const { return enemies_; }
 
 	//CSV～敵の情報
 	void LoadData(void);
 
 	//エネミー生成
-	EnemyBase* Create(const EnemyBase::EnemyData& data);
+	std::shared_ptr<EnemyBase> Create(const EnemyBase::EnemyData& data);
 private:
 	//エネミー
-	std::vector<EnemyBase*> enemies_;
+	std::vector<std::shared_ptr<EnemyBase>> enemies_;
 
 	//更新系(純粋仮想関数)
 	void UpdateProcess(void);

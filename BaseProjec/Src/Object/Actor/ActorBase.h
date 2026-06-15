@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "../Common/Transform.h"
 #include "../Actor/ColliderBase.h"
 class ResourceManager;

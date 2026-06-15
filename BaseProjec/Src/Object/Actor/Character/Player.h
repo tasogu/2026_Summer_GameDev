@@ -79,7 +79,8 @@ private:
 	static constexpr float COL_CAPSULE_RADIUS = 20.0f;
 
 	//ソードのポインタ
-	Sword* sword_;
+	//Sword* sword_;
+	std::unique_ptr<Sword> sword_;
 
 	//剣のモデルID
 	int imgSword_;

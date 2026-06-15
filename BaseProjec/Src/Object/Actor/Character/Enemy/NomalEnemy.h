@@ -10,6 +10,9 @@ public:
 	//デストラクタ
 	virtual ~NomalEnemy(void) override;
 
+	//描画
+	virtual void Draw(void) override;
+
 	//アニメーションタイプ
 	enum class ANIM_TYPE
 	{
@@ -44,7 +47,7 @@ private:
 	static constexpr float COL_CAPSULE_RADIUS = 100.0f;
 	
 	//ノーマルエネミーの体力
-	static constexpr int NOMAL_HP = 60.0f;
+	static constexpr float NOMAL_HP = 60.0f;
 
 	// リソースロード
 	void InitLoad(void) override;
@@ -61,7 +64,6 @@ private:
 	// 初期化後の個別処理
 	void InitPost(void) override;
 
-
 	//更新系
 	virtual void UpdateProcess(void) override;
 	virtual void UpdateProcessPost(void) override;
@@ -70,6 +72,9 @@ private:
 
 	//エネミーの攻撃
 	void ProcessAttack(void);
+
+	//エネミーの移動
+	void ProcessMove(void);
 
 };
 

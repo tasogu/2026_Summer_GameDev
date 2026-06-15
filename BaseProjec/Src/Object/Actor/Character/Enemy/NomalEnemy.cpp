@@ -19,11 +19,18 @@ NomalEnemy::~NomalEnemy(void)
 {
 }
 
+void NomalEnemy::Draw(void)
+{
+
+	CharactorBase::Draw();
+}
+
 void NomalEnemy::InitLoad(void)
 {
 
-	transform_.SetModel(resMng_.Load(ResourceManager::SRC::NOMAL_ENEMY).handleId_);
-
+	//transform_.SetModel(resMng_.Load(ResourceManager::SRC::NOMAL_ENEMY)->handleId_);
+	//正しい書き方（必ず分身のハンドルをもらってセットする）
+	transform_.SetModel(ResourceManager::GetInstance().LoadModelDuplicate(ResourceManager::SRC::NOMAL_ENEMY));
 	
 }
 
@@ -46,22 +53,24 @@ void NomalEnemy::InitCollider(void)
 	auto coiLine = std::make_unique< ColliderLine>(
 		ColliderBase::TAG::ENEMY, &transform_,
 		COL_LINE_START_LOCAL_POS, COL_LINE_END_LOCAL_POS);
-	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::LINE), std::move(coiLine));
 
 	//線分コライダーを当たり判定リストに登録
 	ColliderManager::GetInstance().Register(coiLine.get());
 
+	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::LINE), std::move(coiLine));
+
 	// 主に壁や木などの衝突で仕様するカプセルコライダ
-	ColliderCapsule* colCapsule = new ColliderCapsule(
+	auto colCapsule = std::make_unique< ColliderCapsule>(
 		ColliderBase::TAG::ENEMY, &transform_,
 		COL_CAPSULE_TOP_LOCAL_POS, COL_CAPSULE_DOWN_LOCAL_POS,
 		COL_CAPSULE_RADIUS);
-	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::CAPSULE), colCapsule);
 
 	//カプセルコライダーを当たり判定リストに登録
-	ColliderManager::GetInstance().Register(colCapsule);
+	ColliderManager::GetInstance().Register(colCapsule.get());
 
 	colCapsule->SetOwner(this);
+
+	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::CAPSULE),std::move( colCapsule));
 }
 
 void NomalEnemy::InitAnimation(void)
@@ -86,6 +95,11 @@ void NomalEnemy::UpdateProcessPost(void)
 }
 
 void NomalEnemy::ProcessAttack(void) 
+{
+
+}
+
+void NomalEnemy::ProcessMove(void)
 {
 
 }

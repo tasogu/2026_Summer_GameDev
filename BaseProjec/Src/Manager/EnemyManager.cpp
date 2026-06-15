@@ -23,17 +23,17 @@ void EnemyManager::Update(void)
 		enemy->Update();
 	}
 
+
 	//€‚ñ‚¾“G‚¾‚¯‚ğÁ‚·
 	for (auto it = enemies_.begin(); it != enemies_.end(); )
 	{
 		if ((*it)->IsDead())
-		{
+		{		
 			(*it)->Release();
-			delete (*it);
 			it = enemies_.erase(it);
 		}
 		else
-		{
+		{		
 			++it;
 		}
 	}
@@ -53,7 +53,6 @@ void EnemyManager::Release(void)
 	for (auto& enemy : enemies_)
 	{
 		enemy->Release();
-		delete enemy;
 	}
 	enemies_.clear();
 }
@@ -78,15 +77,15 @@ void EnemyManager::LoadData(void)
 	Create(data);
 }
 
-EnemyBase* EnemyManager::Create(const EnemyBase::EnemyData& data)
+std::shared_ptr<EnemyBase> EnemyManager::Create(const EnemyBase::EnemyData& data)
 {
-	EnemyBase* enemy = nullptr;
+	std::shared_ptr<EnemyBase> enemy = nullptr;
 
 	//í•Ê‚²‚Æ‚É¶¬
 	switch (data.type)
 	{
 	case EnemyBase::ENEMY_TYPE::NOMAL:
-		enemy = new NomalEnemy(data);
+		enemy = std::make_shared<NomalEnemy>(data);
 		break;
 	}
 

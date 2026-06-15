@@ -38,7 +38,7 @@ public:
 	void Destroy(void);
 
 	// リソースのロード
-	const Resource& Load(SRC src);
+	std::shared_ptr<const Resource> Load(SRC src);
 
 	// リソースの複製ロード(モデル用)
 	int LoadModelDuplicate(SRC src);
@@ -49,12 +49,12 @@ private:
 	static ResourceManager* instance_;
 
 	// リソース管理の対象
-	std::map<SRC, std::unique_ptr<Resource>> resourcesMap_;
+	std::map<SRC, std::shared_ptr<Resource>> resourcesMap_;
 
 	// 読み込み済みリソース
-	std::map<SRC, Resource&> loadedMap_;
+	std::map<SRC, std::shared_ptr<Resource>> loadedMap_;
 
-	Resource dummy_;
+	std::shared_ptr<Resource> dummy_;
 
 	// デフォルトコンストラクタをprivateにして、
 	// 外部から生成できない様にする
@@ -63,6 +63,6 @@ private:
 	~ResourceManager(void) = default;
 
 	// 内部ロード
-	Resource& _Load(SRC src);
+	std::shared_ptr<Resource> _Load(SRC src);
 
 };

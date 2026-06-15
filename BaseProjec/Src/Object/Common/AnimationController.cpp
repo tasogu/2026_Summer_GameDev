@@ -13,6 +13,7 @@ AnimationController::AnimationController(int modelId)
 
 AnimationController::~AnimationController(void)
 {
+	Release();
 }
 
 void AnimationController::Add(int type, float speed, const std::string path)

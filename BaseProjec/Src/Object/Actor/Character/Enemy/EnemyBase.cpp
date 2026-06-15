@@ -9,17 +9,13 @@ EnemyBase::EnemyBase(const EnemyBase::EnemyData& data)
 
 
 {
+	isDead_ = false;
 	//‰ŠúÀ•W‚Ì‚¹‚Ä’n
 	transform_.pos = data.defaultPos;
 }
 
 EnemyBase::~EnemyBase(void)
 {
-}
-
-void EnemyBase::Draw(void)
-{
-	CharactorBase::Draw();
 }
 
 void EnemyBase::InitCollider(void)

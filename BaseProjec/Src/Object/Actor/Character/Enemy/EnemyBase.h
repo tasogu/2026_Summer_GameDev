@@ -27,7 +27,7 @@ public:
 	virtual ~EnemyBase(void) override;
 
 	//•`‰æ
-	virtual void Draw(void) override;
+	virtual void Draw(void) = 0;
 
 	////Ž€–S”»’è‚ðŽó‚¯Žæ‚é
 	//bool IsDead(void) const { return isDead_; }

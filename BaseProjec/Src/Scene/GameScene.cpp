@@ -79,6 +79,7 @@ void GameScene::Draw(void)
 
 	//エネミーの描画
 	enemy_->Draw();
+
 }
 
 void GameScene::Release(void)

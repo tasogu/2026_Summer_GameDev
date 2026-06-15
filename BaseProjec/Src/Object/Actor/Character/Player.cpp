@@ -30,12 +30,13 @@ Player::Player(void)
 	state_ = STATE::NONE;
 	animationController_ = nullptr;
 
+	isDead_ = false;
 }
 
 Player::~Player(void)
 {
 
-	delete sword_;
+	//delete sword_;
 }
 
 void Player::Init(void)
@@ -158,10 +159,11 @@ void Player::Release(void)
 void Player::InitLoad(void)
 {
 	//プレイヤーモデルのロード
-	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER).handleId_);
+	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER)->handleId_);
 
 	//剣のモデルのロード
-	sword_ = new Sword();
+	//sword_ = new Sword();
+	sword_ = std::make_unique<Sword>();
 	sword_->Init();
 
 	//モデルの手のボーンを取得
@@ -191,25 +193,29 @@ void Player::InitTransform(void)
 void Player::InitCollider(void)
 {
 	//主に地面との衝突で使用する線分コライダー	
-	ColliderLine* coiLine = new ColliderLine(
+	auto coiLine = std::make_unique<ColliderLine>(
 		ColliderBase::TAG::PLAYER, &transform_,
 		COL_LINE_START_LOCAL_POS, COL_LINE_END_LOCAL_POS);
-	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::LINE), coiLine);
 	
 	//線分コライダーを当たり判定リストに登録
-	ColliderManager::GetInstance().Register(coiLine);
+	ColliderManager::GetInstance().Register(coiLine.get());
+
+	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::LINE), std::move(coiLine));
+
 
 	// 主に壁や木などの衝突で仕様するカプセルコライダ
-	ColliderCapsule* colCapsule = new ColliderCapsule(
+	auto colCapsule = std::make_unique<ColliderCapsule>(
 		ColliderBase::TAG::PLAYER, &transform_,
 		COL_CAPSULE_TOP_LOCAL_POS, COL_CAPSULE_DOWN_LOCAL_POS,
 		COL_CAPSULE_RADIUS);
-	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::CAPSULE), colCapsule);
 
 	//カプセルコライダーを当たり判定リストに登録
-	ColliderManager::GetInstance().Register(colCapsule);
+	ColliderManager::GetInstance().Register(colCapsule.get());
 
 	colCapsule->SetOwner(this);
+
+	ownColliders_.emplace(static_cast<int>(COLLIDER_TYPE::CAPSULE), std::move(colCapsule));
+
 }
 
 void Player::InitAnimation(void)

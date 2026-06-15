@@ -61,6 +61,7 @@ void CharactorBase::Update(void)
 
 void CharactorBase::Draw(void)
 {
+
 	ActorBase::Draw();
 }
 
@@ -124,7 +125,7 @@ void CharactorBase::CollisionGravity(void)
 
 	// 線分コライダ情報
 	ColliderLine* colliderLine_ =
-		dynamic_cast<ColliderLine*>(ownColliders_.at(lineType));
+		dynamic_cast<ColliderLine*>(ownColliders_.at(lineType).get());
 
 	if (colliderLine_ == nullptr) return;
 
@@ -165,7 +166,7 @@ void CharactorBase::CollisionCapsule(void)
 
 	// カプセルコライダ情報
 	ColliderCapsule* colliderCapsule =
-		dynamic_cast<ColliderCapsule*>(ownColliders_.at(capsuleType));
+		dynamic_cast<ColliderCapsule*>(ownColliders_.at(capsuleType).get());
 	if (colliderCapsule == nullptr) return;
 
 	// 登録されている衝突物を全てチェック

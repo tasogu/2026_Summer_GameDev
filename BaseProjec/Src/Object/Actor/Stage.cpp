@@ -55,7 +55,7 @@ void Stage::Release(void)
 void Stage::InitLoad(void)
 {
 	//imgStage_ = resMng_.Load(ResourceManager::SRC::STAGE).handleId_;
-	transform_.SetModel(resMng_.Load(ResourceManager::SRC::STAGE).handleId_);
+	transform_.SetModel(resMng_.Load(ResourceManager::SRC::STAGE)->handleId_);
 
 }
 

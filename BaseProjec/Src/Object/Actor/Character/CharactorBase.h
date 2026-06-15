@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include<memory>
 #include <Dxlib.h>
 #include "../../Actor/ActorBase.h"
 class AnimationController;
@@ -75,8 +76,9 @@ protected:
 	int handBoneid_;
 
 	//HP
-	int hp_;
+	float hp_;
 
+	//€–S”»’è
 	bool isDead_;
 
 	//XVŒn(ƒˆ‰¼‘zŠÖ”)

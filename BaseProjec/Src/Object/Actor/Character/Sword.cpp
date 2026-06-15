@@ -56,7 +56,7 @@ void Sword::Draw(void)
 void Sword::InitLoad(void)
 {
 	//剣のモデルのロード
-	transform_.SetModel(resMng_.Load(ResourceManager::SRC::SWORD).handleId_);
+	transform_.SetModel(resMng_.Load(ResourceManager::SRC::SWORD)->handleId_);
 
 }
 
@@ -69,16 +69,18 @@ void Sword::InitTransform(void)
 void Sword::InitCollider(void)
 {
 	//剣のモデル空間でのカプセルの橋と橋の相対空間を定義
-	ColliderCapsule* col = new ColliderCapsule(
+	auto col = std::make_unique <ColliderCapsule>(
 		ColliderBase::TAG::SWORD,
 		&transform_, COL_CAPSULE_TOP_LOCAL_POS, COL_CAPSULE_DOWN_LOCAL_POS,
 		COL_CAPSULE_RADIUS);
-	ownColliders_.emplace(static_cast<int>(CharactorBase::COLLIDER_TYPE::CAPSULE), col);
 
 	//当たり判定リストに登録
-	ColliderManager::GetInstance().Register(col);
+	ColliderManager::GetInstance().Register(col.get());
 
 	col->SetOwner(this);
+
+	ownColliders_.emplace(static_cast<int>(CharactorBase::COLLIDER_TYPE::CAPSULE), std::move(col));
+
 }
 
 void Sword::InitAnimation(void)
