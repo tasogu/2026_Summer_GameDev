@@ -11,7 +11,8 @@
 
 Sword::Sword(void)
 	:
-	imgSword_(-1)
+	targetTag_(),
+	swordPow_(0)
 {
 }
 
@@ -89,34 +90,47 @@ void Sword::InitAnimation(void)
 
 void Sword::InitPost(void)
 {
+	int frameIndex = MV1SearchFrame(transform_.modelId, "Plane001");
+	if (frameIndex != -1) {
+		MV1SetFrameVisible(transform_.modelId, frameIndex, FALSE); // 非表示にする
+	}
+}
+
+void Sword::SetWeaponProperty(ColliderBase::TAG targetTag, float pow)
+{
+	//受け取ったタグを箱に保存
+	targetTag_ = targetTag;
+
+	//受け取った攻撃力を箱に保存
+	swordPow_ = pow;
 
 }
 
-void Sword::UpdatePose(VECTOR pos, Quaternion playerRot)
+void Sword::UpdatePose(MATRIX handMatrix)
 {
 	//プレイヤーの回転行列
-	MATRIX rotMat = playerRot.ToMatrix();
+	MATRIX rotMat = handMatrix;
 
-	//手から見た剣のオフセットをプレイヤーの向きに合わせて回転させる
-	VECTOR LocalOffset = VGet(0.0f, 40.0f, 15.0f);
-	VECTOR worldOffset = VTransform(LocalOffset, rotMat);
-	VECTOR finalPos = VAdd(pos, worldOffset);
-
-	//剣の構え用の回転行れる
+	//剣の構え角度
 	MATRIX stanceMat = MGetRotX(AsoUtility::Deg2RadF(ROT));
 
+	//握り位置のズレ
+	VECTOR LocalOffset = VGet(0.0f, 40.0f, 15.0f);
+	MATRIX offsetMat = MGetTranslate(LocalOffset);
+
+	//回転させてずらす
+	MATRIX localMat = MMult(stanceMat, offsetMat);
+
 	//最終的な回転行列(剣の構え×プレイヤーの向き)
-	MATRIX finalMat = MMult(stanceMat, rotMat);
+	MATRIX finalMat = MMult(localMat, rotMat);
 
-	//適用
-	//MV1SetPosition(transform_.modelId, finalPos);
-	//MV1SetRotationMatrix(transform_.modelId, finalMat);
-	//MV1SetScale(transform_.modelId, SCALE);
+	//行列からワールド座標を抜き出す
+	transform_.pos = VGet(finalMat.m[3][0], finalMat.m[3][1], finalMat.m[3][2]);
 
-	transform_.pos = finalPos;
-
+	//行列からクォータニオンを抜き出す
 	transform_.quaRot = Quaternion::GetRotation(finalMat);
 
+	//自身の行列を更新
 	transform_.Update();
 }
 
@@ -135,7 +149,7 @@ void Sword::ExecuteStrike(void)
 	for (const auto& hitCol : ColliderManager::GetInstance().GetColliders()) {
 
 		//エネミー以外以外はすべて飛ばす
-		if (hitCol->GetTag() != ColliderBase::TAG::ENEMY) continue;
+		if (hitCol->GetTag() != targetTag_) continue;
 
 		//攻撃判定
 		CollisionResult res = hitCol->CheckCollision(swordCapsule);
@@ -155,7 +169,7 @@ void Sword::ExecuteStrike(void)
 		if (enemy == nullptr) continue;
 
 		//敵の死亡判定
-		enemy->OnDamage(10);
+		enemy->OnDamage(swordPow_);
 
 		printfDx("敵を倒した！\n");
 

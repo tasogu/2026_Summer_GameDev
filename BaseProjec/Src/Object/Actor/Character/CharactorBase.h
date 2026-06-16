@@ -53,7 +53,7 @@ public:
 	void Destroy(void) { isDead_ = true; }
 
 	//ダメージ処理
-	void OnDamage(int damage);
+	void OnDamage(int damage)override;
 
 protected:
 	//アニメーションコントローラーの呼び出し

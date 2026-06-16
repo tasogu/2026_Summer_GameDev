@@ -36,10 +36,10 @@ public:
 	//void Update(void);
 
 	//描画
-	virtual void Draw(void) override;
+	void Draw(void) override;
 
 	//解放
-	virtual void Release(void) override;
+	void Release(void) override;
 
 private:
 	////アニメーションコントローラーの呼び出し
@@ -58,7 +58,7 @@ private:
 	static constexpr float SPEED_MOVE = 3.0f;
 
 	//移動速度(走り)
-	static constexpr float SPEED_RUN = 60.0f;
+	static constexpr float SPEED_RUN = 6.0f;
 
 	//回転時間
 	static constexpr float TIME_ROT = 1.0f;
@@ -77,6 +77,9 @@ private:
 
 	// 衝突判定用カプセル球体半径
 	static constexpr float COL_CAPSULE_RADIUS = 20.0f;
+
+	//剣のプレイヤーでの攻撃力
+	static constexpr float PLAYER_POW = 10.0f;
 
 	//ソードのポインタ
 	//Sword* sword_;
@@ -104,8 +107,8 @@ private:
 	bool isAttack_;
 
 	//更新系(純粋仮想関数継承)
-	virtual void UpdateProcess(void) override;
-	virtual void UpdateProcessPost(void) override;
+	void UpdateProcess(void) override;
+	void UpdateProcessPost(void) override;
 
 	//更新ステップ(NONE)
 	void UpdateNone(void);

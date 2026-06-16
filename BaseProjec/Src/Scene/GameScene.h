@@ -43,6 +43,9 @@ private:
 	//EnemyManager* enemy_;
 	std::unique_ptr<EnemyManager> enemy_;
 
+	//ポーズシーン
+	bool isPause_;
+	
 	////コライダー
 	//ColliderManager* collder_;
 };

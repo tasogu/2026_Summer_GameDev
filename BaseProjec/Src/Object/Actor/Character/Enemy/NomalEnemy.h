@@ -8,18 +8,10 @@ public:
 	NomalEnemy(const EnemyBase::EnemyData& data);
 
 	//デストラクタ
-	virtual ~NomalEnemy(void) override;
+	~NomalEnemy(void) override;
 
 	//描画
-	virtual void Draw(void) override;
-
-	//アニメーションタイプ
-	enum class ANIM_TYPE
-	{
-		IDLE,
-		WALK,
-		RUN,
-	};
+	void Draw(void) override;
 
 private:
 	//スケール
@@ -65,10 +57,10 @@ private:
 	void InitPost(void) override;
 
 	//更新系
-	virtual void UpdateProcess(void) override;
-	virtual void UpdateProcessPost(void) override;
+	void UpdateProcess(void) override;
+	void UpdateProcessPost(void) override;
 
-	virtual void CollisionReserve(void) {};
+	void CollisionReserve(void) {};
 
 	//エネミーの攻撃
 	void ProcessAttack(void);

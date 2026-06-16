@@ -20,11 +20,28 @@ public:
 		float movebleRange;
 	};
 	
+	//状態
+	enum class STATE
+	{
+		NONE,
+		PLAY,
+	};
+
+	//アニメーションタイプ
+	enum class ANIM_TYPE
+	{
+		IDLE,
+		WALK,
+		RUN,
+		ATTACK
+	};
+
+
 	//コンストラクタ
 	EnemyBase(const EnemyBase::EnemyData& data);
 
 	//デストラクタ
-	virtual ~EnemyBase(void) override;
+	~EnemyBase(void) override;
 
 	//描画
 	virtual void Draw(void) = 0;
@@ -53,19 +70,19 @@ private:
 	static constexpr float COL_CAPSULE_RADIUS = 80.0f;
 
 	// リソースロード
-	virtual void InitLoad(void) override = 0;
+	virtual void InitLoad(void) = 0;
 
 	// 大きさ、回転、座標の初期化
-	virtual void InitTransform(void) override = 0;
+	virtual void InitTransform(void) = 0;
 
 	// 衝突判定の初期化
 	void InitCollider(void) override;
 
 	// アニメーションの初期化
-	virtual void InitAnimation(void) override = 0;
+	virtual void InitAnimation(void) = 0;
 
 	// 初期化後の個別処理
-	virtual void InitPost(void) override = 0;
+	virtual void InitPost(void) = 0;
 
 
 	//更新系(純粋仮想関数)

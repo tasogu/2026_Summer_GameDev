@@ -3,6 +3,7 @@
 class Sword : public ActorBase
 {
 public:
+
 	Sword(void);
 	~Sword(void);
 
@@ -11,7 +12,7 @@ public:
 	void Draw(void);
 
 	//プレイヤーから行列を受け取って糸を反映するメソッド
-	void UpdatePose(VECTOR pos, Quaternion playerRot);
+	void UpdatePose(MATRIX handMatrix);
 
 	// 多段ヒット（チェーンソー化）を防ぐためのメモ帳
 	std::vector<ActorBase*> hitActors_;
@@ -19,8 +20,12 @@ public:
 	//攻撃の当たり判定とダメージ処理
 	void ExecuteStrike(void);
 
-	//攻撃の当たり判定とダメージ処理
+	//攻撃の当たり判定とダメージ処理の解放
 	void ResetStrike(void);
+
+	//標的とするタグと攻撃力をセットする処理
+	void SetWeaponProperty(ColliderBase::TAG targetTag, float pow);
+
 private:
 	//スケール
 	static constexpr VECTOR SCALE = { 0.05f, 0.05f, 0.05f };
@@ -37,8 +42,11 @@ private:
 	//剣に加える回転の角度
 	static constexpr float ROT = 135.0f;
 
-	//剣のモデルID
-	int imgSword_;
+	//剣の攻撃力
+	int swordPow_;
+
+	//攻撃対象のタグを持つ
+	ColliderBase::TAG targetTag_;
 
 	// リソースロード
 	void InitLoad(void) override;
@@ -54,7 +62,6 @@ private:
 
 	// 初期化後の個別処理
 	void InitPost(void) override;
-
 
 };
 

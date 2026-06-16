@@ -13,6 +13,7 @@ GameScene::GameScene(void)
 	stage_(nullptr),
 	player_(nullptr),
 	enemy_(nullptr),
+	isPause_(false),
 	//collder_(nullptr),
 	SceneBase()
 {
@@ -50,6 +51,18 @@ void GameScene::Init(void)
 
 void GameScene::Update(void)
 {
+	auto& ins = InputManager::GetInstance();
+
+	//Qキーが押されたら画面をポーズする・ポーズ解除
+	if (ins.IsNew(KEY_INPUT_Q))
+	{
+		isPause_ = !isPause_;
+	}
+
+	if (isPause_)
+	{
+		return;
+	}
 
 	//ステージの更新
 	stage_->Update();
@@ -61,7 +74,6 @@ void GameScene::Update(void)
 	enemy_->Update();
 
 	// シーン遷移
-	auto const& ins = InputManager::GetInstance();
 	if (ins.IsTrgDown(KEY_INPUT_SPACE))
 	{
 		sceMng_.ChangeScene(SceneManager::SCENE_ID::TITLE);

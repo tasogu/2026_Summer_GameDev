@@ -107,12 +107,12 @@ void Player::UpdatePlay(void)
 	transform_.quaRot = playerRotY_;
 
 	//位置を取得
-	VECTOR handPos = MV1GetFramePosition(transform_.modelId, handBoneid_);
+	//VECTOR handPos = MV1GetFramePosition(transform_.modelId, handBoneid_);
+	MATRIX handMatrix = MV1GetFrameLocalWorldMatrix(transform_.modelId, handBoneid_);
 
 	//剣の位置を手の位置に更新
-	sword_->UpdatePose(handPos, transform_.quaRot);
+	sword_->UpdatePose(handMatrix);
 
-	MV1GetFrameLocalMatrix(transform_.modelId, handBoneid_);
 }
 
 void Player::ChangeState(STATE state)
@@ -165,9 +165,11 @@ void Player::InitLoad(void)
 	//sword_ = new Sword();
 	sword_ = std::make_unique<Sword>();
 	sword_->Init();
+	//剣の攻撃対象と攻撃力をセット
+	sword_->SetWeaponProperty(ColliderBase::TAG::ENEMY, PLAYER_POW);
 
 	//モデルの手のボーンを取得
-	handBoneid_ = MV1SearchFrame(transform_.modelId, "mixamorig:RightHandMiddle1");
+	handBoneid_ = MV1SearchFrame(transform_.modelId, "mixamorig:RightHand");
 	
 	//剣のモデルを手のボーンに装着
 	(imgSword_, handBoneid_, 1);
@@ -268,21 +270,21 @@ void Player::ProcessMove(void)
 	if (ins.IsNew(KEY_INPUT_W))
 	{
 		rotRad = AsoUtility::Deg2RadD(0.0f);
-		dir = cameraRot.GetForward();
+		dir = VAdd(dir,cameraRot.GetForward());
 	}
 
 	//カメラ方向に後退したい
 	if (ins.IsNew(KEY_INPUT_S))
 	{
 		rotRad = AsoUtility:: Deg2RadD(180.0f);
-		dir = cameraRot.GetBack();
+		dir = VAdd(dir,cameraRot.GetBack());
 	}
 
 	//カメラ方向に右移動したい
 	if (ins.IsNew(KEY_INPUT_D))
 	{
 		rotRad = AsoUtility::Deg2RadF(90.0f);
-		dir = cameraRot.GetRight();
+		dir = VAdd(dir,cameraRot.GetRight());
 
 	}
 
@@ -290,7 +292,7 @@ void Player::ProcessMove(void)
 	if(ins.IsNew(KEY_INPUT_A))
 	{
 		rotRad = AsoUtility::Deg2RadF(270.0f);
-		dir = cameraRot.GetLeft();
+		dir = VAdd(dir,cameraRot.GetLeft());
 	}
 
 	//移動角度がゼロ以外

@@ -66,4 +66,6 @@ protected:
 	// ‰Šú‰»Œã‚ÌŒÂ•Êˆ—
 	virtual void InitPost(void) = 0;
 
+	//ƒ_ƒ[ƒWˆ—
+	virtual void OnDamage(int damage) {};
 };
