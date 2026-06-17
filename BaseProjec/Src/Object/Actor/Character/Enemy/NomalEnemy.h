@@ -1,5 +1,6 @@
 #pragma once
 #include "EnemyBase.h"
+class Sword;
 
 class NomalEnemy : public EnemyBase
 {
@@ -10,10 +11,15 @@ public:
 	//デストラクタ
 	~NomalEnemy(void) override;
 
+	//初期化
+	void Init(void);
+
 	//描画
 	void Draw(void) override;
 
 private:
+	std::unique_ptr<Sword> sword_;
+
 	//スケール
 	static constexpr VECTOR SCALE = { 1.0f, 1.0f, 1.0f };
 
@@ -36,10 +42,13 @@ private:
 	static constexpr VECTOR COL_CAPSULE_DOWN_LOCAL_POS = { 0.0f, 30.0f, 0.0f };
 
 	// 衝突判定用カプセル球体半径
-	static constexpr float COL_CAPSULE_RADIUS = 100.0f;
+	static constexpr float COL_CAPSULE_RADIUS = 20.0f;
 	
 	//ノーマルエネミーの体力
 	static constexpr float NOMAL_HP = 60.0f;
+
+	//ノーマルエネミーの攻撃力
+	static constexpr float ENEMY_POW = 10.0f;
 
 	// リソースロード
 	void InitLoad(void) override;
@@ -59,6 +68,21 @@ private:
 	//更新系
 	void UpdateProcess(void) override;
 	void UpdateProcessPost(void) override;
+
+	//更新ステップ(NONE)
+	void UpdateNone(void) override;
+
+	//更新ステップ(PLAY)
+	void UpdatePlay(void)override;
+
+	//Stateの切り替え
+	void ChangeState(STATE state) override;
+
+	//Stateの切り替え(NONE)
+	void ChangeStateNone(void) override;
+
+	//Stateの切り替え(PLAY)
+	void ChangeStatePlay(void) override;
 
 	void CollisionReserve(void) {};
 

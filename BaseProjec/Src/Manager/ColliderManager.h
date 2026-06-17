@@ -25,6 +25,9 @@ public:
 
 	//全コライダーを渡す
 	const std::vector<const ColliderBase*>& GetColliders(void);
+
+	//登録されているコライダー全削除
+	void ClearAll();
 private:
 	ColliderManager() = default;
 	~ColliderManager() = default;

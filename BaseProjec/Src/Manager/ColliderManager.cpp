@@ -46,3 +46,8 @@ const std::vector<const ColliderBase*>& ColliderManager::GetColliders(void)
 {
 	return collders_;
 }
+
+void ColliderManager::ClearAll()
+{
+	collders_.clear();
+}

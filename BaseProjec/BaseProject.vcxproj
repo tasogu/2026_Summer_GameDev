@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Scene\GameOverScene.cpp" />
     <ClCompile Include="Src\Manager\ColliderManager.cpp" />
     <ClCompile Include="Src\Object\Actor\Character\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Src\Manager\EnemyManager.cpp" />
@@ -52,6 +53,7 @@
     <ClCompile Include="Src\Object\Actor\Character\Sword.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Scene\GameOverScene.h" />
     <ClInclude Include="Src\Manager\ColliderManager.h" />
     <ClInclude Include="Src\Object\Actor\Character\Enemy\EnemyBase.h" />
     <ClInclude Include="Src\Manager\EnemyManager.h" />

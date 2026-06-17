@@ -156,6 +156,11 @@ const AnimationController::Animation& AnimationController::GetPlayAnim(void) con
 	return playAnim_;
 }
 
+float AnimationController::GetTime(void) const
+{
+	return playAnim_.step;
+}
+
 void AnimationController::Add(int type, float speed, Animation& animation)
 {
 	animation.speed = speed;

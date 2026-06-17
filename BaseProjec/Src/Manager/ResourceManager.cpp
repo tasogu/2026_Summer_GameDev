@@ -46,7 +46,7 @@ void ResourceManager::Init(void)
 	resourcesMap_.emplace(SRC::PLAYER, res);
 
 	//剣のモデル
-	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Player/Sword.mv1");
+	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Sword/sword1.mv1");
 	resourcesMap_.emplace(SRC::SWORD, res);
 
 	//ノーマルエネミーモデル

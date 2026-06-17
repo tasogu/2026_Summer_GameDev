@@ -19,9 +19,7 @@ Player::Player(void)
 	:
 	sword_(nullptr),
 	imgPlayer_(-1),
-	CharactorBase(),
-	imgSword_(-1),
-	isAttack_(false)
+	CharactorBase()
 {	
 	playerRotY_ = Quaternion();
 	goalQuaRot_ = Quaternion();
@@ -31,6 +29,11 @@ Player::Player(void)
 	animationController_ = nullptr;
 
 	isDead_ = false;
+
+	isAttack_ = false;
+
+	imgSword_ = -1;
+
 }
 
 Player::~Player(void)
@@ -77,6 +80,15 @@ void Player::UpdateProcess(void)
 
 void Player::UpdateProcessPost(void)
 {
+	//更新
+	transform_.Update();
+
+	//位置を取得
+	MATRIX handMatrix = MV1GetFrameLocalWorldMatrix(transform_.modelId, handBoneid_);
+
+	//剣の位置を手の位置に更新
+	sword_->UpdatePose(handMatrix);
+
 }
 
 
@@ -106,12 +118,6 @@ void Player::UpdatePlay(void)
 	//プレイヤーの回転の更新
 	transform_.quaRot = playerRotY_;
 
-	//位置を取得
-	//VECTOR handPos = MV1GetFramePosition(transform_.modelId, handBoneid_);
-	MATRIX handMatrix = MV1GetFrameLocalWorldMatrix(transform_.modelId, handBoneid_);
-
-	//剣の位置を手の位置に更新
-	sword_->UpdatePose(handMatrix);
 
 }
 
@@ -354,7 +360,13 @@ void Player::ProcessAttack(void)
 	}
 	else if (isAttack_ == true)
 	{
-		sword_->ExecuteStrike();
+		//アニメーションの再生時間を取得
+		float nowTime = animationController_->GetTime();
+
+		//アニメーション途中から当たり判定を開始
+		if (nowTime >= 15.0f && nowTime <= 30.0f) {
+			sword_->ExecuteStrike();
+		}
 
 		//攻撃アニメーションが終了したら
 		if (animationController_->IsEnd()) {

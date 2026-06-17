@@ -16,6 +16,23 @@ public:
 		MAX,
 	};
 
+	//状態
+	enum class STATE
+	{
+		NONE,
+		PLAY,
+	};
+
+	//アニメーションタイプ
+	enum class ANIM_TYPE
+	{
+		IDLE,
+		WALK,
+		RUN,
+		ATTACK
+	};
+
+
 	//コンストラクタ
 	CharactorBase(void);
 
@@ -43,8 +60,14 @@ public:
 	//ジャンプ後
 	VECTOR jumpPow_;
 
+	//剣のモデルID
+	int imgSword_;
+
 	//移動速度
 	float speed_;
+
+	//攻撃中かの判定
+	bool isAttack_;
 
 	//死亡判定を受け取る
 	bool IsDead(void) const { return isDead_; }
@@ -81,9 +104,27 @@ protected:
 	//死亡判定
 	bool isDead_;
 
+	//現在の状態を取得
+	STATE state_;
+
 	//更新系(純粋仮想関数)
 	virtual void UpdateProcess(void) = 0;
 	virtual void UpdateProcessPost(void) = 0;
+
+	//更新ステップ(NONE)
+	virtual void UpdateNone(void) = 0;
+
+	//更新ステップ(PLAY)
+	virtual void UpdatePlay(void) = 0;
+
+	//Stateの切り替え
+	virtual void ChangeState(STATE state) = 0;
+
+	//Stateの切り替え(NONE)
+	virtual void ChangeStateNone(void) = 0;
+
+	//Stateの切り替え(PLAY)
+	virtual void ChangeStatePlay(void) = 0;
 
 	//移動方向に応じた遅延回転
 	void DelayRotate(void);

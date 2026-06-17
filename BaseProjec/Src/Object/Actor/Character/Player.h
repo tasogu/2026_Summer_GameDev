@@ -7,21 +7,6 @@ class Player : public CharactorBase
 {
 public:
 
-	//状態
-	enum class STATE
-	{
-		NONE,
-		PLAY,
-	};
-
-	//アニメーションタイプ
-	enum class ANIM_TYPE
-	{
-		IDLE,
-		WALK,
-		RUN,
-		ATTACK
-	};
 
 	//コンストラクタ
 	Player(void);
@@ -85,14 +70,9 @@ private:
 	//Sword* sword_;
 	std::unique_ptr<Sword> sword_;
 
-	//剣のモデルID
-	int imgSword_;
-
 	//モデル描画
 	int imgPlayer_;
 
-	//現在の状態を取得
-	STATE state_;
 
 	//回転する方向最初
 	Quaternion playerRotY_;
@@ -103,27 +83,24 @@ private:
 	//回転時間
 	float stepRotTime_;
 
-	//攻撃中かの判定
-	bool isAttack_;
-
 	//更新系(純粋仮想関数継承)
 	void UpdateProcess(void) override;
 	void UpdateProcessPost(void) override;
 
 	//更新ステップ(NONE)
-	void UpdateNone(void);
+	void UpdateNone(void) override;
 
 	//更新ステップ(PLAY)
-	void UpdatePlay(void);
+	void UpdatePlay(void)override;
 
 	//Stateの切り替え
-	void ChangeState(STATE state);
+	void ChangeState(STATE state) override;
 
 	//Stateの切り替え(NONE)
-	void ChangeStateNone(void);
+	void ChangeStateNone(void) override;
 
 	//Stateの切り替え(PLAY)
-	void ChangeStatePlay(void);
+	void ChangeStatePlay(void) override;
 
 	// リソースロード
 	void InitLoad(void) override;

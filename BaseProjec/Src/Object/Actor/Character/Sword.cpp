@@ -37,6 +37,7 @@ void Sword::Init(void)
 	// 初期化後の個別処理
 	InitPost();
 
+	transform_.Update();
 }
 
 void Sword::Update(void)
@@ -111,11 +112,18 @@ void Sword::UpdatePose(MATRIX handMatrix)
 	//プレイヤーの回転行列
 	MATRIX rotMat = handMatrix;
 
+	a += 0.1f;
+
 	//剣の構え角度
-	MATRIX stanceMat = MGetRotX(AsoUtility::Deg2RadF(ROT));
+	MATRIX rotX = MGetRotX(AsoUtility::Deg2RadF(ROTX));
+	MATRIX rotY = MGetRotY(AsoUtility::Deg2RadF(ROTY));
+	//MATRIX rotY = MGetRotX(AsoUtility::Deg2RadF(a));
+	MATRIX rotZ = MGetRotZ(AsoUtility::Deg2RadF(ROTZ));
+
+	MATRIX stanceMat = MMult(MMult(rotZ, rotX), rotY);
 
 	//握り位置のズレ
-	VECTOR LocalOffset = VGet(0.0f, 40.0f, 15.0f);
+	VECTOR LocalOffset = VGet(0.0f, 0.0f, 0.0f);
 	MATRIX offsetMat = MGetTranslate(LocalOffset);
 
 	//回転させてずらす
@@ -148,7 +156,7 @@ void Sword::ExecuteStrike(void)
 	// 登録されている衝突物を全てチェック
 	for (const auto& hitCol : ColliderManager::GetInstance().GetColliders()) {
 
-		//エネミー以外以外はすべて飛ばす
+		//ターゲット以外は飛ばす
 		if (hitCol->GetTag() != targetTag_) continue;
 
 		//攻撃判定
@@ -164,12 +172,14 @@ void Sword::ExecuteStrike(void)
 
 		if (it != hitActors_.end()) continue;
 
-		NomalEnemy* enemy = dynamic_cast<NomalEnemy*>(owner);
+		//NomalEnemy* enemy = dynamic_cast<NomalEnemy*>(owner);
 
-		if (enemy == nullptr) continue;
+		CharactorBase* character = dynamic_cast<CharactorBase*>(owner);
+
+		if (character == nullptr) continue;
 
 		//敵の死亡判定
-		enemy->OnDamage(swordPow_);
+		character->OnDamage(swordPow_);
 
 		printfDx("敵を倒した！\n");
 

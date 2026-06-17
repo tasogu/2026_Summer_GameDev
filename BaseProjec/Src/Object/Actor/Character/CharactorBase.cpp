@@ -136,6 +136,10 @@ void CharactorBase::CollisionGravity(void)
 	// 登録されている衝突物を全てチェック
 	for (const auto& hitCol : ColliderManager::GetInstance().GetColliders())
 	{
+
+		//ポインタがnullならコンティニュー
+		if (hitCol == nullptr) continue;
+
 		// ステージ以外は処理を飛ばす
 		if (hitCol->GetTag() != ColliderBase::TAG::STAGE) continue;
 

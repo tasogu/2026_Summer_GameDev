@@ -96,6 +96,9 @@ void GameScene::Draw(void)
 
 void GameScene::Release(void)
 {
+	//リストを削除
+	ColliderManager::GetInstance().ClearAll();
+
 	//ステージの開放
 	stage_->Release();
 

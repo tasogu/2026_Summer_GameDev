@@ -1,11 +1,13 @@
 #include "../../../../Manager/ResourceManager.h"
 #include "../../../../Application.h"
 #include "../../../../Manager/ColliderManager.h"
+#include "../../../../Manager/InputManager.h"
 #include "../../../Common/AnimationController.h"
 #include "../../../Common/Transform.h"
 #include "../../../../Utility/AsoUtility.h"
 #include "../../ColliderCapsule.h"
 #include "../../ColliderLine.h"
+#include "../Sword.h"
 #include "NomalEnemy.h"
 
 NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
@@ -13,10 +15,33 @@ NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
 	EnemyBase(data)
 {
 	hp_ = NOMAL_HP;
+	isAttack_ = false;
+	imgSword_ = -1;
+	state_ = STATE::NONE;
+
 }
 
 NomalEnemy::~NomalEnemy(void)
 {
+}
+
+void NomalEnemy::Init(void)
+{
+	//リソースロード
+	InitLoad();
+
+	//	// 大きさ、回転、座標の初期化
+	InitTransform();
+
+	// 衝突判定の初期化
+	InitCollider();
+
+	// アニメーションの初期化
+	InitAnimation();
+
+	// 初期化後の個別処理
+	InitPost();
+
 }
 
 void NomalEnemy::Draw(void)
@@ -32,6 +57,19 @@ void NomalEnemy::InitLoad(void)
 	//正しい書き方（必ず分身のハンドルをもらってセットする）
 	transform_.SetModel(ResourceManager::GetInstance().LoadModelDuplicate(ResourceManager::SRC::NOMAL_ENEMY));
 	
+	//剣のモデルのロード
+//sword_ = new Sword();
+	sword_ = std::make_unique<Sword>();
+	sword_->Init();
+	//剣の攻撃対象と攻撃力をセット
+	sword_->SetWeaponProperty(ColliderBase::TAG::PLAYER, ENEMY_POW);
+
+	//モデルの手のボーンを取得
+	handBoneid_ = MV1SearchFrame(transform_.modelId, "mixamorig:RightHand");
+
+	//剣のモデルを手のボーンに装着
+	(imgSword_, handBoneid_, 1);
+
 }
 
 void NomalEnemy::InitTransform(void)
@@ -78,24 +116,145 @@ void NomalEnemy::InitAnimation(void)
 	std::string path = Application::PATH_MODEL + "Player/";
 	//animationController_ = new AnimationController(transform_.modelId);
 	animationController_ = std::make_unique<AnimationController>(transform_.modelId);
+	animationController_->Add((int)ANIM_TYPE::IDLE, 20.0f, path + "Idle.mv1");
+	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f, path + "Walk.mv1");
+	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f, path + "Run.mv1");
+	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f, path + "Attack.mv1");
+
+	animationController_->Play((int)ANIM_TYPE::IDLE);
 
 }
 
 void NomalEnemy::InitPost(void)
 {
+	//移動量を初期化
+	movePow_ = AsoUtility::VECTOR_ZERO;
+
+	//移動方向を初期化
+	moveDir_ = AsoUtility::VECTOR_ZERO;
+
+	//stateをプレイに変更
+	ChangeState(STATE::PLAY);
+
+	//プレイヤーの更新
+	transform_.Update();
+
 }
 
 
 void NomalEnemy::UpdateProcess(void)
 {
+	//更新ステップ
+	switch (state_)
+	{
+	case STATE::NONE:
+		UpdateNone();
+		break;
+	case STATE::PLAY:
+		UpdatePlay();
+		break;
+	}
+
 }
 
 void NomalEnemy::UpdateProcessPost(void)
+{
+	//更新
+	transform_.Update();
+
+	//位置を取得
+	MATRIX handMatrix = MV1GetFrameLocalWorldMatrix(transform_.modelId, handBoneid_);
+
+	//剣の位置を手の位置に更新
+	sword_->UpdatePose(handMatrix);
+
+}
+
+void NomalEnemy::UpdateNone(void)
+{
+}
+
+void NomalEnemy::UpdatePlay(void)
+{
+	//アニメーションの更新
+	animationController_->Update();
+
+	//攻撃
+	ProcessAttack();
+
+	//攻撃中ではないなら移動
+	if (isAttack_ == false) {
+		//移動
+		ProcessMove();
+
+	}
+
+
+}
+
+void NomalEnemy::ChangeState(STATE state)
+{
+	state_ = state;
+
+	switch (state_)
+	{
+	case STATE::NONE:
+		ChangeStateNone();
+		break;
+	case STATE::PLAY:
+		ChangeStatePlay();
+		break;
+	}
+
+}
+
+void NomalEnemy::ChangeStateNone(void)
+{
+}
+
+void NomalEnemy::ChangeStatePlay(void)
 {
 }
 
 void NomalEnemy::ProcessAttack(void) 
 {
+	auto& ins = InputManager::GetInstance();
+
+	//攻撃ボタンが押されたら
+	if (ins.IsNew(KEY_INPUT_K) && isAttack_ == false) {
+		//攻撃中フラグを立てる
+		isAttack_ = true;
+
+		//移動量をリセット
+		movePow_ = AsoUtility::VECTOR_ZERO;
+
+		//アニメーションを攻撃に変更
+		animationController_->Play((int)ANIM_TYPE::ATTACK, false);
+
+
+	}
+	else if (isAttack_ == true)
+	{
+		//アニメーションの再生時間を取得
+		float nowTime = animationController_->GetTime();
+
+		//アニメーション途中から当たり判定を開始
+		if (nowTime >= 15.0f && nowTime <= 30.0f) {
+			sword_->ExecuteStrike();
+		}
+
+		//攻撃アニメーションが終了したら
+		if (animationController_->IsEnd()) {
+			//攻撃中フラグをリセット
+			isAttack_ = false;
+			sword_->ResetStrike();
+
+			//アニメーションを待機に変更
+			animationController_->Play((int)ANIM_TYPE::IDLE);
+
+		}
+
+	}
 
 }
 

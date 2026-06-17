@@ -19,23 +19,6 @@ public:
 		VECTOR defaultPos;
 		float movebleRange;
 	};
-	
-	//状態
-	enum class STATE
-	{
-		NONE,
-		PLAY,
-	};
-
-	//アニメーションタイプ
-	enum class ANIM_TYPE
-	{
-		IDLE,
-		WALK,
-		RUN,
-		ATTACK
-	};
-
 
 	//コンストラクタ
 	EnemyBase(const EnemyBase::EnemyData& data);
@@ -83,7 +66,6 @@ private:
 
 	// 初期化後の個別処理
 	virtual void InitPost(void) = 0;
-
 
 	//更新系(純粋仮想関数)
 	virtual void UpdateProcess(void) = 0;

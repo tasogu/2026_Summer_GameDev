@@ -48,6 +48,9 @@ public:
 	// 再生中のアニメーション情報を取得
 	const Animation& GetPlayAnim(void) const;
 
+	//アニメーションの再生時間を取得
+	float GetTime(void) const;
+
 private:
 
 	// アニメーションするモデルのハンドルID
