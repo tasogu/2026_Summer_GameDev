@@ -57,8 +57,9 @@ void Sword::Draw(void)
 
 void Sword::InitLoad(void)
 {
-	//剣のモデルのロード
-	transform_.SetModel(resMng_.Load(ResourceManager::SRC::SWORD)->handleId_);
+	//複製のハンドルをもらってロード
+	//transform_.SetModel(resMng_.Load(ResourceManager::SRC::SWORD)->handleId_);
+	transform_.SetModel(ResourceManager::GetInstance().LoadModelDuplicate(ResourceManager::SRC::SWORD));
 
 }
 
@@ -181,7 +182,7 @@ void Sword::ExecuteStrike(void)
 		//敵の死亡判定
 		character->OnDamage(swordPow_);
 
-		printfDx("敵を倒した！\n");
+		//printfDx("敵を倒した！\n");
 
 		hitActors_.push_back(owner);
 

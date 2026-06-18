@@ -25,7 +25,8 @@ public:
 		NONE,
 		TITLE,
 		GAME,
-		GAMEOVER
+		GAMEOVER,
+		GAMECLEAR
 	};
 	
 	// インスタンスの生成

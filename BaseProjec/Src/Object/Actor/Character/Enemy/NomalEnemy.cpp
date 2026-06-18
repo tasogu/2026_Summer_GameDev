@@ -23,6 +23,10 @@ NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
 
 NomalEnemy::~NomalEnemy(void)
 {
+	if (sword_)
+	{
+		sword_->ResetStrike();
+	}
 }
 
 void NomalEnemy::Init(void)
@@ -46,15 +50,20 @@ void NomalEnemy::Init(void)
 
 void NomalEnemy::Draw(void)
 {
+	sword_->Draw();
 
 	CharactorBase::Draw();
+}
+
+void NomalEnemy::Release(void)
+{
+	sword_->Release();
 }
 
 void NomalEnemy::InitLoad(void)
 {
 
-	//transform_.SetModel(resMng_.Load(ResourceManager::SRC::NOMAL_ENEMY)->handleId_);
-	//正しい書き方（必ず分身のハンドルをもらってセットする）
+	//複製のハンドルをもらってロード
 	transform_.SetModel(ResourceManager::GetInstance().LoadModelDuplicate(ResourceManager::SRC::NOMAL_ENEMY));
 	
 	//剣のモデルのロード

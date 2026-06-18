@@ -24,14 +24,13 @@ void Application::CreateInstance(void)
 Application& Application::GetInstance(void)
 {
 	return *instance_;
-	delete instance_;
 }
 
 void Application::Init(void)
 {
 
 	// アプリケーションの初期設定
-	SetWindowText("3DAction");
+	SetWindowText("アクション");
 
 	// ウィンドウサイズ
 	SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 32);
@@ -106,15 +105,19 @@ void Application::Run(void)
 
 void Application::Destroy(void)
 {
+	// シーン管理解放
+	SceneManager::GetInstance().Destroy();
 
 	InputManager::GetInstance().Destroy();
 	ResourceManager::GetInstance().Destroy();
 	
-	// シーン管理解放
-	SceneManager::GetInstance().Destroy();
 
 	// Effekseerを終了する。
 	Effkseer_End();
+
+	if (fpsController_) {
+		fpsController_.reset();
+	}
 
 	// DxLib終了
 	if (DxLib_End() == -1)

@@ -40,9 +40,9 @@ private:
 	static constexpr float COL_CAPSULE_RADIUS = 5.0f;
 
 	//Œ•‚É‰Á‚¦‚é‰ñ“]‚ÌŠp“x
-	static constexpr float ROTX = 180.0f;
-	static constexpr float ROTY = -20.0f;
-	static constexpr float ROTZ = -90.0f;
+	static constexpr float ROTX = 0.0f;
+	static constexpr float ROTY = 0.0f;
+	static constexpr float ROTZ = 0.0f;
 
 
 	//Œ•‚ÌUŒ‚—Í

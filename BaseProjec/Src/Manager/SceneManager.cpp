@@ -5,6 +5,7 @@
 #include "../Scene/TitleScene.h"
 #include "../Scene/GameScene.h"
 #include "../Scene/GameOverScene.h"
+#include "../Scene/GameClearScene.h"
 #include "Camera.h"
 #include "ResourceManager.h"
 #include "SceneManager.h"
@@ -160,6 +161,10 @@ void SceneManager::Destroy(void)
 	//// フェード機能の解放
 	//delete fader_;
 
+	if (scene_) {
+		scene_.reset();
+	}
+
 	camera_->Release();
 
 	if (camera_) {
@@ -226,6 +231,9 @@ void SceneManager::ResetDeltaTime(void)
 
 void SceneManager::DoChangeScene(SCENE_ID sceneId)
 {
+	if (scene_) {
+		scene_.reset();
+	}
 
 	// リソースの解放
 	ResourceManager::GetInstance().Release();
@@ -251,6 +259,9 @@ void SceneManager::DoChangeScene(SCENE_ID sceneId)
 		break;
 	case SCENE_ID::GAMEOVER:
 		scene_ = std::make_unique<GameOverScene>();
+		break;
+	case SCENE_ID::GAMECLEAR:
+		scene_ = std::make_unique<GameClearScene>();
 		break;
 	}
 

@@ -17,6 +17,8 @@ public:
 	//•`‰æ
 	void Draw(void) override;
 
+	//‰ð•ú
+	void Release(void);
 private:
 	std::unique_ptr<Sword> sword_;
 

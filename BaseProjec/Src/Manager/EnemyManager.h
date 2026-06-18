@@ -24,6 +24,9 @@ public:
 	//解放
 	void Release(void);
 
+	//エネミー志望
+	bool IsAllDead(void);
+
 	//エネミー
 	const std::vector<std::shared_ptr<EnemyBase>>& GetEemies(void) const { return enemies_; }
 

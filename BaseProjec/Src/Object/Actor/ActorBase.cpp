@@ -13,6 +13,7 @@ ActorBase::ActorBase(void)
 
 ActorBase::~ActorBase(void)
 {
+	Release();
 }
 
 void ActorBase::Init(void)
@@ -62,6 +63,8 @@ void ActorBase::Release(void)
 		ColliderManager::GetInstance().Unregister(own.second.get());
 
 	}
+
+	ownColliders_.clear();
 }
 
 const Transform& ActorBase::GetTransform(void) const

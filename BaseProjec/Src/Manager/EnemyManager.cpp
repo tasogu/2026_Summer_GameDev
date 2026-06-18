@@ -57,6 +57,11 @@ void EnemyManager::Release(void)
 	enemies_.clear();
 }
 
+bool EnemyManager::IsAllDead(void)
+{
+	return enemies_.empty();
+}
+
 void EnemyManager::LoadData(void)
 {
 	EnemyBase::EnemyData data = EnemyBase::EnemyData();

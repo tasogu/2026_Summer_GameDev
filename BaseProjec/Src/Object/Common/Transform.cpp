@@ -52,6 +52,11 @@ void Transform::Update(void)
 
 void Transform::Release(void)
 {
+	if (modelId != -1)
+	{
+		MV1DeleteModel(modelId);
+		modelId = -1;
+	}
 }
 
 void Transform::SetModel(int model)

@@ -28,6 +28,8 @@ void GameOverScene::Update(void)
 
 void GameOverScene::Draw(void)
 {
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "GAMEOVER");
+
 }
 
 void GameOverScene::Release(void)

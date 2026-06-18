@@ -21,6 +21,7 @@ GameScene::GameScene(void)
 
 GameScene::~GameScene(void)
 {
+	ColliderManager::GetInstance().ClearAll();
 }
 
 void GameScene::Init(void)
@@ -73,10 +74,15 @@ void GameScene::Update(void)
 	//エネミーの更新
 	enemy_->Update();
 
-	// シーン遷移
-	if (ins.IsTrgDown(KEY_INPUT_SPACE))
+
+	// シーン遷移(プレイヤー死亡：GAMEOVER、エネミー死亡：GAMECLEAR)
+	if (player_->IsDead())
 	{
-		sceMng_.ChangeScene(SceneManager::SCENE_ID::TITLE);
+		sceMng_.ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
+	}
+	if (enemy_->IsAllDead()) 
+	{
+		sceMng_.ChangeScene(SceneManager::SCENE_ID::GAMECLEAR);
 	}
 
 }

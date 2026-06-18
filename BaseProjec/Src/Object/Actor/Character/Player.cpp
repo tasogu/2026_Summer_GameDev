@@ -34,6 +34,7 @@ Player::Player(void)
 
 	imgSword_ = -1;
 
+	hp_ = PLAYER_HP;
 }
 
 Player::~Player(void)
@@ -48,7 +49,7 @@ void Player::Init(void)
 	//リソースロード
 	InitLoad();
 
-	//	// 大きさ、回転、座標の初期化
+	// 大きさ、回転、座標の初期化
 	InitTransform();
 
 	// 衝突判定の初期化
@@ -160,6 +161,16 @@ void Player::Release(void)
 	transform_.Release();
 	
 	ActorBase::Release();
+
+	sword_->Release();
+}
+
+bool Player::IsDead(void)
+{
+	if (hp_ <= 0) {
+		return true;
+	}
+	return false;
 }
 
 void Player::InitLoad(void)

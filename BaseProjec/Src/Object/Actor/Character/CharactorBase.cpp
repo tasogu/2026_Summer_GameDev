@@ -26,6 +26,14 @@ CharactorBase::CharactorBase(void)
 
 CharactorBase::~CharactorBase(void)
 {
+	// 自分が持っている全てのコライダーを、Managerのリストから登録解除する
+	for (auto& pair : ownColliders_)
+	{
+		if (pair.second)
+		{
+			ColliderManager::GetInstance().Unregister(pair.second.get());
+		}
+	}
 }
 
 void CharactorBase::Update(void)
@@ -183,6 +191,8 @@ void CharactorBase::CollisionCapsule(void)
 		const ColliderModel* colliderModel =
 			dynamic_cast<const ColliderModel*>(hitCol);
 		if (colliderModel == nullptr) continue;
+		if (colliderModel->GetFollow()->modelId == -1)continue;
+
 		auto hits = MV1CollCheck_Capsule(
 			colliderModel->GetFollow()->modelId, -1,
 			colliderCapsule->GetPosTop(), colliderCapsule->GetPosDown(),
@@ -193,6 +203,8 @@ void CharactorBase::CollisionCapsule(void)
 		for (int i = 0; i < hits.HitNum; i++)
 		{
 			auto hit = hits.Dim[i];
+
+			if (hit.FrameIndex == -1) continue;
 
 			if (!colliderModel->IsTargetFrame(hit.FrameIndex))
 			{

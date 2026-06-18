@@ -79,6 +79,10 @@ CollisionResult ColliderModel::CheckCollision(const ColliderBase* other)const
 	CollisionResult result;
 	result.isHit = false;
 
+	if (follow_ == nullptr || follow_->modelId == -1) {
+		return result;
+	}
+
 	switch (other->GetShape()) {
 	case SHAPE::LINE:
 		//カプセルとラインの当たり判定

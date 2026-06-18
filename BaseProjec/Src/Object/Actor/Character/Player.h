@@ -26,6 +26,8 @@ public:
 	//解放
 	void Release(void) override;
 
+	//HP取得
+	bool IsDead(void);
 private:
 	////アニメーションコントローラーの呼び出し
 	//AnimationController* animationController_;
@@ -65,6 +67,9 @@ private:
 
 	//剣のプレイヤーでの攻撃力
 	static constexpr float PLAYER_POW = 10.0f;
+
+	//プレイヤー体力
+	static constexpr float PLAYER_HP = 60.0f;
 
 	//ソードのポインタ
 	//Sword* sword_;
