@@ -10,7 +10,7 @@ EnemyBase::EnemyBase(const EnemyBase::EnemyData& data)
 
 {
 	isDead_ = false;
-	//‰ŠúÀ•W‚Ì‚¹‚Ä’n
+	//‰ŠúÀ•W‚Ìİ’è
 	transform_.pos = data.defaultPos;
 }
 

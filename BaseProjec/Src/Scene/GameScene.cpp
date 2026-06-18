@@ -39,8 +39,8 @@ void GameScene::Init(void)
 	//エネミーの生成
 	//enemy_ = new EnemyManager();
 	enemy_ = std::make_unique<EnemyManager>();
-	enemy_->Init();
-
+	enemy_->Init(); 
+	
 	//collder_->Register(stage_->GetOwnCollider(static_cast<int>(Stage::COLLIDER_TYPE::MODEL)));
 	//カメラにも登録
 	std::shared_ptr<Camera> camera = sceMng_.GetCamera();
