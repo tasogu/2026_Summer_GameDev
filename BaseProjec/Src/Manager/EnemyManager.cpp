@@ -1,4 +1,5 @@
 #include "../Object/Actor/Character/Enemy/NomalEnemy.h"
+#include "../Object/Actor/Character/Player.h"
 #include "EnemyManager.h"
 
 EnemyManager::EnemyManager(void)
@@ -16,11 +17,11 @@ void EnemyManager::Init(void)
 	LoadData();
 }
 
-void EnemyManager::Update(void)
+void EnemyManager::Update(Player* player)
 {
 	for (auto& enemy : enemies_)
 	{
-		enemy->Update();
+		enemy->Update(player);
 	}
 
 

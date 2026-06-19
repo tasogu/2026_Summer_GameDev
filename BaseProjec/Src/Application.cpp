@@ -3,11 +3,13 @@
 #include "Manager/InputManager.h"
 #include "Manager/ResourceManager.h"
 #include "Manager/SceneManager.h"
+#include "Manager/SoundManager.h"
 #include "Common/FpsController.h"
 #include "Application.h"
 
 Application* Application::instance_ = nullptr;
 
+const std::string Application::PATH_DATA = "Data/";
 const std::string Application::PATH_IMAGE = "Data/Image/";
 const std::string Application::PATH_MODEL = "Data/Model/";
 const std::string Application::PATH_EFFECT = "Data/Effect/";
@@ -72,6 +74,8 @@ void Application::Init(void)
 	// シーン管理初期化
 	SceneManager::CreateInstance();
 
+	//サウンド管理初期化
+	SoundManager::CreateInstance();
 }
 
 void Application::Run(void)
@@ -81,7 +85,7 @@ void Application::Run(void)
 	SceneManager& sceneManager = SceneManager::GetInstance();
 
 	// ゲームループ
-	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+	while (ProcessMessage() == 0 && isQuit_ == false)
 	{
 
 		inputManager.Update();
@@ -105,6 +109,9 @@ void Application::Run(void)
 
 void Application::Destroy(void)
 {
+	//サウンド管理解放
+	SoundManager::CreateInstance();
+
 	// シーン管理解放
 	SceneManager::GetInstance().Destroy();
 

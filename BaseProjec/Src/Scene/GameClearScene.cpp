@@ -16,9 +16,12 @@ void GameClearScene::Init(void)
 
 void GameClearScene::Update(void)
 {
-	// シーン遷移
 	auto const& ins = InputManager::GetInstance();
-	if (ins.IsTrgDown(KEY_INPUT_SPACE))
+
+	bool isAttackPad = ins.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD1, InputManager::JOYPAD_BTN::RIGHT);
+
+	// シーン遷移
+	if (ins.IsTrgDown(KEY_INPUT_SPACE) || isAttackPad)
 	{
 		sceMng_.ChangeScene(SceneManager::SCENE_ID::TITLE);
 	}

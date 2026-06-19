@@ -3,6 +3,7 @@
 #include "../../../Manager/ResourceManager.h"
 #include "../../../Manager/ColliderManager.h"
 #include "../../../Manager/SceneManager.h"
+#include "../../../Manager/SoundManager.h"
 #include "Enemy/NomalEnemy.h"
 #include "../ColliderBase.h"
 #include "../ColliderCapsule.h"
@@ -182,6 +183,7 @@ void Sword::ExecuteStrike(void)
 		//“G‚Ì€–S”»’è
 		character->OnDamage(swordPow_);
 
+		SoundManager::GetInstance().PlaySE(SoundManager::SE_ID::HIT);
 		//printfDx("“G‚ğ“|‚µ‚½I\n");
 
 		hitActors_.push_back(owner);

@@ -9,6 +9,7 @@
 #include "../../../Application.h"
 #include "../../Common/AnimationController.h"
 #include "../../../Manager/ColliderManager.h"
+#include "../../../Manager/SoundManager.h"
 #include "..//ColliderCapsule.h"
 #include "..//ColliderLine.h"
 #include "Enemy/EnemyBase.h"
@@ -272,94 +273,100 @@ void Player::ProcessMove(void)
 
 	auto& ins = InputManager::GetInstance();
 
-	//移動量をリセット
+	// 移動量をリセット
 	movePow_ = AsoUtility::VECTOR_ZERO;
 
-	//X回転を除いた、重力方向に垂直なカメラ角度(XZ平面)を取得
+	// X回転を除いた、重力方向に垂直なカメラ角度(XZ平面)を取得
 	Quaternion cameraRot = SceneManager::GetInstance().GetCamera()->GetQuaRotY();
 
-	//回転したい角度
-	double rotRad = 0;
-
+	// 最終的な移動方向を蓄積するベクトル
 	VECTOR dir = AsoUtility::VECTOR_ZERO;
 
-	//カメラ方向に前進したい
-	if (ins.IsNew(KEY_INPUT_W))
+	// -------------------------------------------------------------
+	// ① キーボード入力の処理（既存のロジック）
+	// -------------------------------------------------------------
+	VECTOR kbDir = AsoUtility::VECTOR_ZERO;
+	if (ins.IsNew(KEY_INPUT_W)) kbDir = VAdd(kbDir, cameraRot.GetForward());
+	if (ins.IsNew(KEY_INPUT_S)) kbDir = VAdd(kbDir, cameraRot.GetBack());
+	if (ins.IsNew(KEY_INPUT_D)) kbDir = VAdd(kbDir, cameraRot.GetRight());
+	if (ins.IsNew(KEY_INPUT_A)) kbDir = VAdd(kbDir, cameraRot.GetLeft());
+
+	// キーボード入力があれば全体の dir に加算
+	if (!AsoUtility::EqualsVZero(kbDir))
 	{
-		rotRad = AsoUtility::Deg2RadD(0.0f);
-		dir = VAdd(dir,cameraRot.GetForward());
+		dir = VAdd(dir, kbDir);
 	}
 
-	//カメラ方向に後退したい
-	if (ins.IsNew(KEY_INPUT_S))
+	// -------------------------------------------------------------
+	// ② コントローラー入力（左スティック）の処理
+	// -------------------------------------------------------------
+	// 前のステップで作った関数から、正規化されたスティックの傾きを取得（Xが左右、Zが前後）
+	VECTOR stickInput = ins.GetLeftStickDir(InputManager::JOYPAD_NO::PAD1);
+
+	if (!AsoUtility::EqualsVZero(stickInput))
 	{
-		rotRad = AsoUtility:: Deg2RadD(180.0f);
-		dir = VAdd(dir,cameraRot.GetBack());
+		// スティックの入力をカメラの向き（前・右方向）に合わせてワールド空間のベクトルに変換
+		VECTOR padDir = VAdd(
+			VScale(cameraRot.GetForward(), stickInput.z), // 前後の傾き量
+			VScale(cameraRot.GetRight(), stickInput.x)    // 左右の傾き量
+		);
+		dir = VAdd(dir, padDir);
 	}
 
-	//カメラ方向に右移動したい
-	if (ins.IsNew(KEY_INPUT_D))
-	{
-		rotRad = AsoUtility::Deg2RadF(90.0f);
-		dir = VAdd(dir,cameraRot.GetRight());
-
-	}
-
-	//カメラ方向に左移動したい
-	if(ins.IsNew(KEY_INPUT_A))
-	{
-		rotRad = AsoUtility::Deg2RadF(270.0f);
-		dir = VAdd(dir,cameraRot.GetLeft());
-	}
-
-	//移動角度がゼロ以外
+	// -------------------------------------------------------------
+	// ③ 移動と回転の実行フェーズ
+	// -------------------------------------------------------------
+	// キーボードかコントローラー、どちらかの入力が合計されて dir がゼロ以外なら移動
 	if (!AsoUtility::EqualsVZero(dir))
 	{
-		//移動速度を歩きに設定
+		// 進行方向ベクトルを正規化（長さを1にする）
+		moveDir_ = VNorm(dir);
+
+		double rotRad = atan2f(moveDir_.x, moveDir_.z);
+
+		// 移動速度を歩きに設定
 		speed_ = SPEED_MOVE;
 
-		//シフトキーを押されたら走る
-		if (ins.IsNew(KEY_INPUT_RSHIFT) || ins.IsNew(KEY_INPUT_LSHIFT))
+		// ダッシュ判定（キーボードのShift、またはコントローラーのRトリガーなど）
+		bool isRunKey = ins.IsNew(KEY_INPUT_RSHIFT) || ins.IsNew(KEY_INPUT_LSHIFT);
+		bool isRunPad = ins.IsPadBtnNew(InputManager::JOYPAD_NO::PAD1, InputManager::JOYPAD_BTN::R_TRIGGER);
+
+		if (isRunKey || isRunPad)
 		{
 			speed_ = SPEED_RUN;
-
-			//アニメーションを走るに変更
 			animationController_->Play((int)ANIM_TYPE::RUN);
-
 		}
-		else {
-			//アニメーションを歩きに変更
+		else
+		{
 			animationController_->Play((int)ANIM_TYPE::WALK);
 		}
 
-		//移動させたい方向(ベクトル)に変換
-		moveDir_ = dir;
-
-		//移動させたい方向に移動量をかける(=移動量)
+		// 移動させたい方向にスピードをかける
 		movePow_ = VScale(moveDir_, speed_);
 
-		//回転処理
+		// 回転処理（自動計算された完璧なラジアンを渡す）
 		SetGoalRotate(rotRad);
-
-
 	}
-	else if(AsoUtility::EqualsVZero(dir))
+	else
 	{
-		//アニメーションを待機に変更
+		// 入力がまったくなければ待機
 		animationController_->Play((int)ANIM_TYPE::IDLE);
 	}
-
-
 }
 
 void Player::ProcessAttack(void)
 {
 	auto& ins = InputManager::GetInstance();
 	
+	bool isAttackKey = ins.IsTrgDown(KEY_INPUT_K);
+	bool isAttackPad = ins.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD1, InputManager::JOYPAD_BTN::RIGHT);
+
 	//攻撃ボタンが押されたら
-	if (ins.IsNew(KEY_INPUT_K) && isAttack_ == false) {
+	if (isAttackKey || isAttackPad && isAttack_ == false) {
 		//攻撃中フラグを立てる
 		isAttack_ = true;
+
+		SoundManager::GetInstance().PlaySE(SoundManager::SE_ID::SWORD_SWING);
 
 		//移動量をリセット
 		movePow_ = AsoUtility::VECTOR_ZERO;

@@ -1,6 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
 class Sword;
+class Player;
 
 class NomalEnemy : public EnemyBase
 {
@@ -14,6 +15,9 @@ public:
 	//初期化
 	void Init(void);
 
+	//更新
+	void Update(Player* player) override;
+
 	//描画
 	void Draw(void) override;
 
@@ -21,6 +25,8 @@ public:
 	void Release(void);
 private:
 	std::unique_ptr<Sword> sword_;
+
+	Player* targetPlayer_;
 
 	//スケール
 	static constexpr VECTOR SCALE = { 1.0f, 1.0f, 1.0f };
@@ -51,6 +57,9 @@ private:
 
 	//ノーマルエネミーの攻撃力
 	static constexpr float ENEMY_POW = 10.0f;
+
+	//ノーマルエネミーの移動速度
+	static constexpr float ENEMY_RUN = 4.0f;
 
 	// リソースロード
 	void InitLoad(void) override;

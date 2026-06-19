@@ -25,8 +25,20 @@ public:
 	void Release(void) override;
 
 private:
+	//メニュー項目
+	enum class MENU_ITEM
+	{
+		START,
+		EXIT,
+		MAX
+	};
+
+	//減じあのカーソル位置
+	int cursorIndex_;
 
 	//タイトル画像
 	int imgTitle_;
 
+	//スティックの連打防止用フラグ
+	bool isStickHeld_;
 };

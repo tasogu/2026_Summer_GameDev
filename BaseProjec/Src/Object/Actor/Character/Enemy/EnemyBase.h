@@ -1,5 +1,6 @@
 #pragma once
 #include "../CharactorBase.h"
+class Player;
 
 class EnemyBase : public CharactorBase
 {
@@ -25,6 +26,9 @@ public:
 
 	//デストラクタ
 	~EnemyBase(void) override;
+
+	//更新
+	virtual void Update(Player* player) = 0;
 
 	//描画
 	virtual void Draw(void) = 0;

@@ -7,6 +7,7 @@
 #include "../../../../Utility/AsoUtility.h"
 #include "../../ColliderCapsule.h"
 #include "../../ColliderLine.h"
+#include "../Player.h"
 #include "../Sword.h"
 #include "NomalEnemy.h"
 
@@ -17,8 +18,9 @@ NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
 	hp_ = NOMAL_HP;
 	isAttack_ = false;
 	imgSword_ = -1;
-	state_ = STATE::NONE;
-
+	state_ = STATE::PLAY;
+	targetPlayer_ = nullptr;
+	speed_ = ENEMY_RUN;
 }
 
 NomalEnemy::~NomalEnemy(void)
@@ -46,6 +48,13 @@ void NomalEnemy::Init(void)
 	// 初期化後の個別処理
 	InitPost();
 
+}
+
+void NomalEnemy::Update(Player* player)
+{
+	targetPlayer_ = player;
+	
+	CharactorBase::Update();
 }
 
 void NomalEnemy::Draw(void)
@@ -128,7 +137,7 @@ void NomalEnemy::InitAnimation(void)
 	animationController_->Add((int)ANIM_TYPE::IDLE, 20.0f, path + "Idle.mv1");
 	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f, path + "Walk.mv1");
 	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f, path + "Run.mv1");
-	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f, path + "Attack.mv1");
+	animationController_->Add((int)ANIM_TYPE::ATTACK, 14.0f, path + "Attack.mv1");
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 
@@ -230,20 +239,23 @@ void NomalEnemy::ProcessAttack(void)
 	auto& ins = InputManager::GetInstance();
 
 	//攻撃ボタンが押されたら
-	if (ins.IsNew(KEY_INPUT_K) && isAttack_ == false) {
-		//攻撃中フラグを立てる
-		isAttack_ = true;
+	//if (isAttack_ == false) {
+	//	//攻撃中フラグを立てる
+	//	isAttack_ = true;
 
-		//移動量をリセット
-		movePow_ = AsoUtility::VECTOR_ZERO;
+	//	//移動量をリセット
+	//	movePow_ = AsoUtility::VECTOR_ZERO;
 
+	//	//アニメーションを攻撃に変更
+	//	animationController_->Play((int)ANIM_TYPE::ATTACK, false);
+
+
+	//}
+	if (isAttack_ == true)
+	{
 		//アニメーションを攻撃に変更
 		animationController_->Play((int)ANIM_TYPE::ATTACK, false);
 
-
-	}
-	else if (isAttack_ == true)
-	{
 		//アニメーションの再生時間を取得
 		float nowTime = animationController_->GetTime();
 
@@ -269,5 +281,34 @@ void NomalEnemy::ProcessAttack(void)
 
 void NomalEnemy::ProcessMove(void)
 {
+	//記録しているターゲットの座標をゲット
+	VECTOR targetPos = targetPlayer_->GetTransform().pos;
+	VECTOR myPos = transform_.pos;
 
+	VECTOR diff = VSub(targetPos, myPos);
+
+	float distance = VSize(diff);
+
+	//近づくまで移動
+	if (distance >= 150.0f)
+	{
+		animationController_->Play((int)ANIM_TYPE::RUN);
+
+		moveDir_ = VNorm(diff);
+		movePow_ = VScale(moveDir_, speed_);
+	}
+	else
+	{
+		//if (isAttack_ = false) {
+		//	ProcessAttack();
+		//}
+		//else {
+		//	animationController_->Play((int)ANIM_TYPE::IDLE);
+
+		isAttack_ = true;
+
+		// 近づきすぎないように止まる
+		movePow_ = AsoUtility::VECTOR_ZERO;
+
+	}
 }

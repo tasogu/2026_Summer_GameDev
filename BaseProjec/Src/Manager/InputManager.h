@@ -120,6 +120,8 @@ public:
 	// コントローラの入力情報を取得する
 	JOYPAD_IN_STATE GetJPadInputState(JOYPAD_NO no);
 
+	VECTOR GetLeftStickDir(JOYPAD_NO no) const;
+
 	// ボタンが押された
 	bool IsPadBtnNew(JOYPAD_NO no, JOYPAD_BTN btn) const;
 	bool IsPadBtnTrgDown(JOYPAD_NO no, JOYPAD_BTN btn) const;

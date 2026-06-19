@@ -372,6 +372,15 @@ InputManager::JOYPAD_IN_STATE InputManager::GetJPadInputState(JOYPAD_NO no)
 
 }
 
+VECTOR InputManager::GetLeftStickDir(JOYPAD_NO no) const
+{
+	// 指定されたコントローラーの現在の状態を取得
+	const auto& state = padInfos_[static_cast<int>(no)];
+
+	// すでに用意されている優秀な正規化関数に、左スティックのXとYを渡して返す
+	return GetDirectionXZAKey(state.AKeyLX, state.AKeyLY);
+}
+
 bool InputManager::IsPadBtnNew(JOYPAD_NO no, JOYPAD_BTN btn) const
 {
 	return padInfos_[static_cast<int>(no)].IsNew[static_cast<int>(btn)];

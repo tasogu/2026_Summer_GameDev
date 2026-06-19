@@ -2,6 +2,7 @@
 #include <vector>
 #include "../Object/Actor/Character/Enemy/EnemyBase.h"
 #include "../Object/Actor/ColliderBase.h"
+class Player;
 
 class EnemyManager
 {
@@ -16,7 +17,7 @@ public:
 	void Init(void);
 
 	//XV
-	void Update(void);
+	void Update(Player* player);
 
 	//•`‰æ
 	void Draw(void);

@@ -72,7 +72,7 @@ void GameScene::Update(void)
 	player_->Update();
 
 	//エネミーの更新
-	enemy_->Update();
+	enemy_->Update(player_.get());
 
 
 	// シーン遷移(プレイヤー死亡：GAMEOVER、エネミー死亡：GAMECLEAR)

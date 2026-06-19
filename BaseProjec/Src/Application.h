@@ -55,6 +55,9 @@ public:
 	//重力の取得
 	float GetGravityPow(void) const { return GRAVITY * GRAVITY_SCALE; }
 
+	//ゲーム終了要素を出す
+	void Quit(void) {isQuit_ = true;}
+
 private:
 
 	// 静的インスタンス
@@ -69,6 +72,9 @@ private:
 
 	// 解放失敗
 	bool isReleaseFail_;
+
+	//終了フラグ
+	bool isQuit_ = false;
 
 	// デフォルトコンストラクタをprivateにして、
 	// 外部から生成できない様にする
