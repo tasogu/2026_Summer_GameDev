@@ -21,6 +21,7 @@ NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
 	state_ = STATE::PLAY;
 	targetPlayer_ = nullptr;
 	speed_ = ENEMY_RUN;
+	random_ = 0;
 }
 
 NomalEnemy::~NomalEnemy(void)
@@ -238,19 +239,6 @@ void NomalEnemy::ProcessAttack(void)
 {
 	auto& ins = InputManager::GetInstance();
 
-	//攻撃ボタンが押されたら
-	//if (isAttack_ == false) {
-	//	//攻撃中フラグを立てる
-	//	isAttack_ = true;
-
-	//	//移動量をリセット
-	//	movePow_ = AsoUtility::VECTOR_ZERO;
-
-	//	//アニメーションを攻撃に変更
-	//	animationController_->Play((int)ANIM_TYPE::ATTACK, false);
-
-
-	//}
 	if (isAttack_ == true)
 	{
 		//アニメーションを攻撃に変更
@@ -299,12 +287,6 @@ void NomalEnemy::ProcessMove(void)
 	}
 	else
 	{
-		//if (isAttack_ = false) {
-		//	ProcessAttack();
-		//}
-		//else {
-		//	animationController_->Play((int)ANIM_TYPE::IDLE);
-
 		isAttack_ = true;
 
 		// 近づきすぎないように止まる

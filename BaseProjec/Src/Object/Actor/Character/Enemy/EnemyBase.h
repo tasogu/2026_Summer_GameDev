@@ -20,6 +20,9 @@ public:
 		VECTOR defaultPos;
 		float movebleRange;
 	};
+	
+	//ランダム数(AI用)
+	int random_;
 
 	//コンストラクタ
 	EnemyBase(const EnemyBase::EnemyData& data);
