@@ -126,6 +126,7 @@ void TitleScene::Draw(void)
 	int spaceY = 60; 
 
 	// メニューの文字を描画
+	DrawString(450, 200, "リコールエッジ" , GetColor(255, 255, 255));
 	DrawString(baseX, baseY, "GAME START", GetColor(255, 255, 255));
 	DrawString(baseX, baseY + spaceY, "EXIT", GetColor(255, 255, 255));
 
