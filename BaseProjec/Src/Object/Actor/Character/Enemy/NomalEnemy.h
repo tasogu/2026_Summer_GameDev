@@ -103,5 +103,9 @@ private:
 	//エネミーの移動
 	void ProcessMove(void);
 
+	//エネミーの旋回
+	void TurnMove(void);
+
+
 };
 

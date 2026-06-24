@@ -1,6 +1,6 @@
 #include <DxLib.h>
 #include "SoundManager.h"
-#include "../Application.h" // Application ‚ÌƒpƒX‚É‡‚í‚¹‚Ä’²®‚µ‚Ä‚­‚¾‚³‚¢
+#include "../Application.h"
 
 SoundManager* SoundManager::instance_ = nullptr;
 

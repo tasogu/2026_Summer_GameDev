@@ -42,7 +42,12 @@ public:
 	////死亡させる
 	//void Destroy(void) { isDead_ = true; }
 
+	//プレイヤーより近いか遠いか
+	bool IsWithinCirclingRange(VECTOR targetPlayer, float goal);
+
+
 private:
+	Player* targetPlayer_;
 	
 	// 衝突判定用線分開始
 	static constexpr VECTOR COL_LINE_START_LOCAL_POS = { 0.0f, 80.0f, 0.0f };

@@ -239,6 +239,8 @@ void NomalEnemy::ProcessAttack(void)
 {
 	auto& ins = InputManager::GetInstance();
 
+	VECTOR targetPos = targetPlayer_->GetTransform().pos;
+
 	if (isAttack_ == true)
 	{
 		//アニメーションを攻撃に変更
@@ -275,10 +277,13 @@ void NomalEnemy::ProcessMove(void)
 
 	VECTOR diff = VSub(targetPos, myPos);
 
+	VECTOR diffM = VScale(diff, -1.0f);
+
 	float distance = VSize(diff);
 
 	//近づくまで移動
-	if (distance >= 150.0f)
+	if(!IsWithinCirclingRange(targetPos, 300.0f))
+	//if (distance >= 150.0f)
 	{
 		animationController_->Play((int)ANIM_TYPE::RUN);
 
@@ -287,10 +292,25 @@ void NomalEnemy::ProcessMove(void)
 	}
 	else
 	{
+		animationController_->Play((int)ANIM_TYPE::RUN);
+
+		moveDir_ = VNorm(diffM);
+		movePow_ = VScale(moveDir_, speed_);
+	}
+
+	if (distance <= 300.0f && distance >= 200.0f) {
 		isAttack_ = true;
 
+		moveDir_ = VNorm(diff);
+		
 		// 近づきすぎないように止まる
 		movePow_ = AsoUtility::VECTOR_ZERO;
-
 	}
+
 }
+
+void NomalEnemy::TurnMove(void)
+{
+}
+
+

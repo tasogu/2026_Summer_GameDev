@@ -174,8 +174,6 @@ void Sword::ExecuteStrike(void)
 
 		if (it != hitActors_.end()) continue;
 
-		//NomalEnemy* enemy = dynamic_cast<NomalEnemy*>(owner);
-
 		CharactorBase* character = dynamic_cast<CharactorBase*>(owner);
 
 		if (character == nullptr) continue;
