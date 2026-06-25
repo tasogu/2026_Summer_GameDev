@@ -86,7 +86,7 @@ private:
 	bool isSceneChanging_;
 
 	// デルタタイム
-	std::chrono::system_clock::time_point preTime_;
+	std::chrono::steady_clock::time_point preTime_;
 	float deltaTime_;
 	
 	// デフォルトコンストラクタをprivateにして、

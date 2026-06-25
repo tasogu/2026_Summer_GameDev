@@ -243,10 +243,10 @@ void Player::InitAnimation(void)
 	std::string path = Application::PATH_MODEL + "Player/";
 	//animationController_ = new AnimationController(transform_.modelId);
 	animationController_ = std::make_unique<AnimationController>(transform_.modelId);
-	animationController_->Add((int)ANIM_TYPE::IDLE , 20.0f, path + "Idle.mv1");
-	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f, path + "Walk.mv1");
-	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f, path + "Run.mv1");
-	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f, path + "Attack.mv1");
+	animationController_->Add((int)ANIM_TYPE::IDLE , 1200.0f * scnMng_.GetDeltaTime(), path + "Idle.mv1");
+	animationController_->Add((int)ANIM_TYPE::WALK, 1200.0f * scnMng_.GetDeltaTime(), path + "Walk.mv1");
+	animationController_->Add((int)ANIM_TYPE::RUN, 600.0f * scnMng_.GetDeltaTime(), path + "Run.mv1");
+	animationController_->Add((int)ANIM_TYPE::ATTACK, 1200.0f * scnMng_.GetDeltaTime(), path + "Attack.mv1");
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 
@@ -325,7 +325,7 @@ void Player::ProcessMove(void)
 		double rotRad = atan2f(moveDir_.x, moveDir_.z);
 
 		// 移動速度を歩きに設定
-		speed_ = SPEED_MOVE;
+		speed_ = SPEED_MOVE * scnMng_.GetDeltaTime();
 
 		// ダッシュ判定（キーボードのShift、またはコントローラーのRトリガーなど）
 		bool isRunKey = ins.IsNew(KEY_INPUT_RSHIFT) || ins.IsNew(KEY_INPUT_LSHIFT);
@@ -333,7 +333,7 @@ void Player::ProcessMove(void)
 
 		if (isRunKey || isRunPad)
 		{
-			speed_ = SPEED_RUN;
+			speed_ = SPEED_RUN * scnMng_.GetDeltaTime();
 			animationController_->Play((int)ANIM_TYPE::RUN);
 		}
 		else

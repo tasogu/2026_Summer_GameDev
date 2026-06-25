@@ -6,6 +6,7 @@
 #include "../Scene/GameScene.h"
 #include "../Scene/GameOverScene.h"
 #include "../Scene/GameClearScene.h"
+#include "../Utility/AsoUtility.h"
 #include "Camera.h"
 #include "ResourceManager.h"
 #include "SceneManager.h"
@@ -28,6 +29,8 @@ SceneManager& SceneManager::GetInstance(void)
 
 void SceneManager::Init(void)
 {
+	//最初の時間を記録
+	deltaTime_ = AsoUtility::FLOAT_ZERP;
 
 	sceneId_ = SCENE_ID::TITLE;
 	waitSceneId_ = SCENE_ID::NONE;
@@ -46,7 +49,7 @@ void SceneManager::Init(void)
 	isSceneChanging_ = false;
 
 	// デルタタイム
-	preTime_ = std::chrono::system_clock::now();
+	preTime_ = std::chrono::steady_clock::now();
 
 	// 3D用の設定
 	Init3D();
@@ -96,7 +99,7 @@ void SceneManager::Update(void)
 	}
 
 	// デルタタイム
-	auto nowTime = std::chrono::system_clock::now();
+	auto nowTime = std::chrono::steady_clock::now();
 	deltaTime_ = static_cast<float>(
 		std::chrono::duration_cast<std::chrono::nanoseconds>(nowTime - preTime_).count() / 1000000000.0);
 	preTime_ = nowTime;
@@ -196,8 +199,8 @@ SceneManager::SCENE_ID SceneManager::GetSceneID(void)
 
 float SceneManager::GetDeltaTime(void) const
 {
-	return 1.0f / 60.0f;
-	//return deltaTime_;
+	//return 1.0f / 60.0f;
+	return 	deltaTime_;
 }
 
 std::shared_ptr<Camera> SceneManager::GetCamera(void) const
@@ -226,7 +229,7 @@ SceneManager::SceneManager(void)
 void SceneManager::ResetDeltaTime(void)
 {
 	deltaTime_ = 0.016f;
-	preTime_ = std::chrono::system_clock::now();
+	preTime_ = std::chrono::steady_clock::now();
 }
 
 void SceneManager::DoChangeScene(SCENE_ID sceneId)

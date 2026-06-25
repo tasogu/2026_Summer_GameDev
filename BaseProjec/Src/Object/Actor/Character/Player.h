@@ -42,10 +42,10 @@ private:
 	static constexpr VECTOR POS = { 0.0f, 1000.0f, 0.0f };
 
 	//ˆÚ“®‘¬“x(•à‚«)
-	static constexpr float SPEED_MOVE = 3.0f;
+	static constexpr float SPEED_MOVE = 180.0f;
 
 	//ˆÚ“®‘¬“x(‘–‚è)
-	static constexpr float SPEED_RUN = 6.0f;
+	static constexpr float SPEED_RUN = 360.0f;
 
 	//‰ñ“]ŽžŠÔ
 	static constexpr float TIME_ROT = 1.0f;

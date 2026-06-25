@@ -55,7 +55,7 @@ void GameScene::Update(void)
 	auto& ins = InputManager::GetInstance();
 
 	//Qキーが押されたら画面をポーズする・ポーズ解除
-	if (ins.IsNew(KEY_INPUT_Q))
+	if (ins.IsNew(KEY_INPUT_ESCAPE))
 	{
 		isPause_ = !isPause_;
 	}
