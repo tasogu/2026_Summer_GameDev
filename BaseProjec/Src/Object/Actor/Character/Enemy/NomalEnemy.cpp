@@ -5,6 +5,7 @@
 #include "../../../Common/AnimationController.h"
 #include "../../../Common/Transform.h"
 #include "../../../../Utility/AsoUtility.h"
+#include "../../../../Manager/SceneManager.h"
 #include "../../ColliderCapsule.h"
 #include "../../ColliderLine.h"
 #include "../Player.h"
@@ -20,7 +21,7 @@ NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
 	imgSword_ = -1;
 	state_ = STATE::PLAY;
 	targetPlayer_ = nullptr;
-	speed_ = ENEMY_RUN;
+	speed_ = ENEMY_RUN * scnMng_.GetDeltaTime();
 	random_ = 0;
 }
 

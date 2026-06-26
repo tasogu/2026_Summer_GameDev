@@ -59,7 +59,7 @@ private:
 	static constexpr float ENEMY_POW = 10.0f;
 
 	//ノーマルエネミーの移動速度
-	static constexpr float ENEMY_RUN = 4.0f;
+	static constexpr float ENEMY_RUN = 240.0f;
 
 	// リソースロード
 	void InitLoad(void) override;
