@@ -31,8 +31,6 @@ void Stage::Init(void)
 	// ‰Šú‰»Œã‚ÌŒÂ•Êˆ—
 	InitPost();
 
-
-
 }
 
 void Stage::Update(void)

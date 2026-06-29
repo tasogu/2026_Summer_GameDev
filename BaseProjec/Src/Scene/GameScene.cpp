@@ -15,7 +15,8 @@ GameScene::GameScene(void)
 	enemy_(nullptr),
 	isPause_(false),
 	//collder_(nullptr),
-	SceneBase()
+	SceneBase(),
+	gameType_(GAME_TYPE::PLAY)
 {
 }
 

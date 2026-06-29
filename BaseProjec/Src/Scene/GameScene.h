@@ -11,6 +11,14 @@ class GameScene : public SceneBase
 
 public:
 	
+	enum class GAME_TYPE
+	{
+		PLAY,
+		FADEOUT,
+		MEMORY_SWAP,
+		FADEIN
+	};
+
 	// コンストラクタ
 	GameScene(void);
 
@@ -45,6 +53,9 @@ private:
 
 	//ポーズシーン
 	bool isPause_;
+
+	//ゲームのタイプ
+	VECTOR gameType_;
 	
 	////コライダー
 	//ColliderManager* collder_;
