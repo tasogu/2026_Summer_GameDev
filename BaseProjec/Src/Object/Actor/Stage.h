@@ -1,5 +1,6 @@
 #pragma once
 #include "../Actor/ActorBase.h"
+#include "../../Scene/StageCommon.h"
 
 class Stage : public ActorBase
 {
@@ -11,14 +12,14 @@ public:
 		MAX,
 	};
 
-	
 	//コンストラクタ
-	Stage(void);
+	Stage(STAGE_TYPE stageType);
+
 	//デストラクタ
 	~Stage(void);
 
 	//初期化
-	void Init(void);
+	void Init();
 
 	//更新
 	void Update(void) override;
@@ -30,6 +31,9 @@ public:
 	void Release(void) override;
 
 private:
+
+	//ステージの種類
+	STAGE_TYPE stageType_;
 	
 	//ステージのスケール
 	static constexpr VECTOR SCALE_ = { 1.0f , 1.0f, 1.0f};

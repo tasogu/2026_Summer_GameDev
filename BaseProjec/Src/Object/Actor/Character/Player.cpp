@@ -243,10 +243,10 @@ void Player::InitAnimation(void)
 	std::string path = Application::PATH_MODEL + "Player/";
 	//animationController_ = new AnimationController(transform_.modelId);
 	animationController_ = std::make_unique<AnimationController>(transform_.modelId);
-	animationController_->Add((int)ANIM_TYPE::IDLE , 20.0f * scnMng_.GetDeltaTime(), path + "Idle.mv1");
-	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f * scnMng_.GetDeltaTime(), path + "Walk.mv1");
-	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f * scnMng_.GetDeltaTime(), path + "Run.mv1");
-	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f * scnMng_.GetDeltaTime(), path + "Attack.mv1");
+	animationController_->Add((int)ANIM_TYPE::IDLE , 20.0f, path + "Idle.mv1");
+	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f , path + "Walk.mv1");
+	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f , path + "Run.mv1");
+	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f, path + "Attack.mv1");
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 

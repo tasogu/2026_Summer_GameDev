@@ -1,16 +1,18 @@
 #pragma once
 #include <memory>
 #include "SceneBase.h"
+#include "StageCommon.h"
 #include "../Manager/ColliderManager.h"
 class Stage;
 class Player;
 class EnemyManager;
+class Fader;
 
 class GameScene : public SceneBase
 {
 
 public:
-	
+	//ステージチェンジ
 	enum class GAME_TYPE
 	{
 		PLAY,
@@ -18,6 +20,7 @@ public:
 		MEMORY_SWAP,
 		FADEIN
 	};
+
 
 	// コンストラクタ
 	GameScene(void);
@@ -51,12 +54,22 @@ private:
 	//EnemyManager* enemy_;
 	std::unique_ptr<EnemyManager> enemy_;
 
+	//フェード
+	std::unique_ptr<Fader> fader_;
+
 	//ポーズシーン
 	bool isPause_;
 
 	//ゲームのタイプ
-	VECTOR gameType_;
-	
+	GAME_TYPE gameType_;
+
+	//ステージの種類
+	STAGE_TYPE stageType_;
+
 	////コライダー
 	//ColliderManager* collder_;
+
+	//再初期化用
+	void LoadNextStage();
+
 };

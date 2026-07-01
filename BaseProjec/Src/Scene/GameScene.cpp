@@ -6,6 +6,7 @@
 #include "../Object/Actor/Character/Player.h"
 #include "../Manager/Camera.h"
 #include "../Manager/EnemyManager.h"
+#include "../Common/Fader.h"
 #include "GameScene.h"
 
 GameScene::GameScene(void)
@@ -18,6 +19,7 @@ GameScene::GameScene(void)
 	SceneBase(),
 	gameType_(GAME_TYPE::PLAY)
 {
+	stageType_ = STAGE_TYPE::STAGE1;
 }
 
 GameScene::~GameScene(void)
@@ -28,21 +30,21 @@ GameScene::~GameScene(void)
 void GameScene::Init(void)
 {
 	//ステージの生成
-	//stage_  = new Stage();
-	stage_ = std::make_unique<Stage>();
+	stage_ = std::make_unique<Stage>(stageType_);
 	stage_->Init();
 
 	//プレイヤーの生成
-	//player_ = new Player();
 	player_ = std::make_unique<Player>();
 	player_->Init();
 
 	//エネミーの生成
-	//enemy_ = new EnemyManager();
-	enemy_ = std::make_unique<EnemyManager>();
+	enemy_ = std::make_unique<EnemyManager>(stageType_);
 	enemy_->Init(); 
+
+	//フェードの生成
+	fader_ = std::make_unique<Fader>();
+	fader_->Init();
 	
-	//collder_->Register(stage_->GetOwnCollider(static_cast<int>(Stage::COLLIDER_TYPE::MODEL)));
 	//カメラにも登録
 	std::shared_ptr<Camera> camera = sceMng_.GetCamera();
 	
@@ -65,26 +67,51 @@ void GameScene::Update(void)
 	{
 		return;
 	}
+	switch (gameType_) {
+		case GAME_TYPE::PLAY:
+			//ステージの更新
+			stage_->Update();
 
-	//ステージの更新
-	stage_->Update();
+			//プレイヤーの更新
+			player_->Update();
 
-	//プレイヤーの更新
-	player_->Update();
+			//エネミーの更新
+			enemy_->Update(player_.get());
 
-	//エネミーの更新
-	enemy_->Update(player_.get());
+			//プレイヤーが死んだら
+			if (player_->IsDead()) {
+				sceMng_.ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
+			}
 
-
-	// シーン遷移(プレイヤー死亡：GAMEOVER、エネミー死亡：GAMECLEAR)
-	if (player_->IsDead())
-	{
-		sceMng_.ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
+			else if (enemy_->IsAllDead())
+			{
+				if (stageType_ == STAGE_TYPE::STAGE2) {
+					sceMng_.ChangeScene(SceneManager::SCENE_ID::GAMECLEAR);
+				}
+				else {
+					gameType_ = GAME_TYPE::FADEOUT;
+					fader_->SetFade(Fader::STATE::FADE_OUT);
+				}
+			}
+			break;
+		case GAME_TYPE::FADEOUT:
+			if (fader_->IsEnd() == true) {
+				gameType_ = GAME_TYPE::MEMORY_SWAP;
+			}
+			break;
+		case GAME_TYPE::MEMORY_SWAP:
+			LoadNextStage();
+			break;
+		case GAME_TYPE::FADEIN:
+			// フェードイン演出が終わるのを待つ
+			if (fader_->IsEnd() == true) {
+				gameType_ = GAME_TYPE::PLAY;
+			}
+			break;
 	}
-	if (enemy_->IsAllDead()) 
-	{
-		sceMng_.ChangeScene(SceneManager::SCENE_ID::GAMECLEAR);
-	}
+
+	//フェードの更新
+	fader_->Update();
 
 }
 
@@ -99,6 +126,8 @@ void GameScene::Draw(void)
 	//エネミーの描画
 	enemy_->Draw();
 
+	//フェードの描画
+	fader_->Draw();
 }
 
 void GameScene::Release(void)
@@ -114,4 +143,16 @@ void GameScene::Release(void)
 
 	//エネミーの開放
 	enemy_->Release();
+}
+
+void GameScene::LoadNextStage()
+{
+	stageType_ = STAGE_TYPE::STAGE2;
+	stage_ = std::make_unique<Stage>(stageType_);
+	stage_->Init();
+	enemy_ = std::make_unique<EnemyManager>(stageType_);
+	enemy_->Init();
+
+	std::shared_ptr<Camera> camera = sceMng_.GetCamera();
+	camera->SetFollow(&player_->GetTransform());
 }

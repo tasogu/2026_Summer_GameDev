@@ -2,16 +2,20 @@
 #include "../Object/Actor/Character/Player.h"
 #include "EnemyManager.h"
 
-EnemyManager::EnemyManager(void)
+EnemyManager::EnemyManager(STAGE_TYPE stageType)
 {
+	//ステージの種類を保存
+	stageType_ = stageType;
+
 }
 
 EnemyManager::~EnemyManager(void)
 {
 }
 
-void EnemyManager::Init(void)
+void EnemyManager::Init()
 { 
+	
 
 	//エネミーのデータ読み込み
 	LoadData();
@@ -23,7 +27,6 @@ void EnemyManager::Update(Player* player)
 	{
 		enemy->Update(player);
 	}
-
 
 	//死んだ敵だけを消す
 	for (auto it = enemies_.begin(); it != enemies_.end(); )

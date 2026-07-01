@@ -2,19 +2,21 @@
 #include <vector>
 #include "../Object/Actor/Character/Enemy/EnemyBase.h"
 #include "../Object/Actor/ColliderBase.h"
+#include "../Scene/StageCommon.h"
+
 class Player;
 
 class EnemyManager
 {
 public:
 	//コンストラクタ
-	EnemyManager(void);;
+	EnemyManager(STAGE_TYPE stageType);;
 
 	//デストラクタ
 	~EnemyManager(void);
 
 	//初期化
-	void Init(void);
+	void Init();
 
 	//更新
 	void Update(Player* player);
@@ -37,6 +39,10 @@ public:
 	//エネミー生成
 	std::shared_ptr<EnemyBase> Create(const EnemyBase::EnemyData& data);
 private:
+
+	//ステージの種類
+	STAGE_TYPE stageType_;
+
 	//エネミー
 	std::vector<std::shared_ptr<EnemyBase>> enemies_;
 

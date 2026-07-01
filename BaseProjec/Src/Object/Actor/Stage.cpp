@@ -4,18 +4,20 @@
 #include "../Actor/ColliderModel.h"
 #include "Stage.h"
 
-Stage::Stage(void)
+Stage::Stage(STAGE_TYPE stageType)
 	:
 	imgStage_(-1)
 {
+	stageType_ = stageType;
 }
 
 Stage::~Stage(void)
 {
 }
 
-void Stage::Init(void)
+void Stage::Init()
 {
+
 	//リソースロード
 	InitLoad();
 
@@ -52,22 +54,33 @@ void Stage::Release(void)
 
 void Stage::InitLoad(void)
 {
+	switch (stageType_) {
+	case STAGE_TYPE::STAGE1:
+		transform_.SetModel(resMng_.Load(ResourceManager::SRC::STAGE)->handleId_);
+		break;
+	case STAGE_TYPE::STAGE2:
+		break;
+
+	}
 	//imgStage_ = resMng_.Load(ResourceManager::SRC::STAGE).handleId_;
-	transform_.SetModel(resMng_.Load(ResourceManager::SRC::STAGE)->handleId_);
 
 }
 
 void Stage::InitTransform(void)
 {
-	//ステージの大きさ、回転、座標の初期化
-	//MV1SetScale(imgStage_, SCALE_);
-	//MV1SetPosition(imgStage_, POS_);
 	
-	//ステージの大きさ,座標の初期化
-	transform_.scl = SCALE_;
-	transform_.pos = POS_;
+	switch (stageType_) {
+	case STAGE_TYPE::STAGE1:
+		//ステージの大きさ,座標の初期化
+		transform_.scl = SCALE_;
+		transform_.pos = POS_;
 
-	transform_.Update();
+		transform_.Update();
+		break;
+
+	case STAGE_TYPE::STAGE2:
+		break;
+	}
 }
 
 void Stage::InitCollider(void)
