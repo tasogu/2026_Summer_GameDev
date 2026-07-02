@@ -52,6 +52,10 @@ void ResourceManager::Init(void)
 	//ノーマルエネミーモデル
 	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Enemy/Player.mv1");
 	resourcesMap_.emplace(SRC::NOMAL_ENEMY, res);
+
+	//ワープポイントのエフェクト
+	res = std::make_shared<RES>(RES_T::EFFEKSEER, PATH_EFF + "Warp/WarpPortal.efk");
+	resourcesMap_.emplace(SRC::WARPPORTAL, res);
 }
 
 void ResourceManager::Release(void)

@@ -20,6 +20,7 @@ public:
 		IDLE,
 		WALK,
 		RUN,
+		WARPPORTAL,
 	};
 
 	// 明示的にインステンスを生成する

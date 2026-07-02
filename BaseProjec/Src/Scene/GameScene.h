@@ -57,6 +57,9 @@ private:
 	//フェード
 	std::unique_ptr<Fader> fader_;
 
+	//ロードフレーム
+	int loadStep_;
+
 	//ポーズシーン
 	bool isPause_;
 

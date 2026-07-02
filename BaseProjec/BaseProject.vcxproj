@@ -53,7 +53,7 @@
     <ClCompile Include="Src\Utility\MatrixUtility.cpp" />
     <ClCompile Include="Src\Object\Actor\Stage.cpp" />
     <ClCompile Include="Src\Object\Actor\Character\Sword.cpp" />
-    <ClCompile Include="Src\Manager\WarpPortal.cpp" />
+    <ClCompile Include="Src\Object\WarpPortal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Manager\SoundManager.h" />
@@ -91,7 +91,7 @@
     <ClInclude Include="Src\Utility\MatrixUtility.h" />
     <ClInclude Include="Src\Object\Actor\Stage.h" />
     <ClInclude Include="Src\Object\Actor\Character\Sword.h" />
-    <ClInclude Include="Src\Manager\WarpPortal.h" />
+    <ClInclude Include="Src\Object\WarpPortal.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

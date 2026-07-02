@@ -39,7 +39,6 @@ void Application::Init(void)
 	ChangeWindowMode(true);
 
 	//FPS§Œä‰Šú‰»
-	//fpsController_ = new FpsController(FRAME_RATE);
 	fpsController_ = std::make_unique<FpsController>(FRAME_RATE);
 
 	// DxLib‚Ì‰Šú‰»
@@ -90,8 +89,10 @@ void Application::Run(void)
 
 		inputManager.Update();
 		sceneManager.Update();
+		UpdateEffekseer3D();
 
 		sceneManager.Draw();
+		DrawEffekseer3D();
 
 #ifdef _DEBUG
 		// •½‹ÏFPS•`‰æ

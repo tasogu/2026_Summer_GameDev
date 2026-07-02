@@ -17,7 +17,8 @@ GameScene::GameScene(void)
 	isPause_(false),
 	//collder_(nullptr),
 	SceneBase(),
-	gameType_(GAME_TYPE::PLAY)
+	gameType_(GAME_TYPE::PLAY),
+	loadStep_(0)
 {
 	stageType_ = STAGE_TYPE::STAGE1;
 }
@@ -147,12 +148,25 @@ void GameScene::Release(void)
 
 void GameScene::LoadNextStage()
 {
-	stageType_ = STAGE_TYPE::STAGE2;
-	stage_ = std::make_unique<Stage>(stageType_);
-	stage_->Init();
-	enemy_ = std::make_unique<EnemyManager>(stageType_);
-	enemy_->Init();
+	switch (loadStep_) {
+	case 0:
+		stageType_ = STAGE_TYPE::STAGE2;
+		stage_ = std::make_unique<Stage>(stageType_);
+		stage_->Init();
 
-	std::shared_ptr<Camera> camera = sceMng_.GetCamera();
-	camera->SetFollow(&player_->GetTransform());
+		loadStep_ = 1;
+		break;
+	case 1:
+		
+		enemy_ = std::make_unique<EnemyManager>(stageType_);
+		enemy_->Init();
+		loadStep_ = 2;
+		break;
+	case 2:
+		std::shared_ptr<Camera> camera = sceMng_.GetCamera();
+		camera->SetFollow(&player_->GetTransform());
+		loadStep_ = 0;
+		gameType_ = GAME_TYPE::MEMORY_SWAP;
+		break;
+	}
 }

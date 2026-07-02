@@ -38,7 +38,7 @@ void NomalEnemy::Init(void)
 	//リソースロード
 	InitLoad();
 
-	//	// 大きさ、回転、座標の初期化
+	//大きさ、回転、座標の初期化
 	InitTransform();
 
 	// 衝突判定の初期化
@@ -78,9 +78,9 @@ void NomalEnemy::InitLoad(void)
 	transform_.SetModel(ResourceManager::GetInstance().LoadModelDuplicate(ResourceManager::SRC::NOMAL_ENEMY));
 	
 	//剣のモデルのロード
-//sword_ = new Sword();
 	sword_ = std::make_unique<Sword>();
 	sword_->Init();
+
 	//剣の攻撃対象と攻撃力をセット
 	sword_->SetWeaponProperty(ColliderBase::TAG::PLAYER, ENEMY_POW);
 
