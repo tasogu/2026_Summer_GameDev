@@ -92,6 +92,7 @@ void Application::Run(void)
 		UpdateEffekseer3D();
 
 		sceneManager.Draw();
+		Effekseer_Sync3DSetting();
 		DrawEffekseer3D();
 
 #ifdef _DEBUG

@@ -7,7 +7,9 @@
 #include "../Manager/Camera.h"
 #include "../Manager/EnemyManager.h"
 #include "../Common/Fader.h"
+#include "../Object/WarpPortal.h"
 #include "GameScene.h"
+
 
 GameScene::GameScene(void)
 	:
@@ -45,7 +47,11 @@ void GameScene::Init(void)
 	//フェードの生成
 	fader_ = std::make_unique<Fader>();
 	fader_->Init();
-	
+
+	/////仮ワープステージ描画
+	warpPortal_ = std::make_unique<WarpPortal>();
+	warpPortal_->Init();
+
 	//カメラにも登録
 	std::shared_ptr<Camera> camera = sceMng_.GetCamera();
 	
@@ -56,6 +62,8 @@ void GameScene::Init(void)
 
 void GameScene::Update(void)
 {
+	warpPortal_->Update();
+
 	auto& ins = InputManager::GetInstance();
 
 	//Qキーが押されたら画面をポーズする・ポーズ解除
@@ -78,6 +86,10 @@ void GameScene::Update(void)
 
 			//エネミーの更新
 			enemy_->Update(player_.get());
+
+			//フェードの更新
+			fader_->Update();
+
 
 			//プレイヤーが死んだら
 			if (player_->IsDead()) {
@@ -111,8 +123,6 @@ void GameScene::Update(void)
 			break;
 	}
 
-	//フェードの更新
-	fader_->Update();
 
 }
 
@@ -129,6 +139,7 @@ void GameScene::Draw(void)
 
 	//フェードの描画
 	fader_->Draw();
+
 }
 
 void GameScene::Release(void)
@@ -144,6 +155,8 @@ void GameScene::Release(void)
 
 	//エネミーの開放
 	enemy_->Release();
+
+	warpPortal_->Release();
 }
 
 void GameScene::LoadNextStage()

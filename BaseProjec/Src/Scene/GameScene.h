@@ -7,6 +7,7 @@ class Stage;
 class Player;
 class EnemyManager;
 class Fader;
+class WarpPortal;
 
 class GameScene : public SceneBase
 {
@@ -56,6 +57,9 @@ private:
 
 	//フェード
 	std::unique_ptr<Fader> fader_;
+
+	//ワープポータル
+	std::unique_ptr<WarpPortal> warpPortal_;
 
 	//ロードフレーム
 	int loadStep_;

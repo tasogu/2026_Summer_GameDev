@@ -9,21 +9,17 @@ public:
 
 	~WarpPortal(void);
 
-	void Init(void);
-
 	void Update(void) override;
-
-	void Draw(void);
 
 	void Release(void);
 
 private:
 
 	//初期位置
-	static constexpr VECTOR POS = { 0.0f, 0.0f, 0.0f };
+	static constexpr VECTOR POS = { 20.0f, 50.0f, 0.0f };  
 
-	//位置データ
-	VECTOR pos_;
+	//エフェクトハンドル
+	int effectHandle_;
 
 	// リソースロード
 	void InitLoad(void) override;

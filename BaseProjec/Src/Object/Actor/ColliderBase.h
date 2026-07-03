@@ -35,7 +35,8 @@ public:
 		PLAYER,
 		CAMERA,
 		ENEMY,
-		SWORD
+		SWORD,
+		WARPPORTAL
 	};
 
 

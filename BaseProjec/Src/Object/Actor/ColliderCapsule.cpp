@@ -158,6 +158,7 @@ CollisionResult ColliderCapsule::CheckCollision(const ColliderBase* other)const
 
 		//©•ª‚Æ‘Šè‚ğ“n‚µ‚Ä”»’è‚ğÀs
 		return CheckCollisionCapusle(*this, *otherCap);
+		break;
 	}
 	return result;
 }

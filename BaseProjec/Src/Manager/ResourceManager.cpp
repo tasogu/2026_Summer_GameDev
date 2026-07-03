@@ -54,7 +54,7 @@ void ResourceManager::Init(void)
 	resourcesMap_.emplace(SRC::NOMAL_ENEMY, res);
 
 	//ワープポイントのエフェクト
-	res = std::make_shared<RES>(RES_T::EFFEKSEER, PATH_EFF + "Warp/WarpPortal.efk");
+	res = std::make_shared<RES>(RES_T::EFFEKSEER, PATH_EFF + "Warp/WalpStar.efkefc");
 	resourcesMap_.emplace(SRC::WARPPORTAL, res);
 }
 
