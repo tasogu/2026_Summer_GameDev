@@ -69,7 +69,6 @@ void CharactorBase::Update(void)
 
 void CharactorBase::Draw(void)
 {
-
 	ActorBase::Draw();
 }
 

@@ -183,6 +183,7 @@ void Player::InitLoad(void)
 	//sword_ = new Sword();
 	sword_ = std::make_unique<Sword>();
 	sword_->Init();
+
 	//Œ•‚ÌUŒ‚‘ÎÛ‚ÆUŒ‚—Í‚ğƒZƒbƒg
 	sword_->SetWeaponProperty(ColliderBase::TAG::ENEMY, PLAYER_POW);
 
@@ -404,7 +405,7 @@ void Player::ProcessAttack(void)
 void Player::SetGoalRotate(double rotRad)
 {
 	VECTOR cameraRot = SceneManager::GetInstance().GetCamera()->GetAngles();
-	Quaternion axis = Quaternion::AngleAxis((double)cameraRot.y + rotRad, AsoUtility::AXIS_Y);
+	Quaternion axis = Quaternion::AngleAxis((double)rotRad, AsoUtility::AXIS_Y);
 
 	// Œ»İİ’è‚³‚ê‚Ä‚¢‚é‰ñ“]‚Æ‚ÌŠp“x·‚ğæ‚é
 	double angleDiff = Quaternion::Angle(axis, goalQuaRot_);

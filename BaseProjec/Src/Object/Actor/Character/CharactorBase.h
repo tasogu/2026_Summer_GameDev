@@ -8,13 +8,6 @@ class AnimationController;
 class CharactorBase : public ActorBase
 {
 public:
-	//Õ“Ë”»’èí•Ê
-	enum class COLLIDER_TYPE
-	{
-		LINE,
-		CAPSULE,
-		MAX,
-	};
 
 	//ó‘Ô
 	enum class STATE

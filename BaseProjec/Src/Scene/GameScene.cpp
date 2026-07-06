@@ -140,6 +140,8 @@ void GameScene::Draw(void)
 	//フェードの描画
 	fader_->Draw();
 
+	//ワープポータルの描画
+	warpPortal_->Draw();
 }
 
 void GameScene::Release(void)

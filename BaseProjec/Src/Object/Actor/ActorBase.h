@@ -9,6 +9,13 @@ class ActorBase
 {
 
 public:
+	//衝突判定種別
+	enum class COLLIDER_TYPE
+	{
+		LINE,
+		CAPSULE,
+		MAX,
+	};
 
 	// コンストラクタ
 	ActorBase(void);
