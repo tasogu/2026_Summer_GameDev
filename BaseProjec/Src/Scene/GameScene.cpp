@@ -51,6 +51,7 @@ void GameScene::Init(void)
 	/////仮ワープステージ描画
 	warpPortal_ = std::make_unique<WarpPortal>();
 	warpPortal_->Init();
+	warpPortal_->SetPlayer(player_.get());
 
 	//カメラにも登録
 	std::shared_ptr<Camera> camera = sceMng_.GetCamera();

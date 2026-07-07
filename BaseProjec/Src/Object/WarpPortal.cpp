@@ -2,10 +2,15 @@
 #include "../Manager/ResourceManager.h"
 #include "../Object/Common/Transform.h"
 #include "../Manager/ColliderManager.h"
+#include "Actor/Character/Player.h"
 #include "Actor/ColliderCapsule.h"
 #include "Warpportal.h"
 
 WarpPortal::WarpPortal(void)
+	:
+	isTouched_(false),
+	targetTag_(ColliderBase::TAG::PLAYER),
+	player_(nullptr)
 {
 }
 
@@ -55,6 +60,8 @@ void WarpPortal::InitPost(void)
 
 void WarpPortal::Update(void)
 {
+	//プレイヤーとの当たり判定
+	CheckTouctPlayer();
 
 	//トランスフォームの更新
 	transform_.Update();
@@ -75,5 +82,43 @@ void WarpPortal::Release(void)
 
 	// 親の解放処理を呼ぶ！
 	ActorBase::Release();
+}
+
+void WarpPortal::SetPlayer(Player* player)
+{
+	player_ = player;
+}
+
+void WarpPortal::CheckTouctPlayer(void)
+{
+	if (player_ == nullptr || isTouched_ == true)return;
+
+	int CapsuleType = static_cast<int>(COLLIDER_TYPE::CAPSULE);
+	
+	//自分のコライダーの取得
+	ColliderBase* WarpPortalCollider = GetOwnCollider(CapsuleType);
+
+	//カプセルであるかの判定
+	const ColliderCapsule* WarpPortalCapsule =
+		dynamic_cast<const ColliderCapsule*>(WarpPortalCollider);
+
+	//プレイヤーのコライダーの取得
+	ColliderBase* PlayerCollider = player_->GetOwnCollider(CapsuleType);
+
+	//カプセルであるかの判定
+	const ColliderCapsule* PlayerCapsule =
+		dynamic_cast<const ColliderCapsule*>(PlayerCollider);
+
+	if (WarpPortalCapsule == nullptr || PlayerCapsule== nullptr) return;
+
+	CollisionResult res = PlayerCapsule->CheckCollision(WarpPortalCapsule);
+
+	if (res.isHit == false) {
+		return;
+	}
+	else {
+		isTouched_ = true;
+		printfDx("プレイヤーに当たった");
+	}
 }
 

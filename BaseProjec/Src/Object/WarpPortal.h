@@ -1,6 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include "Actor/ActorBase.h"
+class Player;
 
 class WarpPortal : public ActorBase
 {
@@ -15,7 +16,12 @@ public:
 
 	void Release(void);
 
+	void SetPlayer(Player* player);
+
+	void CheckTouctPlayer(void);
 private:
+
+	Player* player_;
 
 	//初期位置
 	static constexpr VECTOR POS = { 20.0f, 50.0f, 0.0f };  
@@ -32,6 +38,9 @@ private:
 	//エフェクトハンドル
 	int effectHandle_;
 
+	//当たっているか
+	bool isTouched_;
+
 	// リソースロード
 	void InitLoad(void) override;
 
@@ -46,6 +55,8 @@ private:
 
 	// 初期化後の個別処理
 	void InitPost(void) override;
+
+	ColliderBase::TAG targetTag_;
 
 };
 
