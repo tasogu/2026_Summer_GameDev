@@ -41,6 +41,10 @@ void ResourceManager::Init(void)
 	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Stage/MainStage/MainStage.mv1");
 	resourcesMap_.emplace(SRC::STAGE, res);
 
+	//ステージモデル
+	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Stage/MainStage/MainStage.mv1");
+	resourcesMap_.emplace(SRC::STAGE2, res);
+
 	//プレイヤーモデル
 	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Player/Player.mv1");
 	resourcesMap_.emplace(SRC::PLAYER, res);

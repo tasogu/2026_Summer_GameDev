@@ -17,6 +17,7 @@ public:
 	enum class GAME_TYPE
 	{
 		PLAY,
+		WAIT_PORTAL,
 		FADEOUT,
 		MEMORY_SWAP,
 		FADEIN

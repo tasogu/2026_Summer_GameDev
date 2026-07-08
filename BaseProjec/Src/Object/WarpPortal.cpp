@@ -10,12 +10,17 @@ WarpPortal::WarpPortal(void)
 	:
 	isTouched_(false),
 	targetTag_(ColliderBase::TAG::PLAYER),
-	player_(nullptr)
+	player_(nullptr),
+	effectHandle_(-1)
 {
 }
 
 WarpPortal::~WarpPortal(void)
 {
+	if (effectHandle_ != -1)
+	{
+		StopEffekseer3DEffect(effectHandle_);
+	}
 }
 
 void WarpPortal::InitLoad(void)
@@ -58,13 +63,18 @@ void WarpPortal::InitPost(void)
 	SetScalePlayingEffekseer3DEffect(effectHandle_, 30.0f, 20.0f, 30.0f);
 }
 
+bool WarpPortal::IsTouched(void)
+{
+	return isTouched_;
+}
+
 void WarpPortal::Update(void)
 {
-	//プレイヤーとの当たり判定
-	CheckTouctPlayer();
-
 	//トランスフォームの更新
 	transform_.Update();
+
+	//プレイヤーとの当たり判定
+	CheckTouctPlayer();
 
 	// 毎フレーム、エフェクトを見えない基準点に追従させる！
 	SetPosPlayingEffekseer3DEffect(effectHandle_, transform_.pos.x, transform_.pos.y, transform_.pos.z);
@@ -79,6 +89,9 @@ void WarpPortal::Release(void)
 {
 	// エフェクトの再生を止める！
 	StopEffekseer3DEffect(effectHandle_);
+
+	//デストラクタでの二十ストップを防ぐ
+	effectHandle_ = -1;
 
 	// 親の解放処理を呼ぶ！
 	ActorBase::Release();

@@ -16,11 +16,12 @@
 #include "Sword.h"
 #include "Player.h"
 
-Player::Player(void)
+Player::Player(STAGE_TYPE stageType)
 	:
 	sword_(nullptr),
 	imgPlayer_(-1),
-	CharactorBase()
+	CharactorBase(),
+	stageType_(stageType)
 {	
 	playerRotY_ = Quaternion();
 	goalQuaRot_ = Quaternion();
@@ -176,6 +177,11 @@ bool Player::IsDead(void)
 
 void Player::InitLoad(void)
 {
+	//ステージ移行で位置を初期化
+	if (stageType_ == STAGE_TYPE::STAGE2) {
+		transform_.pos = POS;
+	}
+
 	//プレイヤーモデルのロード
 	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER)->handleId_);
 

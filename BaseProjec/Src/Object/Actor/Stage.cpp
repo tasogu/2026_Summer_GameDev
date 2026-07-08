@@ -59,6 +59,7 @@ void Stage::InitLoad(void)
 		transform_.SetModel(resMng_.Load(ResourceManager::SRC::STAGE)->handleId_);
 		break;
 	case STAGE_TYPE::STAGE2:
+		transform_.SetModel(resMng_.Load(ResourceManager::SRC::STAGE2)->handleId_);
 		break;
 
 	}
@@ -79,6 +80,12 @@ void Stage::InitTransform(void)
 		break;
 
 	case STAGE_TYPE::STAGE2:
+		//ステージの大きさ,座標の初期化
+		transform_.scl = SCALE_;
+		transform_.pos = POS_;
+
+		transform_.Update();
+
 		break;
 	}
 }

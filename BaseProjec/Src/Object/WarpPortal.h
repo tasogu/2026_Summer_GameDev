@@ -19,6 +19,10 @@ public:
 	void SetPlayer(Player* player);
 
 	void CheckTouctPlayer(void);
+
+	//“–‚½‚Á‚Ä‚¢‚é‚©‚Ì”»’è
+	bool IsTouched(void);
+
 private:
 
 	Player* player_;
@@ -55,6 +59,7 @@ private:
 
 	// ‰Šú‰»Œã‚ÌŒÂ•Êˆ—
 	void InitPost(void) override;
+
 
 	ColliderBase::TAG targetTag_;
 

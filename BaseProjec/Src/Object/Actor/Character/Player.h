@@ -1,15 +1,15 @@
 #pragma once
 #include "CharactorBase.h"
 //class AnimationController;
+#include "../../../Scene/StageCommon.h"
+
 class Sword;
 
 class Player : public CharactorBase
 {
 public:
-
-
 	//コンストラクタ
-	Player(void);
+	Player(STAGE_TYPE stageType);
 
 	//デストラクタ
 	~Player(void);
@@ -29,6 +29,9 @@ public:
 	//HP取得
 	bool IsDead(void);
 private:
+	//ステージ(１～２)
+	STAGE_TYPE stageType_;
+
 	////アニメーションコントローラーの呼び出し
 	//AnimationController* animationController_;
 
@@ -66,7 +69,7 @@ private:
 	static constexpr float COL_CAPSULE_RADIUS = 20.0f;
 
 	//剣のプレイヤーでの攻撃力
-	static constexpr float PLAYER_POW = 10.0f;
+	static constexpr float PLAYER_POW = 100.0f;
 
 	//プレイヤー体力
 	static constexpr float PLAYER_HP = 60.0f;

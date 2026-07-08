@@ -14,6 +14,7 @@ public:
 	{
 		TITLE,
 		STAGE,
+		STAGE2,
 		PLAYER,
 		SWORD,
 		NOMAL_ENEMY,

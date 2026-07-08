@@ -1,5 +1,6 @@
 #pragma once
 #include "EnemyBase.h"
+#include "../../../../Scene/StageCommon.h"
 class Sword;
 class Player;
 
@@ -27,6 +28,9 @@ private:
 	std::unique_ptr<Sword> sword_;
 
 	Player* targetPlayer_;
+
+	//ステージの種類
+	STAGE_TYPE stageType_;
 
 	//スケール
 	static constexpr VECTOR SCALE = { 1.0f, 1.0f, 1.0f };
