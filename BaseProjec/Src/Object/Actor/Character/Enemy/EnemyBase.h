@@ -11,6 +11,15 @@ public:
 		BOSS,
 	};
 
+	//エネミーの行動パターン
+	enum class ENEMY_ACTIVE
+	{
+		MOVE,
+		TURN,		//向きを合わせる
+		ATTACK,	
+		COOLDOWN,	//硬直
+	};
+
 	//エネミーデータ
 	struct EnemyData
 	{
@@ -20,9 +29,15 @@ public:
 		VECTOR defaultPos;
 		float movebleRange;
 	};
-	
+
 	//ランダム数(AI用)
 	int random_;
+
+	//エネミーの行動パターン
+	ENEMY_ACTIVE enemyActive_;
+
+	//硬直秒数
+	float coolTime_;
 
 	//コンストラクタ
 	EnemyBase(const EnemyBase::EnemyData& data);

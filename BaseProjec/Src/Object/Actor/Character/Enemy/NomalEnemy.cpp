@@ -16,13 +16,17 @@ NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
 	:
 	EnemyBase(data)
 {
-	hp_ = NOMAL_HP;
 	isAttack_ = false;
 	imgSword_ = -1;
 	state_ = STATE::PLAY;
 	targetPlayer_ = nullptr;
 	speed_ = ENEMY_RUN * scnMng_.GetDeltaTime();
 	random_ = 0;
+	enemyActive_ = ENEMY_ACTIVE::MOVE;
+	coolTime_ = 0;
+	//初期座標の設定
+	transform_.pos = data.defaultPos;
+	hp_ = data.hp;
 }
 
 NomalEnemy::~NomalEnemy(void)
@@ -199,15 +203,33 @@ void NomalEnemy::UpdatePlay(void)
 	//アニメーションの更新
 	animationController_->Update();
 
-	//攻撃
-	ProcessAttack();
-
-	//攻撃中ではないなら移動
-	if (isAttack_ == false) {
+	switch (enemyActive_)
+	{
+	case ENEMY_ACTIVE::MOVE:
 		//移動
 		ProcessMove();
-
+		break;
+	case ENEMY_ACTIVE::TURN:
+		//向きなおす
+		TurnMove();
+		break;
+	case ENEMY_ACTIVE::ATTACK:
+		//攻撃
+		ProcessAttack();
+		break;
+	case ENEMY_ACTIVE::COOLDOWN:
+		//硬直
+		Cooldown();
+		break;
 	}
+
+	
+	////攻撃中ではないなら移動
+	//if (isAttack_ == false) {
+	//	//移動
+	//	ProcessMove();
+
+	//}
 
 
 }
@@ -264,6 +286,11 @@ void NomalEnemy::ProcessAttack(void)
 			//アニメーションを待機に変更
 			animationController_->Play((int)ANIM_TYPE::IDLE);
 
+			//硬直秒数をセット
+			coolTime_ = COOL_TIME;
+
+			//行動を移動に変更
+			enemyActive_ = ENEMY_ACTIVE::COOLDOWN;
 		}
 
 	}
@@ -278,40 +305,66 @@ void NomalEnemy::ProcessMove(void)
 
 	VECTOR diff = VSub(targetPos, myPos);
 
-	VECTOR diffM = VScale(diff, -1.0f);
-
 	float distance = VSize(diff);
 
 	//近づくまで移動
-	if(!IsWithinCirclingRange(targetPos, 300.0f))
-	//if (distance >= 150.0f)
+	//if(!IsWithinCirclingRange(targetPos, 200.0f))
+	if (distance >= ENEMY_RANGE)
 	{
 		animationController_->Play((int)ANIM_TYPE::RUN);
 
 		moveDir_ = VNorm(diff);
 		movePow_ = VScale(moveDir_, speed_);
+
 	}
-	else
-	{
-		animationController_->Play((int)ANIM_TYPE::RUN);
+	else {
 
-		moveDir_ = VNorm(diffM);
-		movePow_ = VScale(moveDir_, speed_);
-	}
-
-	if (distance <= 300.0f && distance >= 200.0f) {
-		isAttack_ = true;
-
-		moveDir_ = VNorm(diff);
-		
 		// 近づきすぎないように止まる
 		movePow_ = AsoUtility::VECTOR_ZERO;
+
+		//攻撃に交代
+		enemyActive_ = ENEMY_ACTIVE::TURN;
+
+		//攻撃を開始する
+		isAttack_ = true;
+
 	}
+
+	//if (distance <= 300.0f && distance >= 200.0f) {
+	//	isAttack_ = true;
+
+	//	moveDir_ = VNorm(diff);
+	//	
+	//	// 近づきすぎないように止まる
+	//	movePow_ = AsoUtility::VECTOR_ZERO;
+	//}
 
 }
 
 void NomalEnemy::TurnMove(void)
 {
+	//記録しているターゲットの座標をゲット
+	VECTOR targetPos = targetPlayer_->GetTransform().pos;
+	VECTOR myPos = transform_.pos;
+
+	VECTOR diff = VSub(targetPos, myPos);
+
+	moveDir_ = VNorm(diff);
+
+
+	enemyActive_ = ENEMY_ACTIVE::ATTACK;
+}
+
+void NomalEnemy::Cooldown(void)
+{
+	//硬直秒数を減らす
+	coolTime_ -= scnMng_.GetDeltaTime();
+
+	//硬直がゼロなら移動へ
+	if (coolTime_ <= 0.0f)
+	{
+		enemyActive_ = ENEMY_ACTIVE::MOVE;
+	}
 }
 
 

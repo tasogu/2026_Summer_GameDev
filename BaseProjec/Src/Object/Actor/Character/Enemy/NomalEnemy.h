@@ -65,6 +65,12 @@ private:
 	//ノーマルエネミーの移動速度
 	static constexpr float ENEMY_RUN = 240.0f;
 
+	//ノーマルエネミーの移動①
+	static constexpr float ENEMY_RANGE = 150.0f;
+
+	//硬直タイム
+	static constexpr float COOL_TIME = 1.5f;
+
 	// リソースロード
 	void InitLoad(void) override;
 
@@ -107,9 +113,10 @@ private:
 	//エネミーの移動
 	void ProcessMove(void);
 
-	//エネミーの旋回
+	//プレイヤーを向く
 	void TurnMove(void);
 
-
+	//硬直
+	void Cooldown(void);
 };
 

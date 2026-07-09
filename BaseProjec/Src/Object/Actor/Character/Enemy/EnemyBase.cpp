@@ -11,8 +11,6 @@ EnemyBase::EnemyBase(const EnemyBase::EnemyData& data)
 
 {
 	isDead_ = false;
-	//‰ŠúÀ•W‚Ìİ’è
-	transform_.pos = data.defaultPos;
 }
 
 EnemyBase::~EnemyBase(void)

@@ -70,19 +70,22 @@ void EnemyManager::LoadData(void)
 {
 	EnemyBase::EnemyData data = EnemyBase::EnemyData();
 
-	//ID
+	//一体目
 	data.id = 0;
-
 	//種別
 	data.type = EnemyBase::ENEMY_TYPE::NOMAL;
-
 	//HP
-	data.hp = 10;
-
+	data.hp = 60;
 	//初期座標
 	data.defaultPos = { 200.0f, 200.0f, 200.0f };
-
 	//エネミー生成
+	Create(data);
+
+	//二体目
+	data.id = 1;
+	//初期座標
+	data.defaultPos = { 250.0f, 0.0f, 150.0f };
+	//生成
 	Create(data);
 }
 
