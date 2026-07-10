@@ -93,6 +93,32 @@ private:
 	//回転時間
 	float stepRotTime_;
 
+	//----------------------------------------
+	//回避中か
+	bool isEvasion_;
+	//回避の残り時間
+	float evasionTime_;
+	//回避の再使用待ち時間
+	float evasionCoolTime_;
+	//回避方向
+	VECTOR evasionDir_;
+
+	//回避の持続秒数
+	static constexpr float EVASION_TIME = 0.45f;
+	//回避の移動速度
+	static constexpr float EVASION_SPEED = 800.0f;
+	//回避の再使用待ち秒数
+	static constexpr float EVASION_COOL = 0.8f;
+
+	void OnDamage(int damage) override;
+
+
+	//HPバー用画像ハンドル
+	int imgHpFrame_;
+	int imgHpRed_;
+	int imgHpBlack_;
+	//----------------------------------------------
+
 	//更新系(純粋仮想関数継承)
 	void UpdateProcess(void) override;
 	void UpdateProcessPost(void) override;
@@ -132,6 +158,9 @@ private:
 
 	//プレイヤーの攻撃
 	void ProcessAttack(void);
+
+	//プレイヤー回避
+	void ProcessEvasion(void);
 
 	//回転したい角度を設定
 	void SetGoalRotate(double rotRad);

@@ -24,7 +24,9 @@ public:
 		WARPPORTAL,
 		HP_RET,
 		HP_BLACK,
-		HP_FRAME
+		HP_FRAME,
+		GAMEOVER,
+		GAMECLEAR
 	};
 
 	// 明示的にインステンスを生成する

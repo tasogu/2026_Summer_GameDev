@@ -131,7 +131,7 @@ void WarpPortal::CheckTouctPlayer(void)
 	}
 	else {
 		isTouched_ = true;
-		printfDx("プレイヤーに当たった");
+		//printfDx("プレイヤーに当たった");
 	}
 }
 

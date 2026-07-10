@@ -1,5 +1,7 @@
 #include "../Manager/InputManager.h"
 #include "../Manager/SceneManager.h"
+#include "../Manager/SoundManager.h"
+#include "../Manager/ResourceManager.h"
 #include "GameClearScene.h"
 
 GameClearScene::GameClearScene(void)
@@ -12,6 +14,11 @@ GameClearScene::~GameClearScene(void)
 
 void GameClearScene::Init(void)
 {
+	SoundManager::GetInstance().PlayBGM(SoundManager::BGM_ID::CLEAR);
+	SoundManager::GetInstance().PlaySE(SoundManager::SE_ID::CLEAR);
+
+	imgGameClear = ResourceManager::GetInstance().Load(ResourceManager::SRC::GAMECLEAR)->handleId_;
+
 }
 
 void GameClearScene::Update(void)
@@ -30,7 +37,7 @@ void GameClearScene::Update(void)
 
 void GameClearScene::Draw(void)
 {
-	DrawFormatString(0,0,GetColor(255,255,255),"GAMECLEAR");
+	DrawGraph(0, 0, imgGameClear, true);
 }
 
 void GameClearScene::Release(void)

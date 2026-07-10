@@ -60,6 +60,7 @@ public:
 	//ƒvƒŒƒCƒ„[‚æ‚è‹ß‚¢‚©‰“‚¢‚©
 	bool IsWithinCirclingRange(VECTOR targetPlayer, float goal);
 
+	void AddPosCorrection(const VECTOR& correction);
 
 private:
 	Player* targetPlayer_;

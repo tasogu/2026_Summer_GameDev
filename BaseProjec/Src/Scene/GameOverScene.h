@@ -20,5 +20,6 @@ public:
 	// ‰ð•ú
 	void Release(void) override;
 
+	int imgGameOver_;
 };
 

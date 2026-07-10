@@ -10,7 +10,7 @@ class EnemyManager
 {
 public:
 	//コンストラクタ
-	EnemyManager(STAGE_TYPE stageType);;
+	EnemyManager(STAGE_TYPE stageType);
 
 	//デストラクタ
 	~EnemyManager(void);
@@ -50,6 +50,7 @@ private:
 	void UpdateProcess(void);
 	void UpdateProcessPost(void);
 
-
+	//押し出し
+	void ProcessPushOut(Player* player);
 };
 

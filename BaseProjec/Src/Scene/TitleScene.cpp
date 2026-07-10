@@ -22,8 +22,12 @@ TitleScene::~TitleScene(void)
 
 void TitleScene::Init(void)
 {
+
+	SoundManager::GetInstance().PlayBGM(SoundManager::BGM_ID::TITLE);
+
 	//画像読み込み
-	//imgTitle_ = resMng_.Load(ResourceManager::SRC::TITLE).handleId_;
+	imgTitle_ = ResourceManager::GetInstance().Load(ResourceManager::SRC::TITLE)->handleId_;
+
 
 	// 定点カメラ
 	sceMng_.GetCamera()->ChangeMode(Camera::MODE::FIXED_POINT);
@@ -121,12 +125,18 @@ void TitleScene::Update(void)
 
 void TitleScene::Draw(void)
 {
+	DrawGraph(0, 0, imgTitle_, true);
+
+
 	int baseX = 500;
 	int baseY = 400;
 	int spaceY = 60; 
 
 	// メニューの文字を描画
-	DrawString(450, 200, "リコールエッジ" , GetColor(255, 255, 255));
+	SetFontSize(48);
+	DrawString(450, 200, "リコールエッジ", GetColor(255, 255, 255));
+	SetFontSize(16);
+
 	DrawString(baseX, baseY, "GAME START", GetColor(255, 255, 255));
 	DrawString(baseX, baseY + spaceY, "EXIT", GetColor(255, 255, 255));
 

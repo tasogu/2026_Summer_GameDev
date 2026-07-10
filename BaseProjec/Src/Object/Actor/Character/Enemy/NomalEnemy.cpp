@@ -212,8 +212,6 @@ void NomalEnemy::UpdatePlay(void)
 
 	//HPバーの更新
 	VECTOR barPos = VAdd(transform_.pos, HP_BAR_OFFSET);
-	//hpBar_->Update(transform_.pos, hp_);
-	//hpBar_->Update(transform_.pos, hp_);
 	hpBar_->Update(barPos, hp_);
 
 	switch (enemyActive_)
@@ -356,6 +354,10 @@ void NomalEnemy::ProcessMove(void)
 
 void NomalEnemy::TurnMove(void)
 {
+	// 近づきすぎないように止まる
+	movePow_ = AsoUtility::VECTOR_ZERO;
+
+
 	//記録しているターゲットの座標をゲット
 	VECTOR targetPos = targetPlayer_->GetTransform().pos;
 	VECTOR myPos = transform_.pos;
@@ -370,6 +372,10 @@ void NomalEnemy::TurnMove(void)
 
 void NomalEnemy::Cooldown(void)
 {
+	// 近づきすぎないように止まる
+	movePow_ = AsoUtility::VECTOR_ZERO;
+
+
 	//硬直秒数を減らす
 	coolTime_ -= scnMng_.GetDeltaTime();
 

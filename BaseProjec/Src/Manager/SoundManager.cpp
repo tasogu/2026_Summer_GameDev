@@ -35,7 +35,9 @@ void SoundManager::Destroy(void)
 }
 
 SoundManager::SoundManager(void)
-	: seMap_()
+	: seMap_(),
+	bgmMap_(),
+	nowBgm_(BGM_ID::NONE)
 {
 }
 
@@ -47,13 +49,24 @@ void SoundManager::Init(void)
 	// ここで使う音を一気に登録・ロードする
 	LoadSE(SE_ID::CURSOR_MOVE, basePath + "Cursor.wav");
 	LoadSE(SE_ID::DECIDE, basePath + "Decide.wav");
-	LoadSE(SE_ID::SWORD_SWING, basePath + "Swing.mp3");
+	LoadSE(SE_ID::SWORD_SWING, basePath + "Attack.mp3");
 	LoadSE(SE_ID::HIT, basePath + "Hit.mp3");
+	LoadSE(SE_ID::CLEAR, basePath + "GameCleal.wav");
+
 
 	SetVolume(SE_ID::CURSOR_MOVE, 120);
 	SetVolume(SE_ID::DECIDE, 180);
-	SetVolume(SE_ID::SWORD_SWING, 50);
-	SetVolume(SE_ID::HIT, 80);
+	SetVolume(SE_ID::SWORD_SWING, 100);
+	SetVolume(SE_ID::HIT, 200);
+	SetVolume(SE_ID::CLEAR, 100);
+
+
+	std::string bgmPath = Application::PATH_DATA + "Sound/BGM/";
+	LoadBGM(BGM_ID::TITLE, bgmPath + "Title.mp3");
+	LoadBGM(BGM_ID::GAME, bgmPath + "MainGame.mp3");
+	LoadBGM(BGM_ID::CLEAR, bgmPath + "a.mp3");
+	SetVolumeBGM(BGM_ID::TITLE, 100);
+	SetVolumeBGM(BGM_ID::GAME, 100);
 }
 
 void SoundManager::LoadSE(SE_ID id, const std::string& filePath)
@@ -89,6 +102,60 @@ void SoundManager::SetVolume(SE_ID id, int volume)
 		if (volume > 255) volume = 255;
 
 		// DxLibの関数で、指定した音ハンドルの音量を変更する
+		ChangeVolumeSoundMem(volume, it->second);
+	}
+}
+
+void SoundManager::LoadBGM(BGM_ID id, const std::string& filePath)
+{
+	// 二重読み込み防止
+	if (bgmMap_.find(id) != bgmMap_.end()) return;
+
+	int handle = LoadSoundMem(filePath.c_str());
+
+	if (handle != -1)
+	{
+		bgmMap_[id] = handle;
+	}
+}
+
+void SoundManager::PlayBGM(BGM_ID id)
+{
+	// 同じ曲が既に鳴っているなら何もしない(毎フレーム呼ばれても安全に)
+	if (nowBgm_ == id) return;
+
+	// 別の曲が鳴っていたら止める
+	StopBGM();
+
+	auto it = bgmMap_.find(id);
+	if (it != bgmMap_.end())
+	{
+		// DX_PLAYTYPE_LOOP: ループ再生
+		PlaySoundMem(it->second, DX_PLAYTYPE_LOOP, TRUE);
+		nowBgm_ = id;
+	}
+}
+
+void SoundManager::StopBGM(void)
+{
+	if (nowBgm_ == BGM_ID::NONE) return;
+
+	auto it = bgmMap_.find(nowBgm_);
+	if (it != bgmMap_.end())
+	{
+		StopSoundMem(it->second);
+	}
+	nowBgm_ = BGM_ID::NONE;
+}
+
+void SoundManager::SetVolumeBGM(BGM_ID id, int volume)
+{
+	auto it = bgmMap_.find(id);
+	if (it != bgmMap_.end())
+	{
+		if (volume < 0) volume = 0;
+		if (volume > 255) volume = 255;
+
 		ChangeVolumeSoundMem(volume, it->second);
 	}
 }

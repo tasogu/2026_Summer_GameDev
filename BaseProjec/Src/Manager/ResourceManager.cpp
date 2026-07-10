@@ -54,7 +54,7 @@ void ResourceManager::Init(void)
 	resourcesMap_.emplace(SRC::SWORD, res);
 
 	//ノーマルエネミーモデル
-	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Enemy/Player.mv1");
+	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Enemy/Enemy.mv1");
 	resourcesMap_.emplace(SRC::NOMAL_ENEMY, res);
 
 	//ワープポイントのエフェクト
@@ -72,6 +72,14 @@ void ResourceManager::Init(void)
 	//HPバーの枠エフェクト
 	res = std::make_shared<RES>(RES_T::IMG, PATH_IMG + "HP/Frame.png");
 	resourcesMap_.emplace(SRC::HP_FRAME, res);
+
+	//GAMEOVER
+	res = std::make_shared<RES>(RES_T::IMG, PATH_IMG + "GameOver.png");
+	resourcesMap_.emplace(SRC::GAMEOVER, res);
+
+	//GAMECLEAR
+	res = std::make_shared<RES>(RES_T::IMG, PATH_IMG + "GameClear.png");
+	resourcesMap_.emplace(SRC::GAMECLEAR, res);
 
 }
 

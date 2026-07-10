@@ -37,6 +37,13 @@ Player::Player(STAGE_TYPE stageType)
 	imgSword_ = -1;
 
 	hp_ = PLAYER_HP;
+
+	//---------------------------------------
+	isEvasion_ = false;
+	evasionTime_ = 0.0f;
+	evasionCoolTime_ = 0.0f;
+	evasionDir_ = AsoUtility::VECTOR_ZERO;
+	//----------------------------------------
 }
 
 Player::~Player(void)
@@ -64,6 +71,7 @@ void Player::Init(void)
 	InitPost();
 
 }
+
 
 
 void Player::UpdateProcess(void)
@@ -105,16 +113,21 @@ void Player::UpdatePlay(void)
 	//アニメーションの更新
 	animationController_->Update();
 
-	//攻撃
-	ProcessAttack();
-	
-	//攻撃中ではないなら移動
-	if (isAttack_ == false) {
-		//移動
-		ProcessMove();
+	//回避
+	ProcessEvasion();
 
+	//回避中でなければ攻撃、移動
+	if (isEvasion_ == false) {
+		//攻撃
+		ProcessAttack();
+
+		//攻撃中ではないなら移動
+		if (isAttack_ == false) {
+			//移動
+			ProcessMove();
+
+		}
 	}
-
 	//移動方向に応じた回転
 	Rotate();
 
@@ -156,6 +169,24 @@ void Player::Draw(void)
 	
 	//剣の描画
 	sword_->Draw();
+
+	//---- HPバー(左上固定) ----
+	const int barX = 20;
+	const int barY = 20;
+	const int barW = 300;
+	const int barH = 25;
+
+	float rate = hp_ / PLAYER_HP;
+
+	//黒背景
+	DrawExtendGraph(barX, barY, barX + barW, barY + barH, imgHpBlack_, TRUE);
+	//赤(割合)
+	DrawExtendGraph(barX, barY,
+		barX + static_cast<int>(barW * rate), barY + barH,
+		imgHpRed_, TRUE);
+	//枠
+	DrawExtendGraph(barX, barY, barX + barW, barY + barH, imgHpFrame_, TRUE);
+
 }
 
 void Player::Release(void)
@@ -198,6 +229,14 @@ void Player::InitLoad(void)
 	
 	//剣のモデルを手のボーンに装着
 	(imgSword_, handBoneid_, 1);
+
+	//----------------------------------------------------------------------
+	//とりあえずの体力表示
+	//HPバー画像のロード
+	imgHpFrame_ = resMng_.Load(ResourceManager::SRC::HP_FRAME)->handleId_;
+	imgHpRed_ = resMng_.Load(ResourceManager::SRC::HP_RET)->handleId_;
+	imgHpBlack_ = resMng_.Load(ResourceManager::SRC::HP_BLACK)->handleId_;
+	//----------------------------------------------------------------------
 }
 
 void Player::InitTransform(void)
@@ -254,6 +293,7 @@ void Player::InitAnimation(void)
 	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f , path + "Walk.mv1");
 	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f , path + "Run.mv1");
 	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f, path + "Attack.mv1");
+	animationController_->Add((int)ANIM_TYPE::ROLL, 30.0f, path + "Roll.mv1");
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 
@@ -407,6 +447,69 @@ void Player::ProcessAttack(void)
 	}
 
 }
+
+//----------------------------------------------------------------------------
+void Player::ProcessEvasion(void)
+{
+	auto& ins = InputManager::GetInstance();
+
+	//クールタイムは常に減らす
+	evasionCoolTime_ -= scnMng_.GetDeltaTime();
+
+	//発動判定
+	bool isEvasionKey = ins.IsTrgDown(KEY_INPUT_J);
+	bool isEvasionPad = ins.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD1, InputManager::JOYPAD_BTN::LEFT);
+
+	if ((isEvasionKey || isEvasionPad)
+		&& isEvasion_ == false
+		&& isAttack_ == false
+		&& evasionCoolTime_ <= 0.0f)
+	{
+		//回避開始
+		isEvasion_ = true;
+		evasionTime_ = EVASION_TIME;
+
+		//アニメーションを待機に変更
+		animationController_->Play((int)ANIM_TYPE::ROLL, false);
+
+
+		//方向決定:直近の入力方向。なければ後方へ
+		if (AsoUtility::EqualsVZero(moveDir_))
+		{
+			evasionDir_ = playerRotY_.GetBack();
+		}
+		else
+		{
+			evasionDir_ = moveDir_;
+		}
+	}
+
+	//回避中の移動
+	if (isEvasion_ == true)
+	{
+		movePow_ = VScale(evasionDir_, EVASION_SPEED * scnMng_.GetDeltaTime());
+
+		evasionTime_ -= scnMng_.GetDeltaTime();
+		if (evasionTime_ <= 0.0f)
+		{
+			//回避終了
+			isEvasion_ = false;
+			evasionCoolTime_ = EVASION_COOL;
+			movePow_ = AsoUtility::VECTOR_ZERO;
+		}
+	}
+}
+
+void Player::OnDamage(int damage)
+{
+	//回避中は無敵
+	if (isEvasion_ == true) return;
+
+	//通常のダメージ処理は基底に任せる
+	CharactorBase::OnDamage(damage);
+}
+
+//----------------------------------------------------------------------------------------
 
 void Player::SetGoalRotate(double rotRad)
 {

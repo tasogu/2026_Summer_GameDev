@@ -1,4 +1,7 @@
 #pragma once
+#include "../Object/Common/Transform.h"
+
+
 class ResourceManager;
 class SceneManager;
 
@@ -32,5 +35,8 @@ protected:
 
 	// シーン管理
 	SceneManager& sceMng_;
+
+	// モデル制御の基本情報
+	Transform transform_;
 
 };

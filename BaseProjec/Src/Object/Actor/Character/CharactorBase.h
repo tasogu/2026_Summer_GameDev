@@ -22,7 +22,8 @@ public:
 		IDLE,
 		WALK,
 		RUN,
-		ATTACK
+		ATTACK,
+		ROLL
 	};
 
 

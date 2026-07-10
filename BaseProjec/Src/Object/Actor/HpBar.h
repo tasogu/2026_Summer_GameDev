@@ -24,11 +24,10 @@ public:
 	// シングルトン参照
 	ResourceManager& resMng_;
 
-
 	//HPバーの表示幅
-	static constexpr int BAR_WIDTH = 80;
+	static constexpr int BAR_WIDTH = 100;
 	//HPバーの表示高さ
-	static constexpr int BAR_HEIGHT = 10;
+	static constexpr int BAR_HEIGHT = 20;
 
 	//最大HP
 	float maxHp_;

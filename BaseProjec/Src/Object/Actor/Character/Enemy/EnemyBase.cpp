@@ -11,6 +11,8 @@ EnemyBase::EnemyBase(const EnemyBase::EnemyData& data)
 
 {
 	isDead_ = false;
+
+	transform_.pos = data.defaultPos;
 }
 
 EnemyBase::~EnemyBase(void)
@@ -33,6 +35,11 @@ bool EnemyBase::IsWithinCirclingRange(VECTOR targetPlayer, float goal)
 	else if (distance <= goal) {
 		return true;
 	}
+}
+
+void EnemyBase::AddPosCorrection(const VECTOR& correction)
+{
+	transform_.pos = VAdd(transform_.pos, correction);
 }
 
 void EnemyBase::InitCollider(void)

@@ -6,6 +6,7 @@
 #include "../Object/Actor/Character/Player.h"
 #include "../Manager/Camera.h"
 #include "../Manager/EnemyManager.h"
+#include "../Manager/SoundManager.h"
 #include "../Common/Fader.h"
 #include "../Object/WarpPortal.h"
 #include "GameScene.h"
@@ -32,6 +33,8 @@ GameScene::~GameScene(void)
 
 void GameScene::Init(void)
 {
+	SoundManager::GetInstance().PlayBGM(SoundManager::BGM_ID::GAME);
+
 	//ステージの生成
 	stage_ = std::make_unique<Stage>(stageType_);
 	stage_->Init();

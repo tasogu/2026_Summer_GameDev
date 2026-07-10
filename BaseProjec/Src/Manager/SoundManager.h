@@ -12,7 +12,17 @@ public:
 		DECIDE,      // 決定音
 		SWORD_SWING, // 剣を振る音
 		HIT,		 //ヒット音
+		CLEAR
 	};
+
+	enum class BGM_ID
+	{
+		NONE,        // 無音状態を表す
+		TITLE,       // タイトル画面
+		GAME,        // ゲーム中
+		CLEAR
+	};
+
 
 	// インスタンスの明示的生成
 	static void CreateInstance(void);
@@ -31,6 +41,15 @@ public:
 
 	// SEの音量を変更する関数 (volume は 0 ～ 255)
 	void SetVolume(SE_ID id, int volume);
+
+	void LoadBGM(BGM_ID id, const std::string& filePath);
+	// BGMを再生する(ループ。既に同じ曲ならなにもしない)
+	void PlayBGM(BGM_ID id);
+	// BGMを停止する
+	void StopBGM(void);
+	// BGMの音量変更
+	void SetVolumeBGM(BGM_ID id, int volume);
+
 private:
 	// 静的インスタンス
 	static SoundManager* instance_;
@@ -45,4 +64,9 @@ private:
 	SoundManager(void);
 	~SoundManager(void) = default;
 	SoundManager(const SoundManager&) = default;
+
+	// BGM用のマップ
+	std::unordered_map<BGM_ID, int> bgmMap_;
+	// 現在再生中のBGM
+	BGM_ID nowBgm_;
 };
