@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <map>
 #include "../Common/Transform.h"
 #include "../Actor/ColliderBase.h"
 class ResourceManager;

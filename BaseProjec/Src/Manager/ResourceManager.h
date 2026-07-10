@@ -22,6 +22,9 @@ public:
 		WALK,
 		RUN,
 		WARPPORTAL,
+		HP_RET,
+		HP_BLACK,
+		HP_FRAME
 	};
 
 	// 明示的にインステンスを生成する

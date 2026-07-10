@@ -69,10 +69,10 @@ private:
 	static constexpr float COL_CAPSULE_RADIUS = 20.0f;
 
 	//剣のプレイヤーでの攻撃力
-	static constexpr float PLAYER_POW = 100.0f;
+	static constexpr float PLAYER_POW = 10.0f;
 
 	//プレイヤー体力
-	static constexpr float PLAYER_HP = 60.0f;
+	static constexpr float PLAYER_HP = 100.0f;
 
 	//ソードのポインタ
 	//Sword* sword_;

@@ -8,6 +8,7 @@
 #include "../../../../Manager/SceneManager.h"
 #include "../../ColliderCapsule.h"
 #include "../../ColliderLine.h"
+#include "../../HpBar.h"
 #include "../Player.h"
 #include "../Sword.h"
 #include "NomalEnemy.h"
@@ -67,6 +68,8 @@ void NomalEnemy::Draw(void)
 {
 	sword_->Draw();
 
+	hpBar_->Draw();
+
 	CharactorBase::Draw();
 }
 
@@ -94,6 +97,10 @@ void NomalEnemy::InitLoad(void)
 	//剣のモデルを手のボーンに装着
 	(imgSword_, handBoneid_, 1);
 
+	//HPバーのモデルのロード
+	hpBar_ = std::make_unique<HpBar>();
+	hpBar_->Init();
+	hpBar_->SetProperty(hp_);
 }
 
 void NomalEnemy::InitTransform(void)
@@ -202,6 +209,12 @@ void NomalEnemy::UpdatePlay(void)
 {
 	//アニメーションの更新
 	animationController_->Update();
+
+	//HPバーの更新
+	VECTOR barPos = VAdd(transform_.pos, HP_BAR_OFFSET);
+	//hpBar_->Update(transform_.pos, hp_);
+	//hpBar_->Update(transform_.pos, hp_);
+	hpBar_->Update(barPos, hp_);
 
 	switch (enemyActive_)
 	{

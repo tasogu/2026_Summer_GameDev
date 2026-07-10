@@ -60,6 +60,19 @@ void ResourceManager::Init(void)
 	//ワープポイントのエフェクト
 	res = std::make_shared<RES>(RES_T::EFFEKSEER, PATH_EFF + "Warp/WalpStar.efkefc");
 	resourcesMap_.emplace(SRC::WARPPORTAL, res);
+
+	//HPバーの赤画像
+	res = std::make_shared<RES>(RES_T::IMG, PATH_IMG + "HP/Ret.png");
+	resourcesMap_.emplace(SRC::HP_RET, res);
+
+	//HPバーの黒エフェクト
+	res = std::make_shared<RES>(RES_T::IMG, PATH_IMG + "HP/Black.png");
+	resourcesMap_.emplace(SRC::HP_BLACK, res);
+
+	//HPバーの枠エフェクト
+	res = std::make_shared<RES>(RES_T::IMG, PATH_IMG + "HP/Frame.png");
+	resourcesMap_.emplace(SRC::HP_FRAME, res);
+
 }
 
 void ResourceManager::Release(void)
