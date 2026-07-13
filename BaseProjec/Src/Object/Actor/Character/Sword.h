@@ -4,7 +4,7 @@ class Sword : public ActorBase
 {
 public:
 
-	Sword(void);
+	Sword(const Transform& followTransform, int followFrameId);
 	~Sword(void);
 
 	void Init(void);
@@ -68,5 +68,12 @@ private:
 
 
 	float a = 0.0f;
+
+protected:
+	//’Ç]æTransform
+	const Transform& followTransform_;
+
+	//’Ç]‘ÎÛ‚ÌƒtƒŒ[ƒ€ID
+	int followFrameId_;
 };
 

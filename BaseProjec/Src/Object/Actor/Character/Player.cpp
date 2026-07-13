@@ -97,8 +97,8 @@ void Player::UpdateProcessPost(void)
 	//位置を取得
 	MATRIX handMatrix = MV1GetFrameLocalWorldMatrix(transform_.modelId, handBoneid_);
 
-	//剣の位置を手の位置に更新
-	sword_->UpdatePose(handMatrix);
+	////剣の位置を手の位置に更新
+	//sword_->UpdatePose(handMatrix);
 
 }
 
@@ -179,11 +179,13 @@ void Player::Draw(void)
 	float rate = hp_ / PLAYER_HP;
 
 	//黒背景
-	DrawExtendGraph(barX, barY, barX + barW, barY + barH, imgHpBlack_, TRUE);
+	DrawExtendGraph(barX + 10, barY, barX + barW, barY + barH, imgHpBlack_, TRUE);
+
 	//赤(割合)
 	DrawExtendGraph(barX, barY,
 		barX + static_cast<int>(barW * rate), barY + barH,
 		imgHpRed_, TRUE);
+
 	//枠
 	DrawExtendGraph(barX, barY, barX + barW, barY + barH, imgHpFrame_, TRUE);
 
@@ -216,10 +218,6 @@ void Player::InitLoad(void)
 	//プレイヤーモデルのロード
 	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER)->handleId_);
 
-	//剣のモデルのロード
-	//sword_ = new Sword();
-	sword_ = std::make_unique<Sword>();
-	sword_->Init();
 
 	//剣の攻撃対象と攻撃力をセット
 	sword_->SetWeaponProperty(ColliderBase::TAG::ENEMY, PLAYER_POW);
@@ -229,6 +227,10 @@ void Player::InitLoad(void)
 	
 	//剣のモデルを手のボーンに装着
 	(imgSword_, handBoneid_, 1);
+
+	//剣のモデルのロード
+	sword_ = std::make_unique<Sword>(transform_, handBoneid_);
+	sword_->Init();
 
 	//----------------------------------------------------------------------
 	//とりあえずの体力表示
@@ -473,10 +475,11 @@ void Player::ProcessEvasion(void)
 		animationController_->Play((int)ANIM_TYPE::ROLL, false);
 
 
-		//方向決定:直近の入力方向。なければ後方へ
+		//方向決定:直近の入力方向。なければ前方へ
 		if (AsoUtility::EqualsVZero(moveDir_))
 		{
-			evasionDir_ = playerRotY_.GetBack();
+			//evasionDir_ = playerRotY_.GetBack();
+			evasionDir_ = playerRotY_.GetForward();
 		}
 		else
 		{
@@ -505,7 +508,7 @@ void Player::OnDamage(int damage)
 	//回避中は無敵
 	if (isEvasion_ == true) return;
 
-	//通常のダメージ処理は基底に任せる
+	//通常のダメージ
 	CharactorBase::OnDamage(damage);
 }
 

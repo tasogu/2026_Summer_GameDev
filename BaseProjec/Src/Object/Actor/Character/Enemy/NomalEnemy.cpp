@@ -84,18 +84,19 @@ void NomalEnemy::InitLoad(void)
 	//複製のハンドルをもらってロード
 	transform_.SetModel(ResourceManager::GetInstance().LoadModelDuplicate(ResourceManager::SRC::NOMAL_ENEMY));
 	
-	//剣のモデルのロード
-	sword_ = std::make_unique<Sword>();
-	sword_->Init();
-
-	//剣の攻撃対象と攻撃力をセット
-	sword_->SetWeaponProperty(ColliderBase::TAG::PLAYER, ENEMY_POW);
 
 	//モデルの手のボーンを取得
 	handBoneid_ = MV1SearchFrame(transform_.modelId, "mixamorig:RightHand");
 
 	//剣のモデルを手のボーンに装着
 	(imgSword_, handBoneid_, 1);
+
+	//剣のモデルのロード
+	sword_ = std::make_unique<Sword>(transform_, handBoneid_);
+	sword_->Init();
+
+	//剣の攻撃対象と攻撃力をセット
+	sword_->SetWeaponProperty(ColliderBase::TAG::PLAYER, ENEMY_POW);
 
 	//HPバーのモデルのロード
 	hpBar_ = std::make_unique<HpBar>();

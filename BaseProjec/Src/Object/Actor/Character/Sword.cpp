@@ -4,18 +4,22 @@
 #include "../../../Manager/ColliderManager.h"
 #include "../../../Manager/SceneManager.h"
 #include "../../../Manager/SoundManager.h"
+#include "../../../Utility/ModelFrameUtility.h"
 #include "Enemy/NomalEnemy.h"
 #include "../ColliderBase.h"
 #include "../ColliderCapsule.h"
 #include "CharactorBase.h"
 #include "Sword.h"
 
-Sword::Sword(void)
+Sword::Sword(const Transform& followTransform, int followFrameId)
 	:
 	targetTag_(),
-	swordPow_(0)
+	swordPow_(0),
+	followTransform_(followTransform),
+	followFrameId_(followFrameId)
 {
 }
+
 
 Sword::~Sword(void)
 {
@@ -43,8 +47,10 @@ void Sword::Init(void)
 
 void Sword::Update(void)
 {
+	ModelFrameUtility::SetFrameWorldMatrix(followTransform_, followFrameId_, transform_, transform_.pos, transform_.rot);
+
 	//ÉÇÉfÉãÇÃèÓïÒÇTransformÇ…îΩâfÇ≥ÇπÇÈ
-	transform_.pos = MV1GetPosition(transform_.modelId);
+	//transform_.pos = MV1GetPosition(transform_.modelId);
 
 }
 

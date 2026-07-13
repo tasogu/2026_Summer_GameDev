@@ -2,7 +2,7 @@
 #include "CharactorBase.h"
 //class AnimationController;
 #include "../../../Scene/StageCommon.h"
-
+class Player;
 class Sword;
 
 class Player : public CharactorBase
@@ -29,6 +29,7 @@ public:
 	//HP取得
 	bool IsDead(void);
 private:
+
 	//ステージ(１～２)
 	STAGE_TYPE stageType_;
 
@@ -51,7 +52,7 @@ private:
 	static constexpr float SPEED_RUN = 360.0f;
 
 	//回転時間
-	static constexpr float TIME_ROT = 1.0f;
+	static constexpr float TIME_ROT = 0.1f;
 
 	//衝突判定用線分開始
 	static constexpr VECTOR COL_LINE_START_LOCAL_POS = { 0.0f, 80.0f, 0.0f };

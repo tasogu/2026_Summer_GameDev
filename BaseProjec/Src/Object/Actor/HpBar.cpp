@@ -53,7 +53,7 @@ void HpBar::Draw(void)
 	int barX = static_cast<int>(screenPos_.x) - BAR_WIDTH / 2;
 	int barY = static_cast<int>(screenPos_.y);
 
-	//HP‚ÌŠ„‡(1.0=–ƒ^ƒ“A0.5=”¼•ª)
+	//HP‚ÌŠ„‡
 	float rate = nowHp_ / maxHp_;
 
 	//•”wŒi(‘S•)

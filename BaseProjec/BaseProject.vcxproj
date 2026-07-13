@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Utility\ModelFrameUtility.cpp" />
     <ClCompile Include="Src\Object\Actor\HpBar.cpp" />
     <ClCompile Include="Src\Manager\SoundManager.cpp" />
     <ClCompile Include="Src\Scene\GameClearScene.cpp" />
@@ -57,6 +58,7 @@
     <ClCompile Include="Src\Object\WarpPortal.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Utility\ModelFrameUtility.h" />
     <ClInclude Include="Src\Object\Actor\HpBar.h" />
     <ClInclude Include="Src\Manager\SoundManager.h" />
     <ClInclude Include="Src\Scene\StageCommon.h" />
