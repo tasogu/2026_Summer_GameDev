@@ -1,0 +1,170 @@
+#include <DxLib.h>
+#include <EffekseerForDXLib.h>
+#include "Manager/InputManager.h"
+#include "Manager/ResourceManager.h"
+#include "Manager/SceneManager.h"
+#include "Manager/SoundManager.h"
+#include "Common/FpsController.h"
+#include "Application.h"
+
+Application* Application::instance_ = nullptr;
+
+const std::string Application::PATH_DATA = "Data/";
+const std::string Application::PATH_IMAGE = "Data/Image/";
+const std::string Application::PATH_MODEL = "Data/Model/";
+const std::string Application::PATH_EFFECT = "Data/Effect/";
+
+void Application::CreateInstance(void)
+{
+	if (instance_ == nullptr)
+	{
+		instance_ = new Application();
+	}
+	instance_->Init();
+}
+
+Application& Application::GetInstance(void)
+{
+	return *instance_;
+}
+
+void Application::Init(void)
+{
+
+	// アプリケーションの初期設定
+	SetWindowText("アクション");
+
+	// ウィンドウサイズ
+	SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 32);
+	ChangeWindowMode(true);
+
+	//FPS制御初期化
+	fpsController_ = std::make_unique<FpsController>(FRAME_RATE);
+
+	// DxLibの初期化
+	SetUseDirect3DVersion(DX_DIRECT3D_11);
+	isInitFail_ = false;
+	if (DxLib_Init() == -1)
+	{
+		isInitFail_ = true;
+		return;
+	}
+
+	// Effekseerの初期化
+	InitEffekseer();
+
+	// 乱数のシード値を設定する
+	DATEDATA date;
+
+	// 現在時刻を取得する
+	GetDateTime(&date);
+
+	// 乱数の初期値を設定する
+	// 設定する数値によって、ランダムの出方が変わる
+	SRand(date.Year + date.Mon + date.Day + date.Hour + date.Min + date.Sec);
+
+	// 入力制御初期化
+	SetUseDirectInputFlag(true);
+	InputManager::CreateInstance();
+
+	// リソース管理初期化
+	ResourceManager::CreateInstance();
+
+	// シーン管理初期化
+	SceneManager::CreateInstance();
+
+	//サウンド管理初期化
+	SoundManager::CreateInstance();
+}
+
+void Application::Run(void)
+{
+
+	InputManager& inputManager = InputManager::GetInstance();
+	SceneManager& sceneManager = SceneManager::GetInstance();
+
+	// ゲームループ
+	while (ProcessMessage() == 0 && isQuit_ == false)
+	{
+
+		inputManager.Update();
+		sceneManager.Update();
+		UpdateEffekseer3D();
+
+		sceneManager.Draw();
+		Effekseer_Sync3DSetting();
+		DrawEffekseer3D();
+
+#ifdef _DEBUG
+		// 平均FPS描画
+		//fpsController_->Draw();
+#endif // _DEBUG
+
+		ScreenFlip();
+
+		// 理想FPS経過待ち
+		fpsController_->Wait();
+
+	}
+
+}
+
+void Application::Destroy(void)
+{
+	//サウンド管理解放
+	SoundManager::CreateInstance();
+
+	// シーン管理解放
+	SceneManager::GetInstance().Destroy();
+
+	InputManager::GetInstance().Destroy();
+	ResourceManager::GetInstance().Destroy();
+	
+
+	// Effekseerを終了する。
+	Effkseer_End();
+
+	if (fpsController_) {
+		fpsController_.reset();
+	}
+
+	// DxLib終了
+	if (DxLib_End() == -1)
+	{
+		isReleaseFail_ = true;
+	}
+
+	// インスタンスのメモリ解放
+	delete instance_;
+
+}
+
+bool Application::IsInitFail(void) const
+{
+	return isInitFail_;
+}
+
+bool Application::IsReleaseFail(void) const
+{
+	return isReleaseFail_;
+}
+
+Application::Application(void)
+	:
+	isInitFail_(false),
+	isReleaseFail_(false),
+	fpsController_(nullptr)
+{
+}
+
+void Application::InitEffekseer(void)
+{
+	if (Effekseer_Init(8000) == -1)
+	{
+		DxLib_End();
+	}
+
+	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+}
