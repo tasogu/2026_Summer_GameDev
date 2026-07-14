@@ -27,9 +27,21 @@ void ModelFrameUtility::SetFrameWorldMatrix(const Transform& follow, int followF
 	VECTOR scl;
 	MATRIX matRot;
 	VECTOR pos;
+	
+	//pos = follow.pos;
 
 	GetFrameWorldMatrix(follow.modelId, followFrameIdx, scl, matRot, pos);
 
+	//VECTOR‚ðMATRIX‚É•ÏŠ·
+	MATRIX localMatRot = MGetRotX(localRot.x);
+	localMatRot = MMult(localMatRot, MGetRotY(localRot.y));
+	localMatRot = MMult(localMatRot, MGetRotZ(localRot.z));
+
 	//ˆÊ’u‚ð”½‰f
 	target.pos = pos;
+
+	//Œ•‚Ì‰ñ“]
+	target.matRot = MMult(localMatRot, matRot);
+
+	
 }

@@ -134,7 +134,8 @@ void Player::UpdatePlay(void)
 	//プレイヤーの回転の更新
 	transform_.quaRot = playerRotY_;
 
-
+	//ソードの更新
+	sword_->Update();
 }
 
 void Player::ChangeState(STATE state)
@@ -219,9 +220,6 @@ void Player::InitLoad(void)
 	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER)->handleId_);
 
 
-	//剣の攻撃対象と攻撃力をセット
-	sword_->SetWeaponProperty(ColliderBase::TAG::ENEMY, PLAYER_POW);
-
 	//モデルの手のボーンを取得
 	handBoneid_ = MV1SearchFrame(transform_.modelId, "mixamorig:RightHand");
 	
@@ -231,6 +229,9 @@ void Player::InitLoad(void)
 	//剣のモデルのロード
 	sword_ = std::make_unique<Sword>(transform_, handBoneid_);
 	sword_->Init();
+
+	//剣の攻撃対象と攻撃力をセット
+	sword_->SetWeaponProperty(ColliderBase::TAG::ENEMY, PLAYER_POW);
 
 	//----------------------------------------------------------------------
 	//とりあえずの体力表示

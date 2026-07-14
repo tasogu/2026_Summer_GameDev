@@ -1,4 +1,3 @@
-#include ",,/../../../../Utility/AsoUtility.h"
 #include "../../Common/Transform.h"
 #include "../../../Manager/ResourceManager.h"
 #include "../../../Manager/ColliderManager.h"
@@ -16,7 +15,9 @@ Sword::Sword(const Transform& followTransform, int followFrameId)
 	targetTag_(),
 	swordPow_(0),
 	followTransform_(followTransform),
-	followFrameId_(followFrameId)
+	followFrameId_(followFrameId),
+	localPos_(AsoUtility::VECTOR_ZERO),
+	localRot_({ AsoUtility::Deg2RadF(SWORD_LOCAL_ROTX), AsoUtility::Deg2RadF(SWORD_LOCAL_ROTY), SWORD_LOCAL_ROTZ })
 {
 }
 
@@ -47,10 +48,15 @@ void Sword::Init(void)
 
 void Sword::Update(void)
 {
-	ModelFrameUtility::SetFrameWorldMatrix(followTransform_, followFrameId_, transform_, transform_.pos, transform_.rot);
+	ModelFrameUtility::SetFrameWorldMatrix(followTransform_, followFrameId_, transform_, localPos_, localRot_);
 
 	//モデルの情報をTransformに反映させる
 	//transform_.pos = MV1GetPosition(transform_.modelId);
+
+	transform_.quaRot = Quaternion::GetRotation(transform_.matRot);
+
+	//大きさ・回転・座標をモデルに反映
+	transform_.Update();
 
 }
 
