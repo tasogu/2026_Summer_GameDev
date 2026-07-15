@@ -8,7 +8,7 @@
 #include "../../../Manager/ColliderManager.h"
 #include "CharactorBase.h"
 
-CharactorBase::CharactorBase(void)
+CharactorBase::CharactorBase(float weight, float decayRate)
 	:
 	ActorBase(),
 	isGround_(false),
@@ -18,8 +18,8 @@ CharactorBase::CharactorBase(void)
 	movePos_(),
 	jumpPow_(),
 	speed_(),
-	animationController_(nullptr)
-
+	animationController_(nullptr),
+	knockBack_(weight,decayRate)
 
 {
 }
@@ -244,11 +244,21 @@ void CharactorBase::CollisionCapsule(void)
 	}
 }
 
-void CharactorBase::OnDamage(int damage)
+void CharactorBase::OnDamage(int damage, VECTOR diff, float knockBackPow)
 {
 	hp_ -= damage;
-		if (hp_ <= 0) {
-			Destroy();
-		}
+	knockBack_.Init(diff, knockBackPow);
+	OnStartKnockBack();
+}
+
+void CharactorBase::UpdateKnockBack(void) {
+	movePow_ = knockBack_.GetMovePow();
+
+	knockBack_.Decay();
+
+	//ノックバックが終わったらい次へ
+	if (knockBack_.IsEnd()) {
+		OnEndKnockBack();
+	}
 }
 

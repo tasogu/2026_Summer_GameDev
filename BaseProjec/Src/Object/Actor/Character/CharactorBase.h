@@ -3,9 +3,10 @@
 #include<memory>
 #include <Dxlib.h>
 #include "../../Actor/ActorBase.h"
+#include "../KnockBack.h"
 class AnimationController;
 
-class CharactorBase : public ActorBase
+class CharactorBase : public ActorBase 
 {
 public:
 
@@ -14,6 +15,8 @@ public:
 	{
 		NONE,
 		PLAY,
+		KNOCKBACK,
+		DEAD
 	};
 
 	//アニメーションタイプ
@@ -23,12 +26,13 @@ public:
 		WALK,
 		RUN,
 		ATTACK,
-		ROLL
+		ROLL,
+		KNOCKBACK,
 	};
 
 
 	//コンストラクタ
-	CharactorBase(void);
+	CharactorBase(float weight, float decayRate);
 
 	//デストラクタ
 	virtual ~CharactorBase(void) override;
@@ -70,9 +74,12 @@ public:
 	void Destroy(void) { isDead_ = true; }
 
 	//ダメージ処理
-	void OnDamage(int damage)override;
+	void OnDamage(int damage, VECTOR diff, float knockBackPow) override;
+
+	KnockBack knockBack_;
 
 protected:
+
 	//アニメーションコントローラーの呼び出し
 	//AnimationController* animationController_;
 	std::unique_ptr<AnimationController> animationController_;
@@ -133,5 +140,13 @@ protected:
 
 	void CollisionCapsule(void);
 
+	// ノックバック開始処理
+	virtual void OnStartKnockBack(void) {}
+
+	// ノックバック更新処理
+	void UpdateKnockBack(void);
+
+	//ノックバックの終了処理
+	virtual void OnEndKnockBack(void) {};
 };
 

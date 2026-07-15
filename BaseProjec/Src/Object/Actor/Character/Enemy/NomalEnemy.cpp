@@ -15,7 +15,7 @@
 
 NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
 	:
-	EnemyBase(data)
+	EnemyBase(data,50.0f,0.0f)
 {
 	isAttack_ = false;
 	imgSword_ = -1;
@@ -28,6 +28,7 @@ NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
 	//初期座標の設定
 	transform_.pos = data.defaultPos;
 	hp_ = data.hp;
+	stageType_ = STAGE_TYPE::STAGE1;
 }
 
 NomalEnemy::~NomalEnemy(void)
@@ -185,6 +186,9 @@ void NomalEnemy::UpdateProcess(void)
 	case STATE::PLAY:
 		UpdatePlay();
 		break;
+	case STATE::KNOCKBACK:
+		UpdateKnockBack();
+		break;
 	}
 
 }
@@ -194,11 +198,8 @@ void NomalEnemy::UpdateProcessPost(void)
 	//更新
 	transform_.Update();
 
-	//位置を取得
-	MATRIX handMatrix = MV1GetFrameLocalWorldMatrix(transform_.modelId, handBoneid_);
-
-	//剣の位置を手の位置に更新
-	sword_->UpdatePose(handMatrix);
+	//ソードの更新
+	sword_->Update();
 
 }
 
@@ -210,6 +211,7 @@ void NomalEnemy::UpdatePlay(void)
 {
 	//アニメーションの更新
 	animationController_->Update();
+
 
 	//HPバーの更新
 	VECTOR barPos = VAdd(transform_.pos, HP_BAR_OFFSET);
@@ -250,15 +252,15 @@ void NomalEnemy::ChangeState(STATE state)
 {
 	state_ = state;
 
-	switch (state_)
-	{
-	case STATE::NONE:
-		ChangeStateNone();
-		break;
-	case STATE::PLAY:
-		ChangeStatePlay();
-		break;
-	}
+	//switch (state_)
+	//{
+	//case STATE::NONE:
+	//	ChangeStateNone();
+	//	break;
+	//case STATE::PLAY:
+	//	ChangeStatePlay();
+	//	break;
+	//}
 
 }
 
@@ -387,4 +389,19 @@ void NomalEnemy::Cooldown(void)
 	}
 }
 
+void NomalEnemy::OnStartKnockBack(void)
+{
+	//ノックバック状態へ移行
+	ChangeState(STATE::KNOCKBACK);
+}
 
+void NomalEnemy::OnEndKnockBack(void)
+{
+	//ノックバック終了後はプレイに戻る
+	ChangeState(STATE::PLAY);
+
+	if (hp_ <= 0.0f) {
+		//プレイヤー死亡状態へ移行
+		ChangeState(STATE::DEAD);
+	}
+}

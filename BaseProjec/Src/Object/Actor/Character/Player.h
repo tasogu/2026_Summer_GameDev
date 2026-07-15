@@ -111,9 +111,6 @@ private:
 	//回避の再使用待ち秒数
 	static constexpr float EVASION_COOL = 0.8f;
 
-	void OnDamage(int damage) override;
-
-
 	//HPバー用画像ハンドル
 	int imgHpFrame_;
 	int imgHpRed_;
@@ -169,5 +166,10 @@ private:
 	//移動方向への回転
 	void Rotate(void);
 
+	// ノックバック開始処理
+	void OnStartKnockBack(void) override;
+
+	//ノックバックの終了処理
+	void OnEndKnockBack(void) override;
 
 };

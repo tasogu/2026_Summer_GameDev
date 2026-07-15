@@ -75,5 +75,5 @@ protected:
 	virtual void InitPost(void) = 0;
 
 	//ƒ_ƒ[ƒWˆ—
-	virtual void OnDamage(int damage) {};
+	virtual void OnDamage(int damage, VECTOR diff, float knockBackPow) {};
 };

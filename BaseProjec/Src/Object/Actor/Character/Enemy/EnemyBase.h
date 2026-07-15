@@ -5,6 +5,8 @@ class Player;
 class EnemyBase : public CharactorBase
 {
 public:
+	
+
 	enum class ENEMY_TYPE
 	{
 		NOMAL,
@@ -18,6 +20,7 @@ public:
 		TURN,		//向きを合わせる
 		ATTACK,	
 		COOLDOWN,	//硬直
+
 	};
 
 	//エネミーデータ
@@ -40,7 +43,7 @@ public:
 	float coolTime_;
 
 	//コンストラクタ
-	EnemyBase(const EnemyBase::EnemyData& data);
+	EnemyBase(const EnemyBase::EnemyData& data, float weight, float decayRate);
 
 	//デストラクタ
 	~EnemyBase(void) override;
@@ -98,6 +101,12 @@ private:
 	//更新系(純粋仮想関数)
 	virtual void UpdateProcess(void) = 0;
 	virtual void UpdateProcessPost(void) = 0;
+
+	// ノックバック開始処理
+	virtual void OnStartKnockBack(void) {}
+
+	//ノックバックの終了処理
+	virtual void OnEndKnockBack(void) {};
 
 protected:
 	//bool isDead_;

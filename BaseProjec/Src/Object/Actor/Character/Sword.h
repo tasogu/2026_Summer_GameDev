@@ -12,8 +12,8 @@ public:
 	void Update(void);
 	void Draw(void);
 
-	//プレイヤーから行列を受け取って糸を反映するメソッド
-	void UpdatePose(MATRIX handMatrix);
+	////プレイヤーから行列を受け取って糸を反映するメソッド
+	//void UpdatePose(MATRIX handMatrix);
 
 	// 多段ヒット（チェーンソー化）を防ぐためのメモ帳
 	std::vector<ActorBase*> hitActors_;
@@ -37,7 +37,10 @@ private:
 	// 衝突判定用カプセル下部球体
 	static constexpr VECTOR COL_CAPSULE_DOWN_LOCAL_POS = { 0.0f, -20.0f, 0.0f };
 
-	static constexpr float SWORD_LOCAL_ROTX =- 45.0f;
+	//剣の持ち方の修正
+	static constexpr VECTOR SWORD_POS = { 0.0f, 10.f, -4.0f };
+
+	static constexpr float SWORD_LOCAL_ROTX =- 55.0f;
 	static constexpr float SWORD_LOCAL_ROTY =  -90.0f;
 	static constexpr float SWORD_LOCAL_ROTZ = 0.0f ;
 

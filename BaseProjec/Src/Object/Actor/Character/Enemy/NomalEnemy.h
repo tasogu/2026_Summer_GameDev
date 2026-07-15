@@ -26,6 +26,7 @@ public:
 	//解放
 	void Release(void);
 private:
+
 	std::unique_ptr<Sword> sword_;
 
 	std::unique_ptr<HpBar> hpBar_;
@@ -124,5 +125,11 @@ private:
 
 	//硬直
 	void Cooldown(void);
+
+	// ノックバック開始処理
+	void OnStartKnockBack(void)	override;
+
+	void OnEndKnockBack(void) override;
+
 };
 

@@ -16,7 +16,7 @@ Sword::Sword(const Transform& followTransform, int followFrameId)
 	swordPow_(0),
 	followTransform_(followTransform),
 	followFrameId_(followFrameId),
-	localPos_(AsoUtility::VECTOR_ZERO),
+	localPos_(SWORD_POS),
 	localRot_({ AsoUtility::Deg2RadF(SWORD_LOCAL_ROTX), AsoUtility::Deg2RadF(SWORD_LOCAL_ROTY), SWORD_LOCAL_ROTZ })
 {
 }
@@ -121,40 +121,40 @@ void Sword::SetWeaponProperty(ColliderBase::TAG targetTag, float pow)
 
 }
 
-void Sword::UpdatePose(MATRIX handMatrix)
-{
-	//プレイヤーの回転行列
-	MATRIX rotMat = handMatrix;
-
-	a += 0.1f;
-
-	//剣の構え角度
-	MATRIX rotX = MGetRotX(AsoUtility::Deg2RadF(ROTX));
-	MATRIX rotY = MGetRotY(AsoUtility::Deg2RadF(ROTY));
-	//MATRIX rotY = MGetRotX(AsoUtility::Deg2RadF(a));
-	MATRIX rotZ = MGetRotZ(AsoUtility::Deg2RadF(ROTZ));
-
-	MATRIX stanceMat = MMult(MMult(rotZ, rotX), rotY);
-
-	//握り位置のズレ
-	VECTOR LocalOffset = VGet(0.0f, 0.0f, 0.0f);
-	MATRIX offsetMat = MGetTranslate(LocalOffset);
-
-	//回転させてずらす
-	MATRIX localMat = MMult(stanceMat, offsetMat);
-
-	//最終的な回転行列(剣の構え×プレイヤーの向き)
-	MATRIX finalMat = MMult(localMat, rotMat);
-
-	//行列からワールド座標を抜き出す
-	transform_.pos = VGet(finalMat.m[3][0], finalMat.m[3][1], finalMat.m[3][2]);
-
-	//行列からクォータニオンを抜き出す
-	transform_.quaRot = Quaternion::GetRotation(finalMat);
-
-	//自身の行列を更新
-	transform_.Update();
-}
+//void Sword::UpdatePose(MATRIX handMatrix)
+//{
+//	//プレイヤーの回転行列
+//	MATRIX rotMat = handMatrix;
+//
+//	a += 0.1f;
+//
+//	//剣の構え角度
+//	MATRIX rotX = MGetRotX(AsoUtility::Deg2RadF(ROTX));
+//	MATRIX rotY = MGetRotY(AsoUtility::Deg2RadF(ROTY));
+//	//MATRIX rotY = MGetRotX(AsoUtility::Deg2RadF(a));
+//	MATRIX rotZ = MGetRotZ(AsoUtility::Deg2RadF(ROTZ));
+//
+//	MATRIX stanceMat = MMult(MMult(rotZ, rotX), rotY);
+//
+//	//握り位置のズレ
+//	VECTOR LocalOffset = VGet(0.0f, 0.0f, 0.0f);
+//	MATRIX offsetMat = MGetTranslate(LocalOffset);
+//
+//	//回転させてずらす
+//	MATRIX localMat = MMult(stanceMat, offsetMat);
+//
+//	//最終的な回転行列(剣の構え×プレイヤーの向き)
+//	MATRIX finalMat = MMult(localMat, rotMat);
+//
+//	//行列からワールド座標を抜き出す
+//	transform_.pos = VGet(finalMat.m[3][0], finalMat.m[3][1], finalMat.m[3][2]);
+//
+//	//行列からクォータニオンを抜き出す
+//	transform_.quaRot = Quaternion::GetRotation(finalMat);
+//
+//	//自身の行列を更新
+//	transform_.Update();
+//}
 
 void Sword::ExecuteStrike(void)
 {
@@ -165,7 +165,6 @@ void Sword::ExecuteStrike(void)
 	// カプセルコライダ情報
 	const ColliderCapsule* swordCapsule =
 		dynamic_cast<const ColliderCapsule*>(swordColliderBase);
-
 
 	// 登録されている衝突物を全てチェック
 	for (const auto& hitCol : ColliderManager::GetInstance().GetColliders()) {
@@ -190,13 +189,23 @@ void Sword::ExecuteStrike(void)
 
 		if (character == nullptr) continue;
 
-		//敵の死亡判定
-		character->OnDamage(swordPow_);
 
 		SoundManager::GetInstance().PlaySE(SoundManager::SE_ID::HIT);
 		//printfDx("敵を倒した！\n");
 
 		hitActors_.push_back(owner);
+
+		// カプセルコライダ情報
+		const ColliderCapsule* hitCapsule =
+			dynamic_cast<const ColliderCapsule*>(hitCol);
+
+		//ノックバック方向
+		VECTOR diff = VSub(
+			hitCapsule->GetCenter(),
+			swordCapsule->GetCenter());
+
+		//敵の死亡判定
+		character->OnDamage(swordPow_, diff, 30.0f);
 
 	}
 }

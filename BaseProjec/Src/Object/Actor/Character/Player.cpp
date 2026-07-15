@@ -20,7 +20,7 @@ Player::Player(STAGE_TYPE stageType)
 	:
 	sword_(nullptr),
 	imgPlayer_(-1),
-	CharactorBase(),
+	CharactorBase(50.0f, 0.08),
 	stageType_(stageType)
 {	
 	playerRotY_ = Quaternion();
@@ -49,7 +49,6 @@ Player::Player(STAGE_TYPE stageType)
 Player::~Player(void)
 {
 
-	//delete sword_;
 }
 
 void Player::Init(void)
@@ -85,6 +84,11 @@ void Player::UpdateProcess(void)
 	case Player::STATE::PLAY:
 		UpdatePlay();
 		break;
+	case Player::STATE::KNOCKBACK:
+		UpdateKnockBack();
+		break;
+	case Player::STATE::DEAD:
+		break;
 	}
 
 }
@@ -94,11 +98,9 @@ void Player::UpdateProcessPost(void)
 	//更新
 	transform_.Update();
 
-	//位置を取得
-	MATRIX handMatrix = MV1GetFrameLocalWorldMatrix(transform_.modelId, handBoneid_);
+		//ソードの更新
+	sword_->Update();
 
-	////剣の位置を手の位置に更新
-	//sword_->UpdatePose(handMatrix);
 
 }
 
@@ -134,8 +136,6 @@ void Player::UpdatePlay(void)
 	//プレイヤーの回転の更新
 	transform_.quaRot = playerRotY_;
 
-	//ソードの更新
-	sword_->Update();
 }
 
 void Player::ChangeState(STATE state)
@@ -143,15 +143,18 @@ void Player::ChangeState(STATE state)
 	
 	state_ = state;
 
-	switch (state_)
-	{
-	case Player::STATE::NONE:
-		ChangeStateNone();
-		break;
-	case Player::STATE::PLAY:
-		ChangeStatePlay();
-		break;
-	}
+	//switch (state_)
+	//{
+	//case Player::STATE::NONE:
+	//	ChangeStateNone();
+	//	break;
+	//case Player::STATE::PLAY:
+	//	ChangeStatePlay();
+	//	break;
+	//case Player::STATE::KNOCKBACK:
+	//	break;
+	//	case Play
+	//}
 }
 
 void Player::ChangeStateNone(void)
@@ -434,6 +437,7 @@ void Player::ProcessAttack(void)
 		//アニメーション途中から当たり判定を開始
 		if (nowTime >= 15.0f && nowTime <= 30.0f) {
 			sword_->ExecuteStrike();
+
 		}
 
 		//攻撃アニメーションが終了したら
@@ -504,15 +508,6 @@ void Player::ProcessEvasion(void)
 	}
 }
 
-void Player::OnDamage(int damage)
-{
-	//回避中は無敵
-	if (isEvasion_ == true) return;
-
-	//通常のダメージ
-	CharactorBase::OnDamage(damage);
-}
-
 //----------------------------------------------------------------------------------------
 
 void Player::SetGoalRotate(double rotRad)
@@ -540,5 +535,22 @@ void Player::Rotate(void)
 	//回転の球面補間
 	playerRotY_ = Quaternion::Slerp(
 		playerRotY_, goalQuaRot_, (TIME_ROT - stepRotTime_) / TIME_ROT);
+}
+
+void Player::OnStartKnockBack(void)
+{
+	//ノックバック状態へ移行
+	ChangeState(STATE::KNOCKBACK);
+}
+
+void Player::OnEndKnockBack(void)
+{
+	//ノックバック終了後はプレイに戻る
+	ChangeState(STATE::PLAY);
+
+	if (hp_ <= 0.0f) {
+		//プレイヤー死亡状態へ移行
+		ChangeState(STATE::DEAD);
+	}
 }
 

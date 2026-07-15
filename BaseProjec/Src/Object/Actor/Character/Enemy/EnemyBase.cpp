@@ -4,10 +4,9 @@
 #include "../Player.h"
 #include "EnemyBase.h"
 
-EnemyBase::EnemyBase(const EnemyBase::EnemyData& data)
+EnemyBase::EnemyBase(const EnemyBase::EnemyData& data, float weight, float decayRate)
 	:
-	CharactorBase()
-
+	CharactorBase(weight,decayRate)
 
 {
 	isDead_ = false;

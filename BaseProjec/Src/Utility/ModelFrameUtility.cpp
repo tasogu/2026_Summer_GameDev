@@ -43,5 +43,8 @@ void ModelFrameUtility::SetFrameWorldMatrix(const Transform& follow, int followF
 	//Œ•‚Ì‰ñ“]
 	target.matRot = MMult(localMatRot, matRot);
 
-	
+	//Œ•‚ÌˆÊ’u‚ğC³
+	VECTOR rotatedLocalPos = VTransform(localPos, matRot);
+	target.pos = VAdd(pos ,rotatedLocalPos);
+
 }
