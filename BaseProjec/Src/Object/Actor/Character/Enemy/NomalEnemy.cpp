@@ -15,7 +15,7 @@
 
 NomalEnemy::NomalEnemy(const EnemyBase::EnemyData& data)
 	:
-	EnemyBase(data,50.0f,0.0f)
+	EnemyBase(data,50.0f,0.08)
 {
 	isAttack_ = false;
 	imgSword_ = -1;
@@ -177,6 +177,11 @@ void NomalEnemy::InitPost(void)
 
 void NomalEnemy::UpdateProcess(void)
 {
+
+	//HPバーの更新
+	VECTOR barPos = VAdd(transform_.pos, HP_BAR_OFFSET);
+	hpBar_->Update(barPos, hp_);
+
 	//更新ステップ
 	switch (state_)
 	{
@@ -212,10 +217,9 @@ void NomalEnemy::UpdatePlay(void)
 	//アニメーションの更新
 	animationController_->Update();
 
-
-	//HPバーの更新
-	VECTOR barPos = VAdd(transform_.pos, HP_BAR_OFFSET);
-	hpBar_->Update(barPos, hp_);
+	////HPバーの更新
+	//VECTOR barPos = VAdd(transform_.pos, HP_BAR_OFFSET);
+	//hpBar_->Update(barPos, hp_);
 
 	switch (enemyActive_)
 	{
@@ -398,6 +402,7 @@ void NomalEnemy::OnStartKnockBack(void)
 void NomalEnemy::OnEndKnockBack(void)
 {
 	//ノックバック終了後はプレイに戻る
+	enemyActive_ = ENEMY_ACTIVE::MOVE;
 	ChangeState(STATE::PLAY);
 
 	if (hp_ <= 0.0f) {
