@@ -123,25 +123,6 @@ void EnemyManager::LoadData(void)
 		break;
 
 	}
-	////一体目
-	//data.id = 0;
-	////種別
-	//data.type = EnemyBase::ENEMY_TYPE::NOMAL;
-	////HP
-	//data.hp = 60;
-	////初期座標
-	//data.defaultPos = { 200.0f, 200.0f, 200.0f };
-	////エネミー生成
-	//Create(data);
-
-	////二体目
-	//data.id = 1;
-	////初期座標
-	//data.defaultPos = { 250.0f, 0.0f, 150.0f };
-	////生成
-	//Create(data);
-
-
 }
 
 std::shared_ptr<EnemyBase> EnemyManager::Create(const EnemyBase::EnemyData& data)
@@ -167,9 +148,10 @@ std::shared_ptr<EnemyBase> EnemyManager::Create(const EnemyBase::EnemyData& data
 
 void EnemyManager::ProcessPushOut(Player* player)
 {
-	//敵 vs プレイヤー(敵が一方的に退く)
+	//敵 vs プレイヤー
 	for (auto& enemy : enemies_)
 	{
+		if (enemy->IsPushable() == false)continue;
 		VECTOR diff = VSub(enemy->GetTransform().pos, player->GetTransform().pos);
 		diff.y = 0.0f;                             // XZ平面のみ
 		float distance = VSize(diff);
@@ -193,6 +175,9 @@ void EnemyManager::ProcessPushOut(Player* player)
 	{
 		for (size_t j = i + 1; j < enemies_.size(); ++j)
 		{
+			if (enemies_[i]->IsPushable() == false) continue;
+			if (enemies_[j]->IsPushable() == false) continue;
+
 			VECTOR diff = VSub(enemies_[i]->GetTransform().pos,
 				enemies_[j]->GetTransform().pos);
 			diff.y = 0.0f;

@@ -127,6 +127,12 @@ private:
 	//更新ステップ(PLAY)
 	void UpdatePlay(void)override;
 
+	//ダメージアニメーション終了
+	void UpdateEndKnockBac(void);
+
+	//プレイヤーの死亡
+	void UpdateDead(void);
+
 	//Stateの切り替え
 	void ChangeState(STATE state) override;
 
@@ -171,5 +177,4 @@ private:
 
 	//ノックバックの終了処理
 	void OnEndKnockBack(void) override;
-
 };

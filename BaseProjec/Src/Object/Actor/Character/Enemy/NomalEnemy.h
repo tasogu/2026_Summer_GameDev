@@ -25,6 +25,8 @@ public:
 
 	//解放
 	void Release(void);
+
+	bool IsPushable(void) const override;
 private:
 
 	std::unique_ptr<Sword> sword_;
@@ -49,7 +51,7 @@ private:
 	static constexpr VECTOR COL_LINE_START_LOCAL_POS = { 0.0f, 80.0f, 0.0f };
 
 	// 衝突判定用線分終了
-	static constexpr VECTOR COL_LINE_END_LOCAL_POS = { 0.0f, -10.0f, 0.0f };
+	static constexpr VECTOR COL_LINE_END_LOCAL_POS = { 0.0f, -30.0f, 0.0f };
 
 	// 衝突判定用カプセル上部球体
 	static constexpr VECTOR COL_CAPSULE_TOP_LOCAL_POS = { 0.0f, 110.0f, 0.0f };
@@ -103,6 +105,9 @@ private:
 	//更新ステップ(PLAY)
 	void UpdatePlay(void)override;
 
+	//更新ステップ(DEAD)
+	void UpdateDead(void);
+
 	//Stateの切り替え
 	void ChangeState(STATE state) override;
 
@@ -129,6 +134,7 @@ private:
 	// ノックバック開始処理
 	void OnStartKnockBack(void)	override;
 
+	//ノックバック終了処理
 	void OnEndKnockBack(void) override;
 
 };

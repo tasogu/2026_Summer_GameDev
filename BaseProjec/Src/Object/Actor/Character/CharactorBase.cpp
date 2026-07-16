@@ -74,8 +74,16 @@ void CharactorBase::Draw(void)
 
 void CharactorBase::DelayRotate(void)
 {
-	// 移動方向から回転に変換する
-	Quaternion goalRot = Quaternion::LookRotation(moveDir_);
+	
+	// Y成分を除いた平面方向を作る
+	VECTOR flatDir = moveDir_;
+	flatDir.y = 0.0f;
+
+	// 平面方向がほぼゼロなら回転しない
+	if (VSize(flatDir) < 0.01f) return;
+
+	// 平面方向から回転に変換する
+	Quaternion goalRot = Quaternion::LookRotation(flatDir);   // ← flatDir を渡す!
 
 	// 回転の補間
 	transform_.quaRot =
@@ -105,9 +113,13 @@ void CharactorBase::CalcGravityPow(void)
 
 void CharactorBase::Collision(void)
 {
+
+	VECTOR p0 = transform_.pos;
+
 	//移動処理
 	transform_.pos = VAdd(transform_.pos, movePow_);
 
+	VECTOR p1 = transform_.pos;
 	//衝突(カプセル)
 	CollisionCapsule();
 
@@ -119,6 +131,12 @@ void CharactorBase::Collision(void)
 
 	// 衝突(重力)
 	CollisionGravity();
+
+	VECTOR p2 = transform_.pos;
+
+	printfDx("move:%.2f capsule:%.2f\n",
+		VSize(VSub(p1, p0)),     // ①が動かした量
+		VSize(VSub(p2, p1)));    // ②が動かした量
 }
 
 void CharactorBase::CollisionGravity(void)
@@ -156,6 +174,7 @@ void CharactorBase::CollisionGravity(void)
 		//判定結果を使って位置修正
 		if (res.isHit)
 		{
+			printfDx("[%p] GND hit y=%.1f (col=%p)\n", this, res.hitPos.y, hitCol);
 			transform_.pos = res.hitPos;
 			isGround_ = true;
 		}
@@ -169,6 +188,7 @@ void CharactorBase::CollisionGravity(void)
 
 void CharactorBase::CollisionCapsule(void)
 {
+	return;
 	// カプセルコライダ
 	int capsuleType = static_cast<int>(COLLIDER_TYPE::CAPSULE);
 
@@ -210,6 +230,8 @@ void CharactorBase::CollisionCapsule(void)
 				continue;
 			}
 
+			if (hit.Normal.y >= 0.4)continue;
+			printfDx("[%p] WALL n.y=%.2f\n", this, hit.Normal.y);
 			// 指定された回数と距離で三角形の法線方向に押し戻す
 			transform_.pos =
 				colliderCapsule->GetPosPushBackAlongNormal(

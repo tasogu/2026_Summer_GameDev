@@ -94,12 +94,12 @@ void GameScene::Update(void)
 			//フェードの更新
 			fader_->Update();
 
-
 			//プレイヤーが死んだら
-			if (player_->IsDead()) {
+			if (player_->IsDead() == true) {
 				sceMng_.ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
 			}
 
+			//エネミーがすべて死んだら
 			else if (enemy_->IsAllDead())
 			{
 				if (stageType_ == STAGE_TYPE::STAGE2) {
@@ -111,6 +111,7 @@ void GameScene::Update(void)
 			}
 		break;
 		case GAME_TYPE::WAIT_PORTAL:
+			//ワープポータル更新
 			warpPortal_->Update();
 
 			//ステージの更新
@@ -186,6 +187,7 @@ void GameScene::Release(void)
 	//エネミーの開放
 	enemy_->Release();
 
+	//ワープポータルの開放
 	warpPortal_->Release();
 }
 
@@ -217,7 +219,7 @@ void GameScene::LoadNextStage()
 		break;
 	}
 	case 3:
-		/////仮ワープステージ描画
+		/////ワープステージ描画
 		warpPortal_->Release();
 		warpPortal_ = std::make_unique<WarpPortal>();
 		warpPortal_->Init();

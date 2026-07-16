@@ -79,6 +79,24 @@ void NomalEnemy::Release(void)
 	sword_->Release();
 }
 
+bool NomalEnemy::IsPushable(void) const
+{
+	if (state_ == STATE::KNOCKBACK || state_ == STATE::DEAD) {
+		return false;
+	}
+	if (enemyActive_ == ENEMY_ACTIVE::TURN) {
+		return false;
+	}
+	if (enemyActive_ == ENEMY_ACTIVE::ATTACK) {
+		return false;
+	}
+	if (enemyActive_ == ENEMY_ACTIVE::COOLDOWN) {
+		return false;
+	}
+
+	return true;
+}
+
 void NomalEnemy::InitLoad(void)
 {
 
@@ -153,6 +171,9 @@ void NomalEnemy::InitAnimation(void)
 	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f, path + "Walk.mv1");
 	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f, path + "Run.mv1");
 	animationController_->Add((int)ANIM_TYPE::ATTACK, 14.0f, path + "Attack.mv1");
+	animationController_->Add((int)ANIM_TYPE::KNOCKBACK, 30.0f, path + "Roll.mv1");
+	animationController_->Add((int)ANIM_TYPE::DEAD, 30.0f, path + "Roll.mv1");
+
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 
@@ -194,8 +215,10 @@ void NomalEnemy::UpdateProcess(void)
 	case STATE::KNOCKBACK:
 		UpdateKnockBack();
 		break;
+	case STATE::DEAD:
+		UpdateDead();
+		break;
 	}
-
 }
 
 void NomalEnemy::UpdateProcessPost(void)
@@ -217,10 +240,6 @@ void NomalEnemy::UpdatePlay(void)
 	//アニメーションの更新
 	animationController_->Update();
 
-	////HPバーの更新
-	//VECTOR barPos = VAdd(transform_.pos, HP_BAR_OFFSET);
-	//hpBar_->Update(barPos, hp_);
-
 	switch (enemyActive_)
 	{
 	case ENEMY_ACTIVE::MOVE:
@@ -241,19 +260,22 @@ void NomalEnemy::UpdatePlay(void)
 		break;
 	}
 
-	
-	////攻撃中ではないなら移動
-	//if (isAttack_ == false) {
-	//	//移動
-	//	ProcessMove();
-
-	//}
-
-
 }
+
+void NomalEnemy::UpdateDead(void)
+{
+	//死亡アニメーションが終了したら消滅
+	if (animationController_->IsEnd()) {
+		Destroy();
+	}
+}
+
 
 void NomalEnemy::ChangeState(STATE state)
 {
+	//移動量を初期化
+	movePow_ = AsoUtility::VECTOR_ZERO;
+
 	state_ = state;
 
 	//switch (state_)
@@ -322,7 +344,7 @@ void NomalEnemy::ProcessMove(void)
 	VECTOR myPos = transform_.pos;
 
 	VECTOR diff = VSub(targetPos, myPos);
-
+	diff.y = 0.0f;
 	float distance = VSize(diff);
 
 	//近づくまで移動
@@ -370,6 +392,7 @@ void NomalEnemy::TurnMove(void)
 	VECTOR myPos = transform_.pos;
 
 	VECTOR diff = VSub(targetPos, myPos);
+	diff.y = 0.0f;
 
 	moveDir_ = VNorm(diff);
 
@@ -379,9 +402,6 @@ void NomalEnemy::TurnMove(void)
 
 void NomalEnemy::Cooldown(void)
 {
-	// 近づきすぎないように止まる
-	movePow_ = AsoUtility::VECTOR_ZERO;
-
 
 	//硬直秒数を減らす
 	coolTime_ -= scnMng_.GetDeltaTime();
@@ -401,12 +421,18 @@ void NomalEnemy::OnStartKnockBack(void)
 
 void NomalEnemy::OnEndKnockBack(void)
 {
-	//ノックバック終了後はプレイに戻る
-	enemyActive_ = ENEMY_ACTIVE::MOVE;
-	ChangeState(STATE::PLAY);
 
 	if (hp_ <= 0.0f) {
+
+		animationController_->Play((int)ANIM_TYPE::DEAD, false);
+
 		//プレイヤー死亡状態へ移行
 		ChangeState(STATE::DEAD);
+	}
+	else
+	{
+		//ノックバック終了後はプレイに戻る
+		enemyActive_ = ENEMY_ACTIVE::MOVE;
+		ChangeState(STATE::PLAY);
 	}
 }

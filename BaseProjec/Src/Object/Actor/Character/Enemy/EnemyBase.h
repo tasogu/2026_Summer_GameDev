@@ -65,6 +65,7 @@ public:
 
 	void AddPosCorrection(const VECTOR& correction);
 
+	virtual bool IsPushable(void) const { return true; }
 private:
 	Player* targetPlayer_;
 	
@@ -80,8 +81,8 @@ private:
 	// 衝突判定用カプセル下部球体
 	static constexpr VECTOR COL_CAPSULE_DOWN_LOCAL_POS = { 0.0f, 30.0f, 0.0f };
 
-	// 衝突判定用カプセル球体半径
-	static constexpr float COL_CAPSULE_RADIUS = 80.0f;
+	//// 衝突判定用カプセル球体半径
+	//static constexpr float COL_CAPSULE_RADIUS = 80.0f;
 
 	// リソースロード
 	virtual void InitLoad(void) = 0;

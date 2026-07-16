@@ -27,7 +27,7 @@ public:
 	//解放
 	void Release(void);
 
-	//エネミー志望
+	//エネミー死亡
 	bool IsAllDead(void);
 
 	//エネミー

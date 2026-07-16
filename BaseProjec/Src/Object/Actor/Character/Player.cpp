@@ -87,7 +87,11 @@ void Player::UpdateProcess(void)
 	case Player::STATE::KNOCKBACK:
 		UpdateKnockBack();
 		break;
+	case Player::STATE::KNOCKBACKEND:
+		UpdateEndKnockBac();
+		break;
 	case Player::STATE::DEAD:
+		UpdateDead();
 		break;
 	}
 
@@ -98,16 +102,15 @@ void Player::UpdateProcessPost(void)
 	//更新
 	transform_.Update();
 
-		//ソードの更新
+	//ソードの更新
 	sword_->Update();
-
-
 }
 
 
 
 void Player::UpdateNone(void)
 {
+
 }
 
 void Player::UpdatePlay(void)
@@ -136,6 +139,27 @@ void Player::UpdatePlay(void)
 	//プレイヤーの回転の更新
 	transform_.quaRot = playerRotY_;
 
+}
+
+void Player::UpdateEndKnockBac(void)
+{
+	movePow_ = AsoUtility::VECTOR_ZERO;
+
+	if (animationController_->IsEnd()) {
+		//ノックバック終了後はプレイに戻る
+		ChangeState(STATE::PLAY);
+
+
+	}
+}
+
+void Player::UpdateDead(void)
+{
+	//死亡アニメーションが終了
+	if (animationController_->IsEnd()) {
+		isDead_ = true;
+		IsDead();
+	}
 }
 
 void Player::ChangeState(STATE state)
@@ -206,10 +230,7 @@ void Player::Release(void)
 
 bool Player::IsDead(void)
 {
-	if (hp_ <= 0) {
-		return true;
-	}
-	return false;
+	return isDead_;
 }
 
 void Player::InitLoad(void)
@@ -300,6 +321,9 @@ void Player::InitAnimation(void)
 	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f , path + "Run.mv1");
 	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f, path + "Attack.mv1");
 	animationController_->Add((int)ANIM_TYPE::ROLL, 30.0f, path + "Roll.mv1");
+	animationController_->Add((int)ANIM_TYPE::KNOCKBACK, 30.0f, path + "Roll.mv1");
+	animationController_->Add((int)ANIM_TYPE::DEAD, 30.0f, path + "Roll.mv1");
+
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 
@@ -476,7 +500,7 @@ void Player::ProcessEvasion(void)
 		isEvasion_ = true;
 		evasionTime_ = EVASION_TIME;
 
-		//アニメーションを待機に変更
+		//アニメーションを回避に
 		animationController_->Play((int)ANIM_TYPE::ROLL, false);
 
 
@@ -539,18 +563,28 @@ void Player::Rotate(void)
 
 void Player::OnStartKnockBack(void)
 {
+
 	//ノックバック状態へ移行
 	ChangeState(STATE::KNOCKBACK);
 }
 
 void Player::OnEndKnockBack(void)
 {
-	//ノックバック終了後はプレイに戻る
-	ChangeState(STATE::PLAY);
 
 	if (hp_ <= 0.0f) {
+		animationController_->Play((int)ANIM_TYPE::DEAD,false);
+
+
 		//プレイヤー死亡状態へ移行
 		ChangeState(STATE::DEAD);
+	}
+	else
+	{
+		animationController_->Play((int)ANIM_TYPE::KNOCKBACK,false);
+
+	
+		ChangeState(STATE::KNOCKBACKEND);
+
 	}
 }
 
