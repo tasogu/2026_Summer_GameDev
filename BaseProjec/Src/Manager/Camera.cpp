@@ -14,7 +14,9 @@ Camera::Camera(void)
 	rot_(Quaternion::Identity()),
 	rotY_(Quaternion::Identity()),
 	targetPos_(AsoUtility::VECTOR_ZERO),
-	cameraUp_(AsoUtility::DIR_U)
+	cameraUp_(AsoUtility::DIR_U),
+	shakeTime_(),
+	shakePow_()
 {
 	// DxLibの初期設定では、
 	// カメラの位置が x = 320.0f, y = 240.0f, z = (画面のサイズによって変化)、
@@ -80,6 +82,13 @@ void Camera::Release(void)
 void Camera::SetFollow(const Transform* follow)
 {
 	followTransform_ = follow;
+}
+
+void Camera::SetShake(float shakeTime, float shakePow)
+{
+	shakeTime_ = shakeTime;
+
+	shakePow_ = shakePow;
 }
 
 const VECTOR& Camera::GetPos(void) const

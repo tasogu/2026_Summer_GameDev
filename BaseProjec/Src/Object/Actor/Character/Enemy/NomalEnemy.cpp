@@ -153,6 +153,8 @@ void NomalEnemy::InitAnimation(void)
 	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f, path + "Walk.mv1");
 	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f, path + "Run.mv1");
 	animationController_->Add((int)ANIM_TYPE::ATTACK, 14.0f, path + "Attack.mv1");
+	animationController_->Add((int)ANIM_TYPE::KNOCKBACK, 14.0f, path + "Attack.mv1");
+	animationController_->Add((int)ANIM_TYPE::DEAD, 14.0f, path + "Attack.mv1");
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 
@@ -193,6 +195,12 @@ void NomalEnemy::UpdateProcess(void)
 		break;
 	case STATE::KNOCKBACK:
 		UpdateKnockBack();
+		break;
+	case STATE::KNOCKBACKEND:
+		UpdateKnockBackEnd();
+		break;
+	case STATE::DEAD:
+		UpdateDead();
 		break;
 	}
 
@@ -250,6 +258,27 @@ void NomalEnemy::UpdatePlay(void)
 	//}
 
 
+}
+
+void NomalEnemy::UpdateKnockBackEnd(void)
+{
+	//ノックバック終了後はプレイに戻る
+	enemyActive_ = ENEMY_ACTIVE::MOVE;
+
+	//死亡アニメーションが終了したら消す
+	if (animationController_->IsEnd()) {
+
+		state_ = STATE::PLAY;
+	}
+
+}
+
+void NomalEnemy::UpdateDead(void)
+{
+	//死亡アニメーションが終了したら消す
+	if (animationController_->IsEnd()) {
+		Destroy();
+	}
 }
 
 void NomalEnemy::ChangeState(STATE state)
@@ -322,6 +351,7 @@ void NomalEnemy::ProcessMove(void)
 	VECTOR myPos = transform_.pos;
 
 	VECTOR diff = VSub(targetPos, myPos);
+	diff.y = 0.0f;
 
 	float distance = VSize(diff);
 
@@ -370,6 +400,7 @@ void NomalEnemy::TurnMove(void)
 	VECTOR myPos = transform_.pos;
 
 	VECTOR diff = VSub(targetPos, myPos);
+	diff.y = 0.0f;
 
 	moveDir_ = VNorm(diff);
 
@@ -401,12 +432,20 @@ void NomalEnemy::OnStartKnockBack(void)
 
 void NomalEnemy::OnEndKnockBack(void)
 {
-	//ノックバック終了後はプレイに戻る
-	enemyActive_ = ENEMY_ACTIVE::MOVE;
-	ChangeState(STATE::PLAY);
 
 	if (hp_ <= 0.0f) {
+		//死亡アニメを再生
+		animationController_->Play((int)ANIM_TYPE::DEAD, false);
+
 		//プレイヤー死亡状態へ移行
 		ChangeState(STATE::DEAD);
+	}
+	else {
+		
+		//攻撃アニメを再生
+		animationController_->Play((int)ANIM_TYPE::KNOCKBACK, false);
+		
+		ChangeState(STATE::KNOCKBACKEND);
+
 	}
 }

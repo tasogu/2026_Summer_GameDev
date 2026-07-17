@@ -89,10 +89,19 @@ public:
 	// 追従対象の設定
 	void SetFollow(const Transform* follow);
 
+	//シェイク情報を取得
+	void SetShake(float shakeTime, float shakePow);
+
+
 private:
 
 	// カメラが追従対象とするTransform
 	const Transform* followTransform_;
+	//シェイク残り時間
+	float shakeTime_;
+
+	//シェイク強さ
+	float shakePow_;
 
 	// カメラモード
 	MODE mode_;

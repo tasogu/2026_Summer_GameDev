@@ -74,8 +74,11 @@ void CharactorBase::Draw(void)
 
 void CharactorBase::DelayRotate(void)
 {
+	VECTOR floatDir = moveDir_;
+	floatDir.y = 0.0f;
+
 	// ˆÚ“®•ûŒü‚©‚ç‰ñ“]‚É•ÏŠ·‚·‚é
-	Quaternion goalRot = Quaternion::LookRotation(moveDir_);
+	Quaternion goalRot = Quaternion::LookRotation(floatDir);
 
 	// ‰ñ“]‚Ì•âŠÔ
 	transform_.quaRot =

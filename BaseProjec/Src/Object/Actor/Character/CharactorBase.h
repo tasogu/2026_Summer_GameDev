@@ -16,6 +16,7 @@ public:
 		NONE,
 		PLAY,
 		KNOCKBACK,
+		KNOCKBACKEND,
 		DEAD
 	};
 
@@ -28,6 +29,7 @@ public:
 		ATTACK,
 		ROLL,
 		KNOCKBACK,
+		DEAD
 	};
 
 

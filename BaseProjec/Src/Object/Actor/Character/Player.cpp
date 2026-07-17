@@ -87,7 +87,11 @@ void Player::UpdateProcess(void)
 	case Player::STATE::KNOCKBACK:
 		UpdateKnockBack();
 		break;
+	case Player::STATE::KNOCKBACKEND:
+		UpdateKnockBackEnd();
+		break;
 	case Player::STATE::DEAD:
+		UpdateIdle();
 		break;
 	}
 
@@ -135,6 +139,25 @@ void Player::UpdatePlay(void)
 
 	//プレイヤーの回転の更新
 	transform_.quaRot = playerRotY_;
+
+}
+
+void Player::UpdateKnockBackEnd(void)
+{
+	//アニメーションが終了したら
+	if (animationController_->IsEnd())
+	{
+		ChangeState(STATE::PLAY);
+	}
+}
+
+void Player::UpdateIdle(void)
+{
+	//アニメーションが終了したら
+	if (animationController_->IsEnd())
+	{
+		isDead_ = true;
+	}
 
 }
 
@@ -206,10 +229,8 @@ void Player::Release(void)
 
 bool Player::IsDead(void)
 {
-	if (hp_ <= 0) {
-		return true;
-	}
-	return false;
+	return isDead_;
+
 }
 
 void Player::InitLoad(void)
@@ -300,6 +321,8 @@ void Player::InitAnimation(void)
 	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f , path + "Run.mv1");
 	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f, path + "Attack.mv1");
 	animationController_->Add((int)ANIM_TYPE::ROLL, 30.0f, path + "Roll.mv1");
+	animationController_->Add((int)ANIM_TYPE::KNOCKBACK, 30.0f, path + "Roll.mv1");
+	animationController_->Add((int)ANIM_TYPE::DEAD, 30.0f, path + "Roll.mv1");
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 
@@ -545,12 +568,19 @@ void Player::OnStartKnockBack(void)
 
 void Player::OnEndKnockBack(void)
 {
-	//ノックバック終了後はプレイに戻る
-	ChangeState(STATE::PLAY);
 
 	if (hp_ <= 0.0f) {
+		animationController_->Play((int)ANIM_TYPE::DEAD,false);
+
 		//プレイヤー死亡状態へ移行
 		ChangeState(STATE::DEAD);
+	}
+	else {
+		animationController_->Play((int)ANIM_TYPE::KNOCKBACK,false);
+
+		//ノックバックエンド
+		ChangeState(STATE::KNOCKBACKEND);
+
 	}
 }
 

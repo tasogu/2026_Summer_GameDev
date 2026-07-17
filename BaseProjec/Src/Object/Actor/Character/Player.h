@@ -127,6 +127,12 @@ private:
 	//更新ステップ(PLAY)
 	void UpdatePlay(void)override;
 
+	//更新ステップ(KUNOKBACKEND)
+	void UpdateKnockBackEnd(void);
+
+	//更新ステップ(IDLE)
+	void UpdateIdle(void);
+
 	//Stateの切り替え
 	void ChangeState(STATE state) override;
 
