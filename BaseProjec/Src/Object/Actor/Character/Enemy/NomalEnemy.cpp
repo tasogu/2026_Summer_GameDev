@@ -153,8 +153,8 @@ void NomalEnemy::InitAnimation(void)
 	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f, path + "Walk.mv1");
 	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f, path + "Run.mv1");
 	animationController_->Add((int)ANIM_TYPE::ATTACK, 14.0f, path + "Attack.mv1");
-	animationController_->Add((int)ANIM_TYPE::KNOCKBACK, 14.0f, path + "Attack.mv1");
-	animationController_->Add((int)ANIM_TYPE::DEAD, 14.0f, path + "Attack.mv1");
+	animationController_->Add((int)ANIM_TYPE::KNOCKBACK, 30.0f, path + "Impact.mv1");
+	animationController_->Add((int)ANIM_TYPE::DEAD, 30.0f, path + "Die.mv1");
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 

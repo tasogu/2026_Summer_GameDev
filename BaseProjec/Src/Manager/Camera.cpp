@@ -38,6 +38,7 @@ void Camera::Init(void)
 
 void Camera::Update(void)
 {
+	SetLightDirection(GetForward());
 }
 
 void Camera::SetBeforeDraw(void)
@@ -50,8 +51,8 @@ void Camera::SetBeforeDraw(void)
 	{
 	case Camera::MODE::FIXED_POINT:
 		SetBeforeDrawFixedPoint();
-		break;
 	case Camera::MODE::FREE:
+		break;
 		SetBeforeDrawFree();
 		break;
 	case Camera::MODE::FOLLOW:
@@ -65,6 +66,7 @@ void Camera::SetBeforeDraw(void)
 		targetPos_, 
 		cameraUp_
 	);
+
 
 	// DXライブラリのカメラとEffekseerのカメラを同期する。
 	Effekseer_Sync3DSetting();

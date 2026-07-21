@@ -21,7 +21,8 @@ Player::Player(STAGE_TYPE stageType)
 	sword_(nullptr),
 	imgPlayer_(-1),
 	CharactorBase(50.0f, 0.08),
-	stageType_(stageType)
+	stageType_(stageType),
+	stateAtkCombo_(STATE_ATKCK_COMBO::HORIZONTAL)
 {	
 	playerRotY_ = Quaternion();
 	goalQuaRot_ = Quaternion();
@@ -204,6 +205,12 @@ void Player::Draw(void)
 	const int barH = 25;
 
 	float rate = hp_ / PLAYER_HP;
+	if (rate <= 0.0f) {
+		rate = 0.0f;
+	}
+	else if (rate >= 1.0f) {
+		rate = 1.0f;
+	}
 
 	//•”wŒi
 	DrawExtendGraph(barX + 10, barY, barX + barW, barY + barH, imgHpBlack_, TRUE);
@@ -214,7 +221,7 @@ void Player::Draw(void)
 		imgHpRed_, TRUE);
 
 	//˜g
-	DrawExtendGraph(barX, barY, barX + barW, barY + barH, imgHpFrame_, TRUE);
+	DrawExtendGraph(barX - 10, barY, barX + barW, barY + barH, imgHpFrame_, TRUE);
 
 }
 
@@ -321,8 +328,8 @@ void Player::InitAnimation(void)
 	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f , path + "Run.mv1");
 	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f, path + "Attack.mv1");
 	animationController_->Add((int)ANIM_TYPE::ROLL, 30.0f, path + "Roll.mv1");
-	animationController_->Add((int)ANIM_TYPE::KNOCKBACK, 30.0f, path + "Roll.mv1");
-	animationController_->Add((int)ANIM_TYPE::DEAD, 30.0f, path + "Roll.mv1");
+	animationController_->Add((int)ANIM_TYPE::KNOCKBACK, 30.0f, path + "Impact.mv1");
+	animationController_->Add((int)ANIM_TYPE::DEAD, 30.0f, path + "Die.mv1");
 
 	animationController_->Play((int)ANIM_TYPE::IDLE);
 

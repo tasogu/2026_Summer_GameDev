@@ -55,6 +55,13 @@ void HpBar::Draw(void)
 
 	//HP‚ÌŠ„‡
 	float rate = nowHp_ / maxHp_;
+	if (rate <= 0.0f) {
+		rate = 0.0f;
+	}
+	else if (rate >= 1.0f) {
+		rate = 1.0f;
+	}
+
 
 	//•”wŒi(‘S•)
 	DrawExtendGraph(barX, barY,

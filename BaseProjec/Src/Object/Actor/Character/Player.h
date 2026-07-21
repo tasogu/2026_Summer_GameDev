@@ -30,6 +30,49 @@ public:
 	bool IsDead(void);
 private:
 
+	//攻撃コンボ制御
+	struct ATTACK_CONBO
+	{
+		//コンボ受付開始ステップ
+		float stepInputStart = 0.0f;
+		//コンボ受付終了ステップ
+		float stepInputEnd = 0.0f;
+		//衝突判定開始ステップ
+		float stepCollisionStart = 0.0f;
+		//衝突判定終了ステップ
+		float stepCollisionEnd = 0.0f;
+		//次のコンボにつなげるか
+		bool isNextCombo = false;
+
+		//コンボ受付ステップ
+		bool IsValidCombo(float step) const
+		{
+			return step > stepInputStart
+				&& step < stepInputEnd;
+		}
+
+		//衝突判定ステップ
+		bool IsValidCollsion(float step) const
+		{
+			return step > stepCollisionStart
+				&& step < stepCollisionEnd;
+		}
+	};
+
+	//攻撃コンボ状態管理
+	enum class STATE_ATKCK_COMBO
+	{
+		HORIZONTAL,
+		SPINNING,
+		MAX
+	};
+
+	//攻撃コンボ状態管理
+	STATE_ATKCK_COMBO stateAtkCombo_;
+
+	//攻撃コンボデータ
+	std::map< STATE_ATKCK_COMBO, ATTACK_CONBO> atkComboData_;
+
 	//ステージ(１～２)
 	STAGE_TYPE stageType_;
 
