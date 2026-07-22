@@ -152,7 +152,7 @@ void NomalEnemy::InitAnimation(void)
 	animationController_->Add((int)ANIM_TYPE::IDLE, 20.0f, path + "Idle.mv1");
 	animationController_->Add((int)ANIM_TYPE::WALK, 20.0f, path + "Walk.mv1");
 	animationController_->Add((int)ANIM_TYPE::RUN, 10.0f, path + "Run.mv1");
-	animationController_->Add((int)ANIM_TYPE::ATTACK, 14.0f, path + "Attack.mv1");
+	animationController_->Add((int)ANIM_TYPE::ATTACK, 20.0f, path + "Attack.mv1");
 	animationController_->Add((int)ANIM_TYPE::KNOCKBACK, 30.0f, path + "Impact.mv1");
 	animationController_->Add((int)ANIM_TYPE::DEAD, 30.0f, path + "Die.mv1");
 
@@ -305,6 +305,11 @@ void NomalEnemy::ChangeStatePlay(void)
 {
 }
 
+bool NomalEnemy::IsArmor(void) const
+{
+	return isAttack_;
+}
+
 void NomalEnemy::ProcessAttack(void) 
 {
 	auto& ins = InputManager::GetInstance();
@@ -324,11 +329,18 @@ void NomalEnemy::ProcessAttack(void)
 			sword_->ExecuteStrike();
 		}
 
+		if (nowTime >= 0) {
+			//ソード軌跡エフェクトを再生
+			sword_->StartSlashEffect();
+		}
+
 		//攻撃アニメーションが終了したら
 		if (animationController_->IsEnd()) {
 			//攻撃中フラグをリセット
 			isAttack_ = false;
 			sword_->ResetStrike();
+
+			sword_->EndSlashEffect();
 
 			//アニメーションを待機に変更
 			animationController_->Play((int)ANIM_TYPE::IDLE);
@@ -426,6 +438,14 @@ void NomalEnemy::Cooldown(void)
 
 void NomalEnemy::OnStartKnockBack(void)
 {
+	//すでに死亡していたら被弾アニメで上書きしない
+	if (state_ == STATE::DEAD) return;
+
+	if (isAttack_ == false) {
+		//被弾アニメを再生
+		animationController_->Play((int)ANIM_TYPE::KNOCKBACK, false);
+	}
+
 	//ノックバック状態へ移行
 	ChangeState(STATE::KNOCKBACK);
 }
@@ -442,8 +462,6 @@ void NomalEnemy::OnEndKnockBack(void)
 	}
 	else {
 		
-		//攻撃アニメを再生
-		animationController_->Play((int)ANIM_TYPE::KNOCKBACK, false);
 		
 		ChangeState(STATE::KNOCKBACKEND);
 

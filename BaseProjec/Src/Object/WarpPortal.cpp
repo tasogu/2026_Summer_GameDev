@@ -90,7 +90,7 @@ void WarpPortal::Release(void)
 	// エフェクトの再生を止める！
 	StopEffekseer3DEffect(effectHandle_);
 
-	//デストラクタでの二十ストップを防ぐ
+	//デストラクタでの二重ストップを防ぐ
 	effectHandle_ = -1;
 
 	// 親の解放処理を呼ぶ！

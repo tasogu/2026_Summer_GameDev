@@ -118,6 +118,9 @@ private:
 	//Stateの切り替え(PLAY)
 	void ChangeStatePlay(void) override;
 
+	//アーマーの付与
+	bool IsArmor(void) const override;
+
 	void CollisionReserve(void) {};
 
 	//エネミーの攻撃

@@ -1,3 +1,4 @@
+#include <EffekseerForDXLib.h>
 #include "../../Common/Transform.h"
 #include "../../../Manager/ResourceManager.h"
 #include "../../../Manager/ColliderManager.h"
@@ -17,7 +18,9 @@ Sword::Sword(const Transform& followTransform, int followFrameId)
 	followTransform_(followTransform),
 	followFrameId_(followFrameId),
 	localPos_(SWORD_POS),
-	localRot_({ AsoUtility::Deg2RadF(SWORD_LOCAL_ROTX), AsoUtility::Deg2RadF(SWORD_LOCAL_ROTY), SWORD_LOCAL_ROTZ })
+	localRot_({ AsoUtility::Deg2RadF(SWORD_LOCAL_ROTX), AsoUtility::Deg2RadF(SWORD_LOCAL_ROTY), SWORD_LOCAL_ROTZ }),
+	swordTrajectory_(-1),
+	effectHandle_(-1)
 {
 }
 
@@ -48,6 +51,7 @@ void Sword::Init(void)
 
 void Sword::Update(void)
 {
+
 	ModelFrameUtility::SetFrameWorldMatrix(followTransform_, followFrameId_, transform_, localPos_, localRot_);
 
 	//モデルの情報をTransformに反映させる
@@ -57,6 +61,18 @@ void Sword::Update(void)
 
 	//大きさ・回転・座標をモデルに反映
 	transform_.Update();
+
+	//エフェクトが再生中か
+	int swordTrajectoryPlay = IsEffekseer3DEffectPlaying(swordTrajectory_);
+
+	//エフェクトが再生中なら
+	if (swordTrajectoryPlay == 0) {
+		SetPosPlayingEffekseer3DEffect(swordTrajectory_, transform_.pos.x, transform_.pos.y, transform_.pos.z);
+
+		VECTOR a = Quaternion::ToEuler(transform_.quaRot);
+		SetRotationPlayingEffekseer3DEffect(swordTrajectory_, a.x, a.y, a.z);
+
+	}
 
 }
 
@@ -74,6 +90,8 @@ void Sword::InitLoad(void)
 	//transform_.SetModel(resMng_.Load(ResourceManager::SRC::SWORD)->handleId_);
 	transform_.SetModel(ResourceManager::GetInstance().LoadModelDuplicate(ResourceManager::SRC::SWORD));
 
+	//ソードの軌跡ロード
+	effectHandle_ = resMng_.Load(ResourceManager::SRC::SWORD_TRAJECTORY)->handleId_;
 }
 
 void Sword::InitTransform(void)
@@ -108,6 +126,29 @@ void Sword::InitPost(void)
 	int frameIndex = MV1SearchFrame(transform_.modelId, "Plane001");
 	if (frameIndex != -1) {
 		MV1SetFrameVisible(transform_.modelId, frameIndex, FALSE); // 非表示にする
+	}
+}
+
+void Sword::StartSlashEffect(void)
+{
+	//エフェクトが再生中か
+	int swordTrajectoryPlay = IsEffekseer3DEffectPlaying(swordTrajectory_);
+
+	//エフェクトが再生されていないなら
+	if (swordTrajectoryPlay == -1) {
+
+		swordTrajectory_ = PlayEffekseer3DEffect(effectHandle_);
+
+		SetScalePlayingEffekseer3DEffect(swordTrajectory_, 5.0f, 25.0f, 1.0f);
+	}
+	//printfDx("eff=%d traj=%d\n", effectHandle_, swordTrajectory_);
+}
+
+void Sword::EndSlashEffect(void)
+{
+	if (swordTrajectory_ != -1)
+	{
+		StopEffekseer3DEffect(swordTrajectory_);
 	}
 }
 

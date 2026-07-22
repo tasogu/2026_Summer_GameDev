@@ -129,6 +129,9 @@ protected:
 	//Stateの切り替え(PLAY)
 	virtual void ChangeStatePlay(void) = 0;
 
+	//アーマーの付与
+	virtual bool IsArmor(void) const { return false; }
+
 	//移動方向に応じた遅延回転
 	void DelayRotate(void);
 

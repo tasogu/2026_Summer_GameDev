@@ -17,6 +17,7 @@ public:
 		STAGE2,
 		PLAYER,
 		SWORD,
+		SWORD_TRAJECTORY,
 		NOMAL_ENEMY,
 		IDLE,
 		WALK,

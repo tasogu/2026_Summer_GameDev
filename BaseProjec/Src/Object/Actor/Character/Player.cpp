@@ -103,9 +103,8 @@ void Player::UpdateProcessPost(void)
 	//更新
 	transform_.Update();
 
-		//ソードの更新
+	//ソードの更新
 	sword_->Update();
-
 
 }
 
@@ -249,7 +248,6 @@ void Player::InitLoad(void)
 
 	//プレイヤーモデルのロード
 	transform_.SetModel(resMng_.Load(ResourceManager::SRC::PLAYER)->handleId_);
-
 
 	//モデルの手のボーンを取得
 	handBoneid_ = MV1SearchFrame(transform_.modelId, "mixamorig:RightHand");
@@ -445,11 +443,12 @@ void Player::ProcessAttack(void)
 	bool isAttackPad = ins.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD1, InputManager::JOYPAD_BTN::RIGHT);
 
 	//攻撃ボタンが押されたら
-	if (isAttackKey || isAttackPad && isAttack_ == false) {
+	if ((isAttackKey || isAttackPad )&& isAttack_ == false) {
 		//攻撃中フラグを立てる
 		isAttack_ = true;
 
 		SoundManager::GetInstance().PlaySE(SoundManager::SE_ID::SWORD_SWING);
+
 
 		//移動量をリセット
 		movePow_ = AsoUtility::VECTOR_ZERO;
@@ -467,7 +466,11 @@ void Player::ProcessAttack(void)
 		//アニメーション途中から当たり判定を開始
 		if (nowTime >= 15.0f && nowTime <= 30.0f) {
 			sword_->ExecuteStrike();
+		}
 
+		if (nowTime >= 0) {
+			//ソード軌跡エフェクトを再生
+			sword_->StartSlashEffect();
 		}
 
 		//攻撃アニメーションが終了したら
@@ -475,6 +478,9 @@ void Player::ProcessAttack(void)
 			//攻撃中フラグをリセット
 			isAttack_ = false;
 			sword_->ResetStrike();
+
+			//ソードエフェクトの終了
+			sword_->EndSlashEffect();
 
 			//アニメーションを待機に変更
 			animationController_->Play((int)ANIM_TYPE::IDLE);
@@ -502,6 +508,7 @@ void Player::ProcessEvasion(void)
 		&& isAttack_ == false
 		&& evasionCoolTime_ <= 0.0f)
 	{
+
 		//回避開始
 		isEvasion_ = true;
 		evasionTime_ = EVASION_TIME;
@@ -569,6 +576,15 @@ void Player::Rotate(void)
 
 void Player::OnStartKnockBack(void)
 {
+	//ソードエフェクトの終了
+	sword_->EndSlashEffect();
+
+	//すでに死亡していたら被弾アニメで上書きしない
+	if (state_ == STATE::DEAD) return;
+
+	//被弾アニメーション
+	animationController_->Play((int)ANIM_TYPE::KNOCKBACK, false);
+
 	//ノックバック状態へ移行
 	ChangeState(STATE::KNOCKBACK);
 }
@@ -583,7 +599,6 @@ void Player::OnEndKnockBack(void)
 		ChangeState(STATE::DEAD);
 	}
 	else {
-		animationController_->Play((int)ANIM_TYPE::KNOCKBACK,false);
 
 		//ノックバックエンド
 		ChangeState(STATE::KNOCKBACKEND);

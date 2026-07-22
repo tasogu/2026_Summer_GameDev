@@ -27,6 +27,11 @@ public:
 	//標的とするタグと攻撃力をセットする処理
 	void SetWeaponProperty(ColliderBase::TAG targetTag, float pow);
 
+	//剣の軌跡エフェクト再生
+	void StartSlashEffect(void);
+
+	//剣の軌跡エフェクト終了
+	void EndSlashEffect(void);
 private:
 	//スケール
 	static constexpr VECTOR SCALE = { 0.01f, 0.01f, 0.01f };
@@ -35,7 +40,7 @@ private:
 	static constexpr VECTOR COL_CAPSULE_TOP_LOCAL_POS = { 0.0f, 100.0f, 0.0f };
 
 	// 衝突判定用カプセル下部球体
-	static constexpr VECTOR COL_CAPSULE_DOWN_LOCAL_POS = { 0.0f, -20.0f, 0.0f };
+	static constexpr VECTOR COL_CAPSULE_DOWN_LOCAL_POS = { 0.0f, -40.0f, 0.0f };
 
 	//剣の持ち方の修正
 	static constexpr VECTOR SWORD_POS = { 0.0f, 10.f, -4.0f };
@@ -56,6 +61,12 @@ private:
 
 	//剣の攻撃力
 	int swordPow_;
+
+	//剣の軌跡エフェクト再生ハンドル
+	int swordTrajectory_;
+
+	//剣の軌跡エフェクトリソースハンドル
+	int effectHandle_;
 
 	//攻撃対象のタグを持つ
 	ColliderBase::TAG targetTag_;

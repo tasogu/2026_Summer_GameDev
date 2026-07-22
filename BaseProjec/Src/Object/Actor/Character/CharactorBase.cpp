@@ -250,6 +250,12 @@ void CharactorBase::CollisionCapsule(void)
 void CharactorBase::OnDamage(int damage, VECTOR diff, float knockBackPow)
 {
 	hp_ -= damage;
+
+	//アーマー中は攻撃を止めない
+	if (IsArmor() == true) {
+		return;
+	}
+
 	knockBack_.Init(diff, knockBackPow);
 	OnStartKnockBack();
 }

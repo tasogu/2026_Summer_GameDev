@@ -53,6 +53,10 @@ void ResourceManager::Init(void)
 	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Sword/sword1.mv1");
 	resourcesMap_.emplace(SRC::SWORD, res);
 
+	//剣の軌跡effect
+	res = std::make_shared<RES>(RES_T::EFFEKSEER, PATH_EFF + "Sword/SwordTrajectory.efkefc");
+	resourcesMap_.emplace(SRC::SWORD_TRAJECTORY, res);
+
 	//ノーマルエネミーモデル
 	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Enemy/Enemy.mv1");
 	resourcesMap_.emplace(SRC::NOMAL_ENEMY, res);
