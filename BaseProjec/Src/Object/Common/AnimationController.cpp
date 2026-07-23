@@ -34,47 +34,68 @@ void AnimationController::AddInFbx(int type, float speed, int animIndex)
 	Add(type, speed, animation);
 }
 
-void AnimationController::Play(int type, bool isLoop)
+void AnimationController::Play(int type, bool isLoop, float blendTime)
 {
 
-	if (playType_ == type)
+	if (priorityType_ == type)
 	{
 		// 同じアニメーションだったら再生を継続する
 		return;
 	}
 
-	if (playType_ != -1)
+	if (priorityType_ != -1)
 	{
-		// モデルからアニメーションを外す
-		MV1DetachAnim(modelId_, playAnim_.attachNo);
+		auto& oldAnimation = animations_[priorityType_];
+		oldAnimation.isPriority = false;
+		oldAnimation.weight = oldAnimation.blendRate;
 	}
 
-	// アニメーション種別を変更
-	playType_ = type;
-	playAnim_ = animations_[type];
-
-	// 初期化
-	playAnim_.step = 0.0f;
-
-	// モデルにアニメーションを付ける
-	if (playAnim_.model == -1)
-	{
-		// モデルと同じファイルからアニメーションをアタッチする
-		playAnim_.attachNo = MV1AttachAnim(modelId_, playAnim_.animIndex);
-	}
-	else
-	{
-		// 別のモデルファイルからアニメーションをアタッチする
-		// DxModelViewerを確認すること(大体0か1)
-		int animIdx = 0;
-		playAnim_.attachNo = MV1AttachAnim(modelId_, animIdx, playAnim_.model);
+	auto& newAnimation = animations_[type];
+	if (newAnimation.attachNo = -1) {
+		if (newAnimation.model == -1) {
+			newAnimation.attachNo = MV1AttachAnim(modelId_, 0, newAnimation.animIndex);
+		}
+		else {
+			newAnimation.attachNo = MV1AttachAnim(modelId_, 0, newAnimation.model);
+		}
 	}
 
-	// アニメーション総時間の取得
-	playAnim_.totalTime = MV1GetAttachAnimTotalTime(modelId_, playAnim_.attachNo);
+	newAnimation.step = 0;
+	newAnimation.blendStep = 0;
+	newAnimation.blendRate = 0;
+	newAnimation.isPriority = true;
+	newAnimation.isLoop = isLoop;
 
-	// アニメーションループ
-	isLoop_ = isLoop;
+	priorityType_ = type;
+	blendTime_ = blendTime;
+	isBlending_ = true;
+
+	//// アニメーション種別を変更
+	//playType_ = type;
+	//playAnim_ = animations_[type];
+
+	//// 初期化
+	//playAnim_.step = 0.0f;
+
+	//// モデルにアニメーションを付ける
+	//if (playAnim_.model == -1)
+	//{
+	//	// モデルと同じファイルからアニメーションをアタッチする
+	//	playAnim_.attachNo = MV1AttachAnim(modelId_, playAnim_.animIndex);
+	//}
+	//else
+	//{
+	//	// 別のモデルファイルからアニメーションをアタッチする
+	//	// DxModelViewerを確認すること(大体0か1)
+	//	int animIdx = 0;
+	//	playAnim_.attachNo = MV1AttachAnim(modelId_, animIdx, playAnim_.model);
+	//}
+
+	//// アニメーション総時間の取得
+	//playAnim_.totalTime = MV1GetAttachAnimTotalTime(modelId_, playAnim_.attachNo);
+
+	//// アニメーションループ
+	//isLoop_ = isLoop;
 
 }
 
@@ -84,26 +105,41 @@ void AnimationController::Update(void)
 	// 経過時間の取得
 	float deltaTime = SceneManager::GetInstance().GetDeltaTime();
 
-	// 再生
-	playAnim_.step += (deltaTime * playAnim_.speed);
-
-	// アニメーションが終了したら
-	if (playAnim_.step > playAnim_.totalTime)
-	{
-		if (isLoop_)
-		{
-			// ループ再生
-			playAnim_.step = 0.0f;
-		}
-		else
-		{
-			// ループしない
-			playAnim_.step = playAnim_.totalTime;
+	if (isBlending_ == true && priorityType_ != -1) {
+		auto& precedeAnimation = animations_[priorityType_];
+		precedeAnimation.blendStep += deltaTime;
+		precedeAnimation.blendRate = precedeAnimation.blendStep / blendTime_;
+		if (precedeAnimation.blendRate >= 1.0) {
+			precedeAnimation.blendRate = 1.0;
+			isBlending_ = false;
 		}
 	}
 
-	// アニメーション設定
-	MV1SetAttachAnimTime(modelId_, playAnim_.attachNo, playAnim_.step);
+	for (auto& pair : animations_) {
+		auto& anim = pair.second;
+		if (anim.attachNo == -1)continue;
+
+	}
+	//// 再生
+	//playAnim_.step += (deltaTime * playAnim_.speed);
+
+	//// アニメーションが終了したら
+	//if (playAnim_.step > playAnim_.totalTime)
+	//{
+	//	if (isLoop_)
+	//	{
+	//		// ループ再生
+	//		playAnim_.step = 0.0f;
+	//	}
+	//	else
+	//	{
+	//		// ループしない
+	//		playAnim_.step = playAnim_.totalTime;
+	//	}
+	//}
+
+	//// アニメーション設定
+	//MV1SetAttachAnimTime(modelId_, playAnim_.attachNo, playAnim_.step);
 
 }
 
@@ -129,7 +165,7 @@ int AnimationController::GetPlayType(void) const
 	return playType_;
 }
 
-bool AnimationController::IsEnd(void) const
+bool AnimationController::IsEnd(int animType) const
 {
 
 	bool ret = false;

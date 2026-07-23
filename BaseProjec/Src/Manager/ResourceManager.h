@@ -13,6 +13,7 @@ public:
 	enum class SRC
 	{
 		TITLE,
+		TITLELETTER,
 		STAGE,
 		STAGE2,
 		PLAYER,

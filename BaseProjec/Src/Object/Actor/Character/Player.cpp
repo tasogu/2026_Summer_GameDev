@@ -344,6 +344,10 @@ void Player::InitPost(void)
 	//stateをプレイに変更
 	ChangeState(Player::STATE::PLAY);
 
+	//攻撃コンボデータ
+	ATTACK_CONBO data = ATTACK_CONBO();
+
+
 	//プレイヤーの更新
 	transform_.Update();
 

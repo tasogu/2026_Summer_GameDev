@@ -93,6 +93,8 @@ void EnemyManager::LoadData(void)
 		data.defaultPos = { 250.0f, 0.0f, 150.0f };
 		//¶¬
 		Create(data);
+		
+ 
 		break;
 	case STAGE_TYPE::STAGE2:
 		//ˆê‘Ì–Ú
@@ -120,6 +122,8 @@ void EnemyManager::LoadData(void)
 		//¶¬
 		Create(data);
 
+
+
 		break;
 
 	}
@@ -143,6 +147,7 @@ void EnemyManager::LoadData(void)
 
 
 }
+
 
 std::shared_ptr<EnemyBase> EnemyManager::Create(const EnemyBase::EnemyData& data)
 {

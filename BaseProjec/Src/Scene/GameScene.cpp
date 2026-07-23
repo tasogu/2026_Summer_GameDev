@@ -69,6 +69,7 @@ void GameScene::Update(void)
 
 	auto& ins = InputManager::GetInstance();
 
+
 	//Qキーが押されたら画面をポーズする・ポーズ解除
 	if (ins.IsNew(KEY_INPUT_ESCAPE))
 	{
@@ -170,6 +171,8 @@ void GameScene::Draw(void)
 
 	//ワープポータルの描画
 	warpPortal_->Draw();
+
+
 }
 
 void GameScene::Release(void)

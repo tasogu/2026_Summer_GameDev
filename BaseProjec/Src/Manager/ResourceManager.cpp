@@ -34,8 +34,12 @@ void ResourceManager::Init(void)
 	std::shared_ptr<Resource> res;
 
 	//タイトル画像
-	res = std::make_shared<RES>(RES_T::IMG, PATH_IMG + "Title.png"); 
+	res = std::make_shared<RES>(RES_T::IMG, PATH_IMG + "Title/Title.png"); 
 	resourcesMap_.emplace(SRC::TITLE, res);
+
+	//タイトル文字
+	res = std::make_shared<RES>(RES_T::IMG, PATH_IMG + "Title/TitleLetter.png");
+	resourcesMap_.emplace(SRC::TITLELETTER, res);
 
 	//ステージモデル
 	res = std::make_shared<RES>(RES_T::MODEL, PATH_MDL + "Stage/MainStage/MainStage.mv1");

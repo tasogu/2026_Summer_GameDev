@@ -16,6 +16,12 @@ public:
 		float speed = 0.0f;
 		float totalTime = 0.0f;
 		float step = 0.0f;
+
+		float blendStep = 0.0f;
+		float blendRate = 0.0f;
+		float weight = 0.0f;
+		bool isPriority = false;
+		bool isLoop = true;
 	};
 
 	// コンストラクタ
@@ -31,7 +37,7 @@ public:
 	void AddInFbx(int type, float speed, int animIndex);
 
 	// アニメーション再生
-	void Play(int type, bool isLoop = true);
+	void Play(int type, bool isLoop = true, float blentTime = 0.5f);
 
 	// 更新
 	void Update(void);
@@ -43,7 +49,7 @@ public:
 	int GetPlayType(void) const;
 
 	// 再生終了
-	bool IsEnd(void) const;
+	bool IsEnd(int animType) const;
 
 	// 再生中のアニメーション情報を取得
 	const Animation& GetPlayAnim(void) const;
@@ -60,11 +66,14 @@ private:
 	std::map<int, Animation> animations_;
 
 	// 再生中のアニメーション
-	int playType_;
-	Animation playAnim_;
+	int priorityType_;
+	float blendTime_;
+	bool isBlending_;
 
-	// アニメーションをループするかしないか
-	bool isLoop_;
+	//Animation playAnim_;
+
+	//// アニメーションをループするかしないか
+	//bool isLoop_;
 
 	// アニメーション追加の共通処理
 	void Add(int type, float speed, Animation& animation);

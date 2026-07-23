@@ -39,6 +39,9 @@ private:
 	//タイトル画像
 	int imgTitle_;
 
+	//タイトル文字
+	int imgTitleLetter_;
+
 	//スティックの連打防止用フラグ
 	bool isStickHeld_;
 };
